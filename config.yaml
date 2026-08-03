@@ -14,7 +14,7 @@ carpentry: 'uom'
 carpentry_description: 'Lesson Description' # FIXME
 
 # Overall title for pages.
-title: 'Lesson Title' # FIXME
+title: 'Introduction to methylation array'
 
 # Date the lesson was created ('YYYY-MM-DD', this is empty by default)
 created: ~ # FIXME
@@ -62,17 +62,17 @@ contact: 'fixme@fixme.org' # FIXME
 # - another-learner.md
 
 # Order of episodes in your lesson
-episodes: 
+episodes:
 - introduction.Rmd
 
 # Information for Learners
-learners: 
+learners:
 
 # Information for Instructors
-instructors: 
+instructors:
 
 # Learner Profiles
-profiles: 
+profiles:
 
 # Customisation ---------------------------------------------
 #
