@@ -1,125 +1,170 @@
 ---
-title: "Using RMarkdown"
-teaching: 10
-exercises: 2
+title: "Introduction: loading packages and downloading data"
+teaching: 15
+exercises: 5
 ---
 
-:::::::::::::::::::::::::::::::::::::: questions 
+:::::::::::::::::::::::::::::::::::::: questions
 
-- How do you write a lesson using R Markdown and `{sandpaper}`?
+- FIXME
+- FIXME
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain how to use markdown with the new lesson template
-- Demonstrate how to include pieces of code, figures, and nested challenge blocks
+- Load the required R packages.
+- Create a sample table and define the variable of interest.
+- Download the six tutorial samples from GEO.
+- Import the IDAT files into a `minfi` object.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Introduction
+## Load packages
 
-This is a lesson created via The Carpentries Workbench. It is written in
-[Pandoc-flavored Markdown](https://pandoc.org/MANUAL.txt) for static files and
-[R Markdown][r-markdown] for dynamic files that can render code into output. 
-Please refer to the [Introduction to The Carpentries 
-Workbench](https://carpentries.github.io/sandpaper-docs/) for full documentation.
+Complete the [setup instructions](../learners/setup.md) first. Open RStudio and
+create a project using **File > New Project > New Directory > New Project**,
+or open your existing workshop project. Create an R script, and run the chunks below in order.
 
-What you need to know is that there are three sections required for a valid
-Carpentries lesson template:
+Installing a package downloads it to your computer. Loading it with `library()`
+makes its functions available in the current session. Load the packages again
+whenever you restart R.
 
- 1. `questions` are displayed at the beginning of the episode to prime the
-    learner for the content.
- 2. `objectives` are the learning objectives for an episode displayed with
-    the questions.
- 3. `keypoints` are displayed at the end of the episode to reinforce the
-    objectives.
+```{r load-packages, eval=FALSE}
+# Data handling
+library(tidyverse)
+library(readxl)
+library(reshape2)
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
+# Methylation analysis and annotation
+library(minfi)
+library(GEOquery)
+library(limma)
+library(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
+library(IlluminaHumanMethylationEPICv2manifest)
+library(AnnotationHub)
+library(DMRcate)
+library(methylKit)
+library(missMethyl)
+library(clusterProfiler)
+library(org.Hs.eg.db)
 
-Inline instructor notes can help inform instructors of timing challenges
-associated with the lessons. They appear in the "Instructor View"
-
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::: challenge 
-
-## Challenge 1: Can you do it?
-
-What is the output of this command?
-
-```r
-paste("This", "new", "lesson", "looks", "good")
+# Plotting and parallel computing
+library(Polychrome)
+library(ComplexHeatmap)
+library(ggsci)
+library(gridExtra)
+library(RColorBrewer)
+library(parallel)
 ```
 
-:::::::::::::::::::::::: solution 
+## Load annotation data
 
-## Output
- 
-```output
-[1] "This new lesson looks good"
+```{r load-annotation-data, eval=FALSE}
+epic <- getAnnotation(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
+head(epic)
 ```
 
-:::::::::::::::::::::::::::::::::
+## Download data
 
+For this tutorial we are using the publicly available LNCaP and PREC cell lines
+(500 ng DNA input) from Peters *et al.* (2024), available from GEO
+([GSE240469](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE240469)).
+We will download these data in the chunk below, so you do not have to manually
+get them from the above link.
 
-## Challenge 2: how do you nest solutions within challenge blocks?
+If you would like to use your own data, create a sample table and variables of
+interest in the same format, with your own IDAT files, samples and variables.
+The GEO download chunk is only needed for data hosted on GEO.
 
-:::::::::::::::::::::::: solution 
+### Create the sample table
 
-You can add a line with at least three colons and a `solution` tag.
+Each row describes one sample. `Accession` identifies the GEO sample, `Name`
+matches its filename label, and `Type` identifies the cell line to compare.
 
-:::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::
+```{r sample-table, eval=FALSE}
+# Create the sample table for IDAT downloads. Replace this table with your own sample information when using your own data.
 
-## Figures
-
-You can also include figures generated from R Markdown:
-
-```{r pyramid, fig.alt = "pie chart illusion of a pyramid", fig.cap = "Sun arise each and every morning"}
-pie(
-  c(Sky = 78, "Sunny side of pyramid" = 17, "Shady side of pyramid" = 5), 
-  init.angle = 315, 
-  col = c("deepskyblue", "yellow", "yellow3"), 
-  border = FALSE
+targets <- data.frame(
+  Accession = c(
+    "GSM7698438",
+    "GSM7698446",
+    "GSM7698462",
+    "GSM7698435",
+    "GSM7698443",
+    "GSM7698459"
+  ),
+  Name = c(
+    "LNCAP_500_1",
+    "LNCAP_500_2",
+    "LNCAP_500_3",
+    "PREC_500_1",
+    "PREC_500_2",
+    "PREC_500_3"
+  ),
+  Type = c("LNCaP", "LNCaP", "LNCaP", "PREC", "PREC", "PREC")
 )
+
+targets$Name2 <- paste(
+  targets$Accession, targets$Name, sep = "_"
+)
+
+# Define the variable of interest and convert it to a factor.
+variable.of.choice <- as.factor(targets$Type)
+
+targets
 ```
 
-Or you can use standard markdown for static figures with the following syntax:
+### Download the IDAT files
 
-`![optional caption that appears below the figure](figure url){alt='alt text for
-accessibility purposes'}`
+The following chunk downloads the IDAT files for the six accessions in
+`targets`. Each sample is saved in its own accession-named folder within
+your current project directory.
 
-![You belong in The Carpentries!](https://raw.githubusercontent.com/carpentries/logo/master/Badge_Carpentries.svg){alt='Blue Carpentries hex person logo with no text.'}
+```{r download-data, eval=FALSE}
+# Download only IDAT files for the selected tutorial samples.
+gsmlist <- lapply(
+  targets$Accession,
+  GEOquery::getGEOSuppFiles,
+  makeDirectory = TRUE,
+  baseDir = getwd(),
+  filter_regex = "[.]idat([.]gz)?$"
+)
+names(gsmlist) <- targets$Accession
+```
 
-::::::::::::::::::::::::::::::::::::: callout
+## Read in .idats
 
-Callout sections can highlight information.
+Add the sample names and file paths to `targets`, preserving its sample order.
+`Basename` is the path to each file pair without the `_Grn.idat` or `_Red.idat`
+suffix (or their compressed `.gz` equivalents).
 
-They are sometimes used to emphasise particularly important points
-but are also used in some lessons to present "asides": 
-content that is not central to the narrative of the lesson,
-e.g. by providing the answer to a commonly-asked question.
+```{r read-idats, eval=FALSE}
+# Link the sample information to the downloaded IDAT files.
+targets$Sample <- targets$Name
+targets$Basename <- file.path(
+  getwd(), targets$Accession, targets$Name2
+)
+
+# Read in raw data from the red/green IDAT files.
+rgSet <- read.metharray.exp(targets = targets)
+sampleNames(rgSet) <- targets$Sample
+rgSet@annotation <- c(
+  array = "IlluminaHumanMethylationEPICv2",
+  annotation = "20a1.hg38"
+)
+rgSet
+```
+
+`rgSet` contains the raw intensities for the six samples. For your own data,
+set `targets$Basename` to your file paths and use the annotation matching your
+array type. Quality control, filtering and normalisation follow in the next
+episode.
+
+::::::::::::::::::::::::::::::::::::: keypoints
+
+- Raw Illumina methylation array data are stored in `.idat` files, with one red-channel and one green-channel file per sample.
+- The `targets` data frame holds the sample metadata, linking each sample's name and cell-line group to its IDAT file paths.
+- `read.metharray.exp(targets = targets)` reads the raw intensities into `rgSet`, an `RGChannelSet` object, ready for quality control and preprocessing.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
-
-## Math
-
-One of our episodes contains $\LaTeX$ equations when describing how to create
-dynamic reports with {knitr}, so we now use mathjax to describe this:
-
-`$\alpha = \dfrac{1}{(1 - \beta)^2}$` becomes: $\alpha = \dfrac{1}{(1 - \beta)^2}$
-
-Cool, right?
-
-::::::::::::::::::::::::::::::::::::: keypoints 
-
-- Use `.md` files for episodes when you want static content
-- Use `.Rmd` files for episodes when you need to generate output
-- Run `sandpaper::check_lesson()` to identify any issues with your lesson
-- Run `sandpaper::build_lesson()` to preview your lesson locally
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-[r-markdown]: https://rmarkdown.rstudio.com/

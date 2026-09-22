@@ -51,7 +51,7 @@ Run the following commands in the **Console** pane of RStudio to install the pac
 ```r
 install.packages(c(
   "tidyverse", "readxl", "Polychrome", "ggsci",
-  "gridExtra", "RColorBrewer", "reshape2"
+  "gridExtra", "RColorBrewer", "reshape2", "R.utils"
 ))
 
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
@@ -59,7 +59,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
 }
 
 BiocManager::install(c(
-  "minfi", "limma",
+  "minfi", "limma", "GEOquery",
   "IlluminaHumanMethylationEPICv2anno.20a1.hg38",
   "IlluminaHumanMethylationEPICv2manifest",
   "AnnotationHub", "ComplexHeatmap", "DMRcate", "methylKit",
