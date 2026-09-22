@@ -4,17 +4,6 @@ title: Setup
 
 Please follow the steps below and install the required software **before** the scheduled workshop.
 
-<!--
-FIXME: Setup instructions live in this document. Please specify the tools and
-the data sets the Learner needs to have installed.
-
-## Data Sets
-
-FIXME: place any data you want learners to use in `episodes/data` and then use
-       a relative link ( [data zip file](data/lesson-data.zip) ) to provide a
-       link to it, replacing the example.com link.
-Download the [data zip file](https://example.com/FIXME) and unzip it to your Desktop
--->
 ## RStudio Setup
 
 We use RStudio for coding in R.
@@ -25,7 +14,7 @@ We use RStudio for coding in R.
 
 ### R packages
 
-Most workshops using R will require the installation of specific packages. Make sure to check in advance with the workshop organisers what packages need to be installed. 
+Most workshops using R will require the installation of specific packages. Make sure to check in advance with the workshop organisers what packages need to be installed.
 
 You can install packages from CRAN using:
 
@@ -55,40 +44,28 @@ devtools::install_github("username/reponame")
 
 ::::::::::::::::::::::::::::
 
+### Install required R packages
 
-<!--
-READ HERE FOR OS-SPECIFIC INSTRUCTIONS
+Run the following commands in the **Console** pane of RStudio to install the packages for this workshop. Required dependencies are installed automatically.
 
-Setup for different systems can be presented in dropdown menus via a `spoiler`
-tag. They will join to this discussion block, so you can give a general overview
-of the software used in this lesson here and fill out the individual operating
-systems (and potentially add more, e.g. online setup) in the solutions blocks.
--->
+```r
+install.packages(c(
+  "tidyverse", "readxl", "Polychrome", "ggsci",
+  "gridExtra", "RColorBrewer", "reshape2"
+))
 
-<!--
-:::::::::::::::: spoiler
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
 
-### Windows
+BiocManager::install(c(
+  "minfi", "limma",
+  "IlluminaHumanMethylationEPICv2anno.20a1.hg38",
+  "IlluminaHumanMethylationEPICv2manifest",
+  "AnnotationHub", "ComplexHeatmap", "DMRcate", "methylKit",
+  "missMethyl", "clusterProfiler", "org.Hs.eg.db"
+))
+```
 
-Use PuTTY
-
-::::::::::::::::::::::::
-
-:::::::::::::::: spoiler
-
-### MacOS
-
-Use Terminal.app
-
-::::::::::::::::::::::::
-
-
-:::::::::::::::: spoiler
-
-### Linux
-
-Use Terminal
-
-::::::::::::::::::::::::
--->
-
+For EPIC v2 arrays, the matching packages are [`IlluminaHumanMethylationEPICv2manifest`](https://bioconductor.org/packages/IlluminaHumanMethylationEPICv2manifest/) and [`IlluminaHumanMethylationEPICv2anno.20a1.hg38`](https://bioconductor.org/packages/IlluminaHumanMethylationEPICv2anno.20a1.hg38/). 
+Manifest and annotation package required will change depending on array type used. 
