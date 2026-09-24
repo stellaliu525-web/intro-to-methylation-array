@@ -40,7 +40,7 @@
   <div class="container-fluid top-nav-container">
     <div class="col-md-8">
       <div class="large-logo">
-        <img id="uom-logo" alt="Lesson Description" src="assets/images/uom-logo.svg"><span class="badge text-bg-danger">
+        <img id="uom-logo" alt="University of Melbourne" src="assets/images/uom-logo.svg"><span class="badge text-bg-danger">
           <abbr title="This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.">
             <a href="https://docs.carpentries.org/resources/curriculum/lesson-life-cycle.html" class="external-link alert-link">
               <i aria-hidden="true" class="icon" data-feather="alert-octagon" style="border-radius: 5px"></i>
@@ -96,7 +96,7 @@
       <span class="menu-title">Menu</span>
     </button>
     <div class="nav-logo">
-      <img class="small-logo" alt="Lesson Description" src="assets/images/uom-logo-sm.svg">
+      <img class="small-logo" alt="University of Melbourne" src="assets/images/uom-logo-sm.svg">
 </div>
     <div class="lesson-title-md">
       Introduction to methylation array
@@ -237,7 +237,43 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="introduction.html">1. Using RMarkdown</a>
+        <a href="introduction.html">1. Introduction: loading packages and downloading data</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush3">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading3">
+        <a href="first-steps.html">2. First steps: quality control, filtering, normalisation and basic visualisation</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush4">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading4">
+        <a href="differentially-methylated-probes.html">3. Differentially methylated probes with limma</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush5">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading5">
+        <a href="differentially-methylated-regions.html">4. Differentially methylated regions with DMRcate</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -300,11 +336,11 @@
     <main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>All in One View</h1>
         
-<section id="aio-introduction"><p>Content from <a href="introduction.html">Using RMarkdown</a></p>
+<section id="aio-introduction"><p>Content from <a href="introduction.html">Introduction: loading packages and downloading data</a></p>
 <hr>
-<p>Last updated on 2026-08-04 |
+<p>Last updated on 2026-09-24 |
 
-        <a href="https://github.com/melbournebioinformatics/workbench-template-rmd/edit/main/episodes/introduction.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/stellaliu525-web/intro-to-methylation-array/edit/main/episodes/introduction.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
@@ -316,8 +352,8 @@
 <div class="inner">
 <h3 class="card-title">Questions</h3>
 <ul>
-<li>How do you write a lesson using R Markdown and
-<a href="https://carpentries.github.io/sandpaper/" class="external-link">sandpaper</a>?</li>
+<li>FIXME</li>
+<li>FIXME</li>
 </ul>
 </div>
 </div>
@@ -327,141 +363,171 @@
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
 <ul>
-<li>Explain how to use markdown with the new lesson template</li>
-<li>Demonstrate how to include pieces of code, figures, and nested
-challenge blocks</li>
+<li>Load the required R packages.</li>
+<li>Create a sample table and define the variable of interest.</li>
+<li>Download the six tutorial samples from GEO.</li>
+<li>Import the IDAT files into a <code>minfi</code> object.</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+<section><h2 class="section-heading" id="load-packages">Load packages<a class="anchor" aria-label="anchor" href="#load-packages"></a>
 </h2>
 <hr class="half-width">
-<p>This is a lesson created via The Carpentries Workbench. It is written
-in <a href="https://pandoc.org/MANUAL.txt" class="external-link">Pandoc-flavored Markdown</a>
-for static files and <a href="https://rmarkdown.rstudio.com/" class="external-link">R
-Markdown</a> for dynamic files that can render code into output. Please
-refer to the <a href="https://carpentries.github.io/sandpaper-docs/" class="external-link">Introduction to The
-Carpentries Workbench</a> for full documentation.</p>
-<p>What you need to know is that there are three sections required for a
-valid Carpentries lesson template:</p>
-<ol style="list-style-type: decimal">
-<li>
-<code>questions</code> are displayed at the beginning of the episode
-to prime the learner for the content.</li>
-<li>
-<code>objectives</code> are the learning objectives for an episode
-displayed with the questions.</li>
-<li>
-<code>keypoints</code> are displayed at the end of the episode to
-reinforce the objectives.</li>
-</ol>
-<div id="challenge-1-can-you-do-it" class="callout challenge">
-<div class="callout-square">
-<i class="callout-icon" data-feather="zap"></i>
-</div>
-<span class="callout-header">Challenge</span>
-<div id="challenge-1-can-you-do-it" class="callout-inner">
-<h3 class="callout-title">Challenge 1: Can you do it?</h3>
-<div class="callout-content">
-<p>What is the output of this command?</p>
+<p>Complete the <a href="index.html#setup">setup instructions</a> first. Open
+RStudio and create a project using <strong>File &gt; New Project &gt;
+New Directory &gt; New Project</strong>, or open your existing workshop
+project. Create an R script, and run the chunks below in order.</p>
+<p>Installing a package downloads it to your computer. Loading it with
+<code>library()</code> makes its functions available in the current
+session. Load the packages again whenever you restart R.</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">paste</span><span class="op">(</span><span class="st">"This"</span>, <span class="st">"new"</span>, <span class="st">"lesson"</span>, <span class="st">"looks"</span>, <span class="st">"good"</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Data handling</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">readxl</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">reshape2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Methylation analysis and annotation</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">minfi</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">GEOquery</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">limma</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">IlluminaHumanMethylationEPICv2anno.20a1.hg38</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">IlluminaHumanMethylationEPICv2manifest</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">AnnotationHub</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">DMRcate</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">methylKit</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">missMethyl</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">clusterProfiler</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">org.Hs.eg.db</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plotting and parallel computing</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">Polychrome</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">ComplexHeatmap</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">ggsci</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">RColorBrewer</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span></span></code></pre>
 </div>
-</div>
-</div>
-</div>
-<div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
-  <h4 class="accordion-header" id="headingSolution1"> Output </h4>
-</button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
-<div class="accordion-body">
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>[1] "This new lesson looks good"</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div id="challenge-2-how-do-you-nest-solutions-within-challenge-blocks" class="callout challenge">
-<div class="callout-square">
-<i class="callout-icon" data-feather="zap"></i>
-</div>
-<span class="callout-header">Challenge</span>
-<div id="challenge-2-how-do-you-nest-solutions-within-challenge-blocks" class="callout-inner">
-<h3 class="callout-title">Challenge 2: how do you nest solutions within
-challenge blocks?</h3>
-<div class="callout-content">
-
-</div>
-</div>
-</div>
-<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
-  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
-</button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
-<div class="accordion-body">
-<p>You can add a line with at least three colons and a
-<code>solution</code> tag.</p>
-</div>
-</div>
-</div>
-</div>
-</section><section><h2 class="section-heading" id="figures">Figures<a class="anchor" aria-label="anchor" href="#figures"></a>
+</section><section><h2 class="section-heading" id="load-annotation-data">Load annotation data<a class="anchor" aria-label="anchor" href="#load-annotation-data"></a>
 </h2>
 <hr class="half-width">
-<p>You can also include figures generated from R Markdown:</p>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">epic</span> <span class="op">&lt;-</span> <span class="fu">getAnnotation</span><span class="op">(</span><span class="va">IlluminaHumanMethylationEPICv2anno.20a1.hg38</span><span class="op">)</span></span>
+<span><span class="fu">head</span><span class="op">(</span><span class="va">epic</span><span class="op">)</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="download-data">Download data<a class="anchor" aria-label="anchor" href="#download-data"></a>
+</h2>
+<hr class="half-width">
+<p>For this tutorial we are using the publicly available LNCaP and PREC
+cell lines (500 ng DNA input) from Peters <em>et al.</em> (2024),
+available from GEO (<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE240469" class="external-link">GSE240469</a>).
+We will download these data in the chunk below, so you do not have to
+manually get them from the above link.</p>
+<p>If you would like to use your own data, create a sample table and
+variables of interest in the same format, with your own IDAT files,
+samples and variables. The GEO download chunk is only needed for data
+hosted on GEO.</p>
+<div class="section level3">
+<h3 id="create-the-sample-table">Create the sample table<a class="anchor" aria-label="anchor" href="#create-the-sample-table"></a>
+</h3>
+<p>Each row describes one sample. <code>Accession</code> identifies the
+GEO sample, <code>Name</code> matches its filename label, and
+<code>Type</code> identifies the cell line to compare.</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">pie</span><span class="op">(</span></span>
-<span>  <span class="fu">c</span><span class="op">(</span>Sky <span class="op">=</span> <span class="fl">78</span>, <span class="st">"Sunny side of pyramid"</span> <span class="op">=</span> <span class="fl">17</span>, <span class="st">"Shady side of pyramid"</span> <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, </span>
-<span>  init.angle <span class="op">=</span> <span class="fl">315</span>, </span>
-<span>  col <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"deepskyblue"</span>, <span class="st">"yellow"</span>, <span class="st">"yellow3"</span><span class="op">)</span>, </span>
-<span>  border <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Create the sample table for IDAT downloads. Replace this table with your own sample information when using your own data.</span></span>
+<span></span>
+<span><span class="va">targets</span> <span class="op">&lt;-</span> <span class="fu">data.frame</span><span class="op">(</span></span>
+<span>  Accession <span class="op">=</span> <span class="fu">c</span><span class="op">(</span></span>
+<span>    <span class="st">"GSM7698438"</span>,</span>
+<span>    <span class="st">"GSM7698446"</span>,</span>
+<span>    <span class="st">"GSM7698462"</span>,</span>
+<span>    <span class="st">"GSM7698435"</span>,</span>
+<span>    <span class="st">"GSM7698443"</span>,</span>
+<span>    <span class="st">"GSM7698459"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  Name <span class="op">=</span> <span class="fu">c</span><span class="op">(</span></span>
+<span>    <span class="st">"LNCAP_500_1"</span>,</span>
+<span>    <span class="st">"LNCAP_500_2"</span>,</span>
+<span>    <span class="st">"LNCAP_500_3"</span>,</span>
+<span>    <span class="st">"PREC_500_1"</span>,</span>
+<span>    <span class="st">"PREC_500_2"</span>,</span>
+<span>    <span class="st">"PREC_500_3"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  Type <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"LNCaP"</span>, <span class="st">"LNCaP"</span>, <span class="st">"LNCaP"</span>, <span class="st">"PREC"</span>, <span class="st">"PREC"</span>, <span class="st">"PREC"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">targets</span><span class="op">$</span><span class="va">Name2</span> <span class="op">&lt;-</span> <span class="fu">paste</span><span class="op">(</span></span>
+<span>  <span class="va">targets</span><span class="op">$</span><span class="va">Accession</span>, <span class="va">targets</span><span class="op">$</span><span class="va">Name</span>, sep <span class="op">=</span> <span class="st">"_"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Define the variable of interest and convert it to a factor.</span></span>
+<span><span class="va">variable.of.choice</span> <span class="op">&lt;-</span> <span class="fu">as.factor</span><span class="op">(</span><span class="va">targets</span><span class="op">$</span><span class="va">Type</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">targets</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="fig/introduction-rendered-pyramid-1.png" alt="pie chart illusion of a pyramid" class="figure mx-auto d-block"><figcaption>
-Sun arise each and every morning
-</figcaption></figure><p>Or you can use standard markdown for static figures with the
-following syntax:</p>
-<p><code>![optional caption that appears below the figure](figure url){alt='alt text for accessibility purposes'}</code></p>
-<figure><img src="https://raw.githubusercontent.com/carpentries/logo/master/Badge_Carpentries.svg" alt="Blue Carpentries hex person logo with no text." class="figure mx-auto d-block"><div class="figcaption">You belong in The Carpentries!</div>
-</figure><div id="callout1" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
 </div>
-<span class="callout-header">Callout</span>
-<div class="callout-inner">
-<div class="callout-content">
-<p>Callout sections can highlight information.</p>
-<p>They are sometimes used to emphasise particularly important points
-but are also used in some lessons to present “asides”: content that is
-not central to the narrative of the lesson, e.g. by providing the answer
-to a commonly-asked question.</p>
+<div class="section level3">
+<h3 id="download-the-idat-files">Download the IDAT files<a class="anchor" aria-label="anchor" href="#download-the-idat-files"></a>
+</h3>
+<p>The following chunk downloads the IDAT files for the six accessions
+in <code>targets</code>. Each sample is saved in its own accession-named
+folder within your current project directory.</p>
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Download only IDAT files for the selected tutorial samples.</span></span>
+<span><span class="va">gsmlist</span> <span class="op">&lt;-</span> <span class="fu">lapply</span><span class="op">(</span></span>
+<span>  <span class="va">targets</span><span class="op">$</span><span class="va">Accession</span>,</span>
+<span>  <span class="fu">GEOquery</span><span class="fu">::</span><span class="va">getGEOSuppFiles</span>,</span>
+<span>  makeDirectory <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  baseDir <span class="op">=</span> <span class="fu">getwd</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  filter_regex <span class="op">=</span> <span class="st">"[.]idat([.]gz)?$"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">names</span><span class="op">(</span><span class="va">gsmlist</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">targets</span><span class="op">$</span><span class="va">Accession</span></span></code></pre>
 </div>
 </div>
-</div>
-</section><section><h2 class="section-heading" id="math">Math<a class="anchor" aria-label="anchor" href="#math"></a>
+</section><section><h2 class="section-heading" id="read-in--idats">Read in .idats<a class="anchor" aria-label="anchor" href="#read-in--idats"></a>
 </h2>
 <hr class="half-width">
-<p>One of our episodes contains <span class="math inline">\(\LaTeX\)</span> equations when describing how to
-create dynamic reports with {knitr}, so we now use mathjax to describe
-this:</p>
-<p><code>$\alpha = \dfrac{1}{(1 - \beta)^2}$</code> becomes: <span class="math inline">\(\alpha = \dfrac{1}{(1 - \beta)^2}\)</span></p>
-<p>Cool, right?</p>
+<p>Add the sample names and file paths to <code>targets</code>,
+preserving its sample order. <code>Basename</code> is the path to each
+file pair without the <code>_Grn.idat</code> or <code>_Red.idat</code>
+suffix (or their compressed <code>.gz</code> equivalents).</p>
+<div class="codewrapper sourceCode" id="cb5">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Link the sample information to the downloaded IDAT files.</span></span>
+<span><span class="va">targets</span><span class="op">$</span><span class="va">Sample</span> <span class="op">&lt;-</span> <span class="va">targets</span><span class="op">$</span><span class="va">Name</span></span>
+<span><span class="va">targets</span><span class="op">$</span><span class="va">Basename</span> <span class="op">&lt;-</span> <span class="fu">file.path</span><span class="op">(</span></span>
+<span>  <span class="fu">getwd</span><span class="op">(</span><span class="op">)</span>, <span class="va">targets</span><span class="op">$</span><span class="va">Accession</span>, <span class="va">targets</span><span class="op">$</span><span class="va">Name2</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Read in raw data from the red/green IDAT files.</span></span>
+<span><span class="va">rgSet</span> <span class="op">&lt;-</span> <span class="fu">read.metharray.exp</span><span class="op">(</span>targets <span class="op">=</span> <span class="va">targets</span><span class="op">)</span></span>
+<span><span class="fu">sampleNames</span><span class="op">(</span><span class="va">rgSet</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">targets</span><span class="op">$</span><span class="va">Sample</span></span>
+<span><span class="va">rgSet</span><span class="op">@</span><span class="va">annotation</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span></span>
+<span>  array <span class="op">=</span> <span class="st">"IlluminaHumanMethylationEPICv2"</span>,</span>
+<span>  annotation <span class="op">=</span> <span class="st">"20a1.hg38"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">rgSet</span></span></code></pre>
+</div>
+<p><code>rgSet</code> contains the raw intensities for the six samples.
+For your own data, set <code>targets$Basename</code> to your file paths
+and use the annotation matching your array type. Quality control,
+filtering and normalisation follow in the next episode.</p>
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
@@ -470,14 +536,217 @@ this:</p>
 <div class="callout-inner">
 <div class="callout-content">
 <ul>
-<li>Use <code>.md</code> files for episodes when you want static
-content</li>
-<li>Use <code>.Rmd</code> files for episodes when you need to generate
-output</li>
-<li>Run <code>sandpaper::check_lesson()</code> to identify any issues
-with your lesson</li>
-<li>Run <code>sandpaper::build_lesson()</code> to preview your lesson
-locally</li>
+<li>Raw Illumina methylation array data are stored in <code>.idat</code>
+files, with one red-channel and one green-channel file per sample.</li>
+<li>The <code>targets</code> data frame holds the sample metadata,
+linking each sample’s name and cell-line group to its IDAT file
+paths.</li>
+<li>
+<code>read.metharray.exp(targets = targets)</code> reads the raw
+intensities into <code>rgSet</code>, an <code>RGChannelSet</code>
+object, ready for quality control and preprocessing.</li>
+</ul>
+</div>
+</div>
+</div>
+<!--
+Place links that you need to refer to multiple times across pages here. Delete
+any links that you are not going to use.
+ -->
+</section></section><section id="aio-first-steps"><p>Content from <a href="first-steps.html">First steps: quality control, filtering, normalisation and basic visualisation</a></p>
+<hr>
+<p>Last updated on 2026-09-24 |
+
+        <a href="https://github.com/stellaliu525-web/intro-to-methylation-array/edit/main/episodes/first-steps.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+<div class="text-end">
+          <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
+        </div>
+<div class="overview card">
+<h2 class="card-header">Overview</h2>
+<div class="row g-0">
+<div class="col-md-4">
+<div class="card-body">
+<div class="inner">
+<h3 class="card-title">Questions</h3>
+<ul>
+<li>How do we assess the quality of methylation array data?</li>
+<li>How do filtering and normalisation prepare data for analysis?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-md-8">
+<div class="card-body">
+<div class="inner bordered">
+<h3 class="card-title">Objectives</h3>
+<ul>
+<li>Inspect sample and probe quality.</li>
+<li>Apply filtering and normalisation.</li>
+<li>Create basic visualisations of the processed data.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>This episode is under development. The sections below outline the
+planned content.</p>
+<section><h2 class="section-heading" id="quality-control">Quality control<a class="anchor" aria-label="anchor" href="#quality-control"></a>
+</h2>
+<hr class="half-width">
+<!-- Add explanations, code examples, and exercises here. --></section><section><h2 class="section-heading" id="filtering">Filtering<a class="anchor" aria-label="anchor" href="#filtering"></a>
+</h2>
+<hr class="half-width">
+<!-- Add explanations, code examples, and exercises here. --></section><section><h2 class="section-heading" id="normalisation">Normalisation<a class="anchor" aria-label="anchor" href="#normalisation"></a>
+</h2>
+<hr class="half-width">
+<!-- Add explanations, code examples, and exercises here. --></section><section><h2 class="section-heading" id="basic-visualisation">Basic visualisation<a class="anchor" aria-label="anchor" href="#basic-visualisation"></a>
+</h2>
+<hr class="half-width">
+<!-- Add explanations, code examples, and exercises here. --><div id="keypoints1" class="callout keypoints">
+<div class="callout-square">
+<i class="callout-icon" data-feather="key"></i>
+</div>
+<span class="callout-header">Key Points</span>
+<div class="callout-inner">
+<div class="callout-content">
+<ul>
+<li>Key points will be added when this episode is completed.</li>
+</ul>
+</div>
+</div>
+</div>
+<!--
+Place links that you need to refer to multiple times across pages here. Delete
+any links that you are not going to use.
+ -->
+</section></section><section id="aio-differentially-methylated-probes"><p>Content from <a href="differentially-methylated-probes.html">Differentially methylated probes with limma</a></p>
+<hr>
+<p>Last updated on 2026-09-24 |
+
+        <a href="https://github.com/stellaliu525-web/intro-to-methylation-array/edit/main/episodes/differentially-methylated-probes.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+<div class="text-end">
+          <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
+        </div>
+<div class="overview card">
+<h2 class="card-header">Overview</h2>
+<div class="row g-0">
+<div class="col-md-4">
+<div class="card-body">
+<div class="inner">
+<h3 class="card-title">Questions</h3>
+<ul>
+<li>How do we compare methylation at individual probes between
+groups?</li>
+<li>How do we interpret the results from limma?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-md-8">
+<div class="card-body">
+<div class="inner bordered">
+<h3 class="card-title">Objectives</h3>
+<ul>
+<li>Define a design matrix and contrasts for the comparison.</li>
+<li>Identify differentially methylated probes with limma.</li>
+<li>Summarise and visualise the results.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>This episode is under development. The sections below outline the
+planned content.</p>
+<section><h2 class="section-heading" id="prepare-the-data">Prepare the data<a class="anchor" aria-label="anchor" href="#prepare-the-data"></a>
+</h2>
+<hr class="half-width">
+<!-- Add explanations, code examples, and exercises here. --></section><section><h2 class="section-heading" id="define-the-design-matrix-and-contrasts">Define the design matrix and contrasts<a class="anchor" aria-label="anchor" href="#define-the-design-matrix-and-contrasts"></a>
+</h2>
+<hr class="half-width">
+<!-- Add explanations, code examples, and exercises here. --></section><section><h2 class="section-heading" id="fit-models-with-limma">Fit models with limma<a class="anchor" aria-label="anchor" href="#fit-models-with-limma"></a>
+</h2>
+<hr class="half-width">
+<!-- Add explanations, code examples, and exercises here. --></section><section><h2 class="section-heading" id="interpret-and-visualise-differentially-methylated-probes">Interpret and visualise differentially methylated probes<a class="anchor" aria-label="anchor" href="#interpret-and-visualise-differentially-methylated-probes"></a>
+</h2>
+<hr class="half-width">
+<!-- Add explanations, code examples, and exercises here. --><div id="keypoints1" class="callout keypoints">
+<div class="callout-square">
+<i class="callout-icon" data-feather="key"></i>
+</div>
+<span class="callout-header">Key Points</span>
+<div class="callout-inner">
+<div class="callout-content">
+<ul>
+<li>Key points will be added when this episode is completed.</li>
+</ul>
+</div>
+</div>
+</div>
+<!--
+Place links that you need to refer to multiple times across pages here. Delete
+any links that you are not going to use.
+ -->
+</section></section><section id="aio-differentially-methylated-regions"><p>Content from <a href="differentially-methylated-regions.html">Differentially methylated regions with DMRcate</a></p>
+<hr>
+<p>Last updated on 2026-09-24 |
+
+        <a href="https://github.com/stellaliu525-web/intro-to-methylation-array/edit/main/episodes/differentially-methylated-regions.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+<div class="text-end">
+          <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
+        </div>
+<div class="overview card">
+<h2 class="card-header">Overview</h2>
+<div class="row g-0">
+<div class="col-md-4">
+<div class="card-body">
+<div class="inner">
+<h3 class="card-title">Questions</h3>
+<ul>
+<li>How do we identify differentially methylated regions?</li>
+<li>How do we interpret and visualise results from DMRcate?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-md-8">
+<div class="card-body">
+<div class="inner bordered">
+<h3 class="card-title">Objectives</h3>
+<ul>
+<li>Prepare the inputs for DMRcate.</li>
+<li>Identify differentially methylated regions.</li>
+<li>Summarise and visualise the regions.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>This episode is under development. The sections below outline the
+planned content.</p>
+<section><h2 class="section-heading" id="prepare-the-inputs">Prepare the inputs<a class="anchor" aria-label="anchor" href="#prepare-the-inputs"></a>
+</h2>
+<hr class="half-width">
+<!-- Add explanations, code examples, and exercises here. --></section><section><h2 class="section-heading" id="identify-regions-with-dmrcate">Identify regions with DMRcate<a class="anchor" aria-label="anchor" href="#identify-regions-with-dmrcate"></a>
+</h2>
+<hr class="half-width">
+<!-- Add explanations, code examples, and exercises here. --></section><section><h2 class="section-heading" id="annotate-and-interpret-regions">Annotate and interpret regions<a class="anchor" aria-label="anchor" href="#annotate-and-interpret-regions"></a>
+</h2>
+<hr class="half-width">
+<!-- Add explanations, code examples, and exercises here. --></section><section><h2 class="section-heading" id="visualise-differentially-methylated-regions">Visualise differentially methylated regions<a class="anchor" aria-label="anchor" href="#visualise-differentially-methylated-regions"></a>
+</h2>
+<hr class="half-width">
+<!-- Add explanations, code examples, and exercises here. --><div id="keypoints1" class="callout keypoints">
+<div class="callout-square">
+<i class="callout-icon" data-feather="key"></i>
+</div>
+<span class="callout-header">Key Points</span>
+<div class="callout-inner">
+<div class="callout-content">
+<ul>
+<li>Key points will be added when this episode is completed.</li>
 </ul>
 </div>
 </div>
@@ -499,11 +768,11 @@ any links that you are not going to use.
         <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
 
-        <a href="https://github.com/melbournebioinformatics/workbench-template-rmd/edit/main/README.md" class="external-link">Edit on GitHub</a>
+        <a href="https://github.com/stellaliu525-web/intro-to-methylation-array/edit/main/README.md" class="external-link">Edit on GitHub</a>
 
 	
-        | <a href="https://github.com/melbournebioinformatics/workbench-template-rmd/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
-        | <a href="https://github.com/melbournebioinformatics/workbench-template-rmd/" class="external-link">Source</a></p>
+        | <a href="https://github.com/stellaliu525-web/intro-to-methylation-array/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
+        | <a href="https://github.com/stellaliu525-web/intro-to-methylation-array/" class="external-link">Source</a></p>
         <p>
         <a href="citation.html">Cite</a>
         | <a href="mailto:fixme@fixme.org">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
@@ -513,7 +782,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors.</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a> Custom fork by <a href="https://www.melbournebioinformatics.org.au/" class="external-link">Melbourne Bioinformatics</a>.</p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/" class="external-link">sandpaper (0.20.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/melbournebioinformatics/uom-varnish/tree/main" class="external-link">varnish (1.1.3)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/" class="external-link">sandpaper (0.21.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/melbournebioinformatics/uom-varnish/tree/main" class="external-link">varnish (1.1.3)</a></p>
 		</div>
 		</footer>
 </div> <!-- / div.container -->
@@ -526,18 +795,18 @@ any links that you are not going to use.
     {
   "@context": "https://schema.org",
   "@type": "LearningResource",
-  "@id": "melbournebioinformatics.github.io/uom-varnish/aio.html",
+  "@id": "https://stellaliu525-web.github.io/intro-to-methylation-array/aio.html",
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "software, data, lesson",
   "name": "All in One View",
   "creativeWorkStatus": "active",
-  "url": "melbournebioinformatics.github.io/uom-varnish/aio.html",
-  "identifier": "melbournebioinformatics.github.io/uom-varnish/aio.html",
-  "dateCreated": "2026-08-03",
-  "dateModified": "2026-08-18",
-  "datePublished": "2026-08-18"
+  "url": "https://stellaliu525-web.github.io/intro-to-methylation-array/aio.html",
+  "identifier": "https://stellaliu525-web.github.io/intro-to-methylation-array/aio.html",
+  "dateCreated": "2026-09-24",
+  "dateModified": "2026-09-24",
+  "datePublished": "2026-09-24"
 }
 
   </script><script>

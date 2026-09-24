@@ -24,7 +24,7 @@
   <div class="container-fluid top-nav-container">
     <div class="col-md-8">
       <div class="large-logo">
-        <img id="uom-logo" alt="Lesson Description" src="../assets/images/uom-logo.svg"><span class="badge text-bg-danger">
+        <img id="uom-logo" alt="University of Melbourne" src="../assets/images/uom-logo.svg"><span class="badge text-bg-danger">
           <abbr title="This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.">
             <a href="https://docs.carpentries.org/resources/curriculum/lesson-life-cycle.html" class="external-link alert-link">
               <i aria-hidden="true" class="icon" data-feather="alert-octagon" style="border-radius: 5px"></i>
@@ -74,7 +74,7 @@
       <span class="menu-title">Menu</span>
     </button>
     <div class="nav-logo">
-      <img class="small-logo" alt="Lesson Description" src="../assets/images/uom-logo-sm.svg"></div>
+      <img class="small-logo" alt="University of Melbourne" src="../assets/images/uom-logo-sm.svg"></div>
     <div class="lesson-title-md">
       Introduction to methylation array
     </div>
@@ -200,7 +200,34 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="introduction.html">1. Using RMarkdown</a>
+        <a href="introduction.html">1. Introduction: loading packages and downloading data</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush3">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading3">
+        <a href="first-steps.html">2. First steps: quality control, filtering, normalisation and basic visualisation</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush4">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading4">
+        <a href="differentially-methylated-probes.html">3. Differentially methylated probes with limma</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush5">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading5">
+        <a href="differentially-methylated-regions.html">4. Differentially methylated regions with DMRcate</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -252,7 +279,7 @@
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link float-end" href="../instructor/introduction.html" rel="next">Next: Using RMarkdown... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="../instructor/introduction.html" rel="next">Next: Introduction: loading packages and... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <hr></nav><main id="main-content" class="main-content"><h1 class="schedule-heading">Summary and Schedule</h1>
       
@@ -275,13 +302,47 @@ any links that you are not going to use.
 <span class="visually-hidden">Duration: </span>00h 00m
 </td>
 <td>
- 1. <a href="introduction.html">Using RMarkdown</a>
+ 1. <a href="introduction.html">Introduction: loading packages and
+downloading data</a>
 </td>
 <td>
-How do you write a lesson using R Markdown and <a href="https://carpentries.github.io/sandpaper/" class="external-link">sandpaper</a>?
+FIXME<br>FIXME
 </td>
 </tr><tr><td>
-<span class="visually-hidden">Duration: </span>00h 12m
+<span class="visually-hidden">Duration: </span>00h 20m
+</td>
+<td>
+ 2. <a href="first-steps.html">First steps: quality control, filtering,
+normalisation and basic visualisation</a>
+</td>
+<td>
+How do we assess the quality of methylation array data?<br>How do
+filtering and normalisation prepare data for analysis?
+</td>
+</tr><tr><td>
+<span class="visually-hidden">Duration: </span>00h 20m
+</td>
+<td>
+ 3. <a href="differentially-methylated-probes.html">Differentially
+methylated probes with limma</a>
+</td>
+<td>
+How do we compare methylation at individual probes between
+groups?<br>How do we interpret the results from limma?
+</td>
+</tr><tr><td>
+<span class="visually-hidden">Duration: </span>00h 20m
+</td>
+<td>
+ 4. <a href="differentially-methylated-regions.html">Differentially
+methylated regions with DMRcate</a>
+</td>
+<td>
+How do we identify differentially methylated regions?<br>How do we
+interpret and visualise results from DMRcate?
+</td>
+</tr><tr><td>
+<span class="visually-hidden">Duration: </span>00h 20m
 </td>
 <td>
 Finish
@@ -296,17 +357,6 @@ any links that you are not going to use.
       </p>
       </section><section id="setup"><p>Please follow the steps below and install the required software
 <strong>before</strong> the scheduled workshop.</p>
-<!--
-FIXME: Setup instructions live in this document. Please specify the tools and
-the data sets the Learner needs to have installed.
-
-## Data Sets
-
-FIXME: place any data you want learners to use in `episodes/data` and then use
-       a relative link ( [data zip file](data/lesson-data.zip) ) to provide a
-       link to it, replacing the example.com link.
-Download the [data zip file](https://example.com/FIXME) and unzip it to your Desktop
--->
 <section><h2 class="section-heading" id="rstudio-setup">RStudio Setup<a class="anchor" aria-label="anchor" href="#rstudio-setup"></a></h2>
 <hr class="half-width"><p>We use RStudio for coding in R.</p>
 <p><a href="https://posit.co/download/rstudio-desktop/" class="external-link">Click here and
@@ -358,50 +408,47 @@ them. To install BiocManager:</p>
 </div>
 </div>
 </div>
-<!--
-READ HERE FOR OS-SPECIFIC INSTRUCTIONS
-
-Setup for different systems can be presented in dropdown menus via a `spoiler`
-tag. They will join to this discussion block, so you can give a general overview
-of the software used in this lesson here and fill out the individual operating
-systems (and potentially add more, e.g. online setup) in the solutions blocks.
--->
-<!--
-:::::::::::::::: spoiler
-
-### Windows
-
-Use PuTTY
-
-::::::::::::::::::::::::
-
-:::::::::::::::: spoiler
-
-### MacOS
-
-Use Terminal.app
-
-::::::::::::::::::::::::
-
-
-:::::::::::::::: spoiler
-
-### Linux
-
-Use Terminal
-
-::::::::::::::::::::::::
--->
+<div class="section level3">
+<h3 id="install-required-r-packages">Install required R packages<a class="anchor" aria-label="anchor" href="#install-required-r-packages"></a></h3>
+<p>Run the following commands in the <strong>Console</strong> pane of
+RStudio to install the packages for this workshop. Required dependencies
+are installed automatically.</p>
+<div class="codewrapper sourceCode" id="cb5">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">install.packages</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span></span>
+<span>  <span class="st">"tidyverse"</span>, <span class="st">"readxl"</span>, <span class="st">"Polychrome"</span>, <span class="st">"ggsci"</span>,</span>
+<span>  <span class="st">"gridExtra"</span>, <span class="st">"RColorBrewer"</span>, <span class="st">"reshape2"</span>, <span class="st">"R.utils"</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">requireNamespace</span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">install.packages</span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span></span>
+<span>  <span class="st">"minfi"</span>, <span class="st">"limma"</span>, <span class="st">"GEOquery"</span>,</span>
+<span>  <span class="st">"IlluminaHumanMethylationEPICv2anno.20a1.hg38"</span>,</span>
+<span>  <span class="st">"IlluminaHumanMethylationEPICv2manifest"</span>,</span>
+<span>  <span class="st">"AnnotationHub"</span>, <span class="st">"ComplexHeatmap"</span>, <span class="st">"DMRcate"</span>, <span class="st">"methylKit"</span>,</span>
+<span>  <span class="st">"missMethyl"</span>, <span class="st">"clusterProfiler"</span>, <span class="st">"org.Hs.eg.db"</span></span>
+<span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<p>For EPIC v2 arrays, the matching packages are <a href="https://bioconductor.org/packages/IlluminaHumanMethylationEPICv2manifest/" class="external-link"><code>IlluminaHumanMethylationEPICv2manifest</code></a>
+and <a href="https://bioconductor.org/packages/IlluminaHumanMethylationEPICv2anno.20a1.hg38/" class="external-link"><code>IlluminaHumanMethylationEPICv2anno.20a1.hg38</code></a>.
+Manifest and annotation package required will change depending on array
+type used.</p>
 <!--
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
+</div>
 </section></section></main><nav class="bottom-pagination mx-md-4" aria-label="Next Chapter"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link float-end" href="../instructor/introduction.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link float-end" href="../instructor/introduction.html" rel="next">Next: Using RMarkdown... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="../instructor/introduction.html" rel="next">Next: Introduction: loading packages and... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
     </nav></div>
 <!-- END  : inst/pkgdown/templates/content-syllabus.html -->
@@ -411,11 +458,11 @@ any links that you are not going to use.
         <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
 
-        <a href="https://github.com/melbournebioinformatics/workbench-template-rmd/edit/main/index.md" class="external-link">Edit on GitHub</a>
+        <a href="https://github.com/stellaliu525-web/intro-to-methylation-array/edit/main/index.md" class="external-link">Edit on GitHub</a>
 
 	
-        | <a href="https://github.com/melbournebioinformatics/workbench-template-rmd/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
-        | <a href="https://github.com/melbournebioinformatics/workbench-template-rmd/" class="external-link">Source</a></p>
+        | <a href="https://github.com/stellaliu525-web/intro-to-methylation-array/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
+        | <a href="https://github.com/stellaliu525-web/intro-to-methylation-array/" class="external-link">Source</a></p>
         <p>
         <a href="../citation.html">Cite</a>
         | <a href="mailto:fixme@fixme.org">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
@@ -425,7 +472,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors.</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a> Custom fork by <a href="https://www.melbournebioinformatics.org.au/" class="external-link">Melbourne Bioinformatics</a>.</p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/" class="external-link">sandpaper (0.20.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/melbournebioinformatics/uom-varnish/tree/main" class="external-link">varnish (1.1.3)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/" class="external-link">sandpaper (0.21.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/melbournebioinformatics/uom-varnish/tree/main" class="external-link">varnish (1.1.3)</a></p>
 		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -437,18 +484,18 @@ any links that you are not going to use.
     {
   "@context": "https://schema.org",
   "@type": "LearningResource",
-  "@id": "melbournebioinformatics.github.io/uom-varnish/instructor/index.html",
+  "@id": "https://stellaliu525-web.github.io/intro-to-methylation-array/instructor/index.html",
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "software, data, lesson",
   "name": "Introduction to methylation array",
   "creativeWorkStatus": "active",
-  "url": "melbournebioinformatics.github.io/uom-varnish/instructor/index.html",
-  "identifier": "melbournebioinformatics.github.io/uom-varnish/instructor/index.html",
-  "dateCreated": "2026-08-03",
-  "dateModified": "2026-08-18",
-  "datePublished": "2026-08-18"
+  "url": "https://stellaliu525-web.github.io/intro-to-methylation-array/instructor/index.html",
+  "identifier": "https://stellaliu525-web.github.io/intro-to-methylation-array/instructor/index.html",
+  "dateCreated": "2026-09-24",
+  "dateModified": "2026-09-24",
+  "datePublished": "2026-09-24"
 }
 
   </script><script>
