@@ -2,42 +2,45 @@
 # Values for this lesson.
 #------------------------------------------------------------
 
-# Which carpentry is this (swc, dc, lc, or cp)? < REPLACED with UNIMELB institutes >
-# uom: University of Melbourne
-# mb: Melbourne Bioinformatics
-# mig: Melbourne Integrative Genomics
-# wehi: Walter and Eliza Hall Institute
-# abacbs: Australian Bioinformatics and Computational Biology Society
+# Which carpentry is this (swc, dc, lc, or cp)?
+# swc: Software Carpentry
+# dc: Data Carpentry
+# lc: Library Carpentry
+# cp: Carpentries (to use for instructor training for instance)
+# incubator: The Carpentries Incubator
+# Note that you can also use a custom carpentry type. For more info,
+# see the documentation: https://carpentries.github.io/sandpaper-docs/editing.html
 carpentry: 'uom'
 
-# Alt-text description of the lesson.
-carpentry_description: 'Lesson Description' # FIXME
+# Custom carpentry description
+# This will be used as the alt text for the logo
+# carpentry_description: "Custom Carpentry"
 
 # Overall title for pages.
 title: 'Introduction to methylation array'
 
-# Date the lesson was created ('YYYY-MM-DD', this is empty by default)
-created: ~ # FIXME
+# Date the lesson was created (YYYY-MM-DD, this is empty by default)
+created:
 
-# Comma-separated list of keywords for the lesson. Avoid words in the title.
-keywords: 'software, data, lesson' # FIXME
+# Comma-separated list of keywords for the lesson
+keywords: 'software, data, lesson'
 
 # Life cycle stage of the lesson
 # refer to <https://docs.carpentries.org/resources/curriculum/lesson-life-cycle.html> for details
 # possible values: pre-alpha, alpha, beta, stable
-life_cycle: 'pre-alpha' # FIXME
+life_cycle: 'pre-alpha'
 
-# License of the lesson
+# License of the lesson materials (recommended CC-BY 4.0)
 license: 'CC-BY 4.0'
 
 # Link to the source repository for this lesson
-source: 'https://github.com/melbournebioinformatics/workbench-template-rmd' # FIXME
+source: 'https://github.com/stellaliu525-web/intro-to-methylation-array'
 
 # Default branch of your lesson
 branch: 'main'
 
 # Who to contact if there are any issues
-contact: 'fixme@fixme.org' # FIXME
+contact: 'fixme@fixme.org'
 
 # Navigation ------------------------------------------------
 #
@@ -64,6 +67,9 @@ contact: 'fixme@fixme.org' # FIXME
 # Order of episodes in your lesson
 episodes:
 - introduction.Rmd
+- first-steps.Rmd
+- differentially-methylated-probes.Rmd
+- differentially-methylated-regions.Rmd
 
 # Information for Learners
 learners:
@@ -79,7 +85,7 @@ profiles:
 # This space below is where custom yaml items (e.g. pinning
 # sandpaper and varnish versions) should live
 
-# This is the UoM varnish, which is a custom version of the Carpentries varnish
-varnish: 'melbournebioinformatics/uom-varnish@main'
-url: 'melbournebioinformatics.github.io/uom-varnish'
 
+carpentry_description: 'University of Melbourne'
+varnish: melbournebioinformatics/uom-varnish@main
+url: 'https://stellaliu525-web.github.io/intro-to-methylation-array/'
