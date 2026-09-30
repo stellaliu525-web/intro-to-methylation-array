@@ -104,8 +104,17 @@ jobs:
           bootstrap <- tempfile("bioc-library-")
           dir.create(bootstrap)
           .libPaths(c(bootstrap, .libPaths()))
-          install.packages("BiocManager", lib = bootstrap,
+          install.packages(c("BiocManager", "renv"), lib = bootstrap,
             repos = "https://cloud.r-project.org")
+          Sys.setenv(RENV_PROFILE = "lesson-requirements")
+          lesson_library <- renv::paths$library()
+          dir.create(lesson_library, recursive = TRUE, showWarnings = FALSE)
+          # A temporary bootstrap library is not visible to later R processes.
+          install.packages("BiocManager", lib = lesson_library,
+            repos = "https://cloud.r-project.org")
+          bioc_version <- as.character(BiocManager::version())
+          renv::settings$bioconductor.version(bioc_version)
+          cat("R:", R.version.string, "\nBioconductor:", bioc_version, "\n")
           options(repos = c(CRAN = "https://cloud.r-project.org"))
           repos <- c(
             carpentries = "https://carpentries.r-universe.dev/",
@@ -122,6 +131,19 @@ jobs:
           override <- paste(names(repos), repos, sep = "=", collapse = ";")
           cat(paste0("RENV_CONFIG_REPOS_OVERRIDE=", override, "\n"),
             file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+          # Check both software and annotation indexes before installing packages.
+          options(timeout = 300, warn = 1)
+          available <- available.packages(repos = repos, type = "source")
+          required <- c("AnnotationHub", "clusterProfiler", "ComplexHeatmap",
+            "DMRcate", "GEOquery", "IlluminaHumanMethylationEPICv2anno.20a1.hg38",
+            "IlluminaHumanMethylationEPICv2manifest", "limma", "methylKit",
+            "minfi", "missMethyl", "org.Hs.eg.db")
+          missing <- setdiff(required, rownames(available))
+          if (length(missing)) {
+            stop("Bioconductor repository check failed: ",
+              paste(missing, collapse = ", "))
+          }
+          print(available[required, c("Package", "Version", "Repository")])
 
       - name: "Update {renv} deps and determine if a PR is needed"
         id: update
@@ -132,6 +154,23 @@ jobs:
           force-renv-init: ${{ env.FORCE_RENV_INIT }}
           generate-cache: ${{ env.LOCKFILE_CACHE_GEN }}
           cache-version: ${{ secrets.CACHE_VERSION }}
+
+      - name: "Verify Bioconductor packages were recorded"
+        shell: Rscript --vanilla {0}
+        run: |
+          Sys.setenv(RENV_PROFILE = "lesson-requirements")
+          source("renv/activate.R")
+          .libPaths(c(renv::paths$library(), .libPaths()))
+          lock <- renv::lockfile_read(renv::paths$lockfile())
+          required <- c("AnnotationHub", "clusterProfiler", "ComplexHeatmap",
+            "DMRcate", "GEOquery", "IlluminaHumanMethylationEPICv2anno.20a1.hg38",
+            "IlluminaHumanMethylationEPICv2manifest", "limma", "methylKit",
+            "minfi", "missMethyl", "org.Hs.eg.db")
+          missing <- setdiff(required, names(lock$Packages))
+          if (length(missing)) {
+            stop("Refusing an incomplete package update; lockfile is missing: ",
+              paste(missing, collapse = ", "))
+          }
 
       - name: "Validate Current Org and Workflow"
         id: validate-org-workflow
