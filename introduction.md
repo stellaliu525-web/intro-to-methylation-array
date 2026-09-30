@@ -34,27 +34,161 @@ whenever you restart R.
 ``` r
 # Data handling
 library(tidyverse)
+```
+
+``` output
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.2.1     ✔ readr     2.2.0
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+✔ purrr     1.2.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+```
+
+``` r
 library(readxl)
 library(reshape2)
+```
 
+``` output
+
+Attaching package: 'reshape2'
+
+The following object is masked from 'package:tidyr':
+
+    smiths
+```
+
+``` r
 # Methylation analysis and annotation
 library(minfi)
-library(GEOquery)
-library(limma)
-library(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
-library(IlluminaHumanMethylationEPICv2manifest)
-library(AnnotationHub)
-library(DMRcate)
-library(methylKit)
-library(missMethyl)
-library(clusterProfiler)
-library(org.Hs.eg.db)
+```
 
+``` error
+Error in `library()`:
+! there is no package called 'minfi'
+```
+
+``` r
+library(GEOquery)
+```
+
+``` error
+Error in `library()`:
+! there is no package called 'GEOquery'
+```
+
+``` r
+library(limma)
+```
+
+``` error
+Error in `library()`:
+! there is no package called 'limma'
+```
+
+``` r
+library(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
+```
+
+``` error
+Error in `library()`:
+! there is no package called 'IlluminaHumanMethylationEPICv2anno.20a1.hg38'
+```
+
+``` r
+library(IlluminaHumanMethylationEPICv2manifest)
+```
+
+``` error
+Error in `library()`:
+! there is no package called 'IlluminaHumanMethylationEPICv2manifest'
+```
+
+``` r
+library(AnnotationHub)
+```
+
+``` error
+Error in `library()`:
+! there is no package called 'AnnotationHub'
+```
+
+``` r
+library(DMRcate)
+```
+
+``` error
+Error in `library()`:
+! there is no package called 'DMRcate'
+```
+
+``` r
+library(methylKit)
+```
+
+``` error
+Error in `library()`:
+! there is no package called 'methylKit'
+```
+
+``` r
+library(missMethyl)
+```
+
+``` error
+Error in `library()`:
+! there is no package called 'missMethyl'
+```
+
+``` r
+library(clusterProfiler)
+```
+
+``` error
+Error in `library()`:
+! there is no package called 'clusterProfiler'
+```
+
+``` r
+library(org.Hs.eg.db)
+```
+
+``` error
+Error in `library()`:
+! there is no package called 'org.Hs.eg.db'
+```
+
+``` r
 # Plotting and parallel computing
 library(Polychrome)
 library(ComplexHeatmap)
+```
+
+``` error
+Error in `library()`:
+! there is no package called 'ComplexHeatmap'
+```
+
+``` r
 library(ggsci)
 library(gridExtra)
+```
+
+``` output
+
+Attaching package: 'gridExtra'
+
+The following object is masked from 'package:dplyr':
+
+    combine
+```
+
+``` r
 library(RColorBrewer)
 library(parallel)
 ```
@@ -64,7 +198,20 @@ library(parallel)
 
 ``` r
 epic <- getAnnotation(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
+```
+
+``` error
+Error in `getAnnotation()`:
+! could not find function "getAnnotation"
+```
+
+``` r
 head(epic)
+```
+
+``` error
+Error:
+! object 'epic' not found
 ```
 
 ## Download data
@@ -118,6 +265,16 @@ variable.of.choice <- as.factor(targets$Type)
 targets
 ```
 
+``` output
+   Accession        Name  Type                  Name2
+1 GSM7698438 LNCAP_500_1 LNCaP GSM7698438_LNCAP_500_1
+2 GSM7698446 LNCAP_500_2 LNCaP GSM7698446_LNCAP_500_2
+3 GSM7698462 LNCAP_500_3 LNCaP GSM7698462_LNCAP_500_3
+4 GSM7698435  PREC_500_1  PREC  GSM7698435_PREC_500_1
+5 GSM7698443  PREC_500_2  PREC  GSM7698443_PREC_500_2
+6 GSM7698459  PREC_500_3  PREC  GSM7698459_PREC_500_3
+```
+
 ### Download the IDAT files
 
 The following chunk downloads the IDAT files for the six accessions in
@@ -134,7 +291,20 @@ gsmlist <- lapply(
   baseDir = getwd(),
   filter_regex = "[.]idat([.]gz)?$"
 )
+```
+
+``` error
+Error in `loadNamespace()`:
+! there is no package called 'GEOquery'
+```
+
+``` r
 names(gsmlist) <- targets$Accession
+```
+
+``` error
+Error:
+! object 'gsmlist' not found
 ```
 
 ## Read in .idats
@@ -153,12 +323,41 @@ targets$Basename <- file.path(
 
 # Read in raw data from the red/green IDAT files.
 rgSet <- read.metharray.exp(targets = targets)
+```
+
+``` error
+Error in `read.metharray.exp()`:
+! could not find function "read.metharray.exp"
+```
+
+``` r
 sampleNames(rgSet) <- targets$Sample
+```
+
+``` error
+Error:
+! object 'rgSet' not found
+```
+
+``` r
 rgSet@annotation <- c(
   array = "IlluminaHumanMethylationEPICv2",
   annotation = "20a1.hg38"
 )
+```
+
+``` error
+Error:
+! object 'rgSet' not found
+```
+
+``` r
 rgSet
+```
+
+``` error
+Error:
+! object 'rgSet' not found
 ```
 
 `rgSet` contains the raw intensities for the six samples. For your own data,
