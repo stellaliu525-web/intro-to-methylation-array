@@ -68,99 +68,347 @@ The following object is masked from 'package:tidyr':
 library(minfi)
 ```
 
-``` error
-Error in `library()`:
-! there is no package called 'minfi'
+``` output
+Loading required package: BiocGenerics
+Loading required package: generics
+
+Attaching package: 'generics'
+
+The following object is masked from 'package:lubridate':
+
+    as.difftime
+
+The following object is masked from 'package:dplyr':
+
+    explain
+
+The following objects are masked from 'package:base':
+
+    as.difftime, as.factor, as.ordered, intersect, is.element, setdiff,
+    setequal, union
+
+
+Attaching package: 'BiocGenerics'
+
+The following object is masked from 'package:dplyr':
+
+    combine
+
+The following objects are masked from 'package:stats':
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from 'package:base':
+
+    anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+    get, grep, grepl, is.unsorted, lapply, Map, mapply, match, mget,
+    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rownames, sapply, saveRDS, table, tapply, unique,
+    unsplit, which.max, which.min
+
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: S4Vectors
+
+Attaching package: 'S4Vectors'
+
+The following objects are masked from 'package:lubridate':
+
+    second, second<-
+
+The following objects are masked from 'package:dplyr':
+
+    first, rename
+
+The following object is masked from 'package:tidyr':
+
+    expand
+
+The following object is masked from 'package:utils':
+
+    findMatches
+
+The following objects are masked from 'package:base':
+
+    expand.grid, I, unname
+
+Loading required package: IRanges
+
+Attaching package: 'IRanges'
+
+The following object is masked from 'package:lubridate':
+
+    %within%
+
+The following objects are masked from 'package:dplyr':
+
+    collapse, desc, slice
+
+The following object is masked from 'package:purrr':
+
+    reduce
+
+Loading required package: Seqinfo
+Loading required package: SummarizedExperiment
+Loading required package: MatrixGenerics
+Loading required package: matrixStats
+
+Attaching package: 'matrixStats'
+
+The following object is masked from 'package:dplyr':
+
+    count
+
+
+Attaching package: 'MatrixGenerics'
+
+The following objects are masked from 'package:matrixStats':
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars
+
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+
+Attaching package: 'Biobase'
+
+The following object is masked from 'package:MatrixGenerics':
+
+    rowMedians
+
+The following objects are masked from 'package:matrixStats':
+
+    anyMissing, rowMedians
+```
+
+``` warning
+Warning: replacing previous import 'S4Arrays::makeNindexFromArrayViewport' by
+'DelayedArray::makeNindexFromArrayViewport' when loading 'SummarizedExperiment'
+```
+
+``` output
+Loading required package: Biostrings
+Loading required package: XVector
+
+Attaching package: 'XVector'
+
+The following object is masked from 'package:purrr':
+
+    compact
+
+
+Attaching package: 'Biostrings'
+
+The following object is masked from 'package:base':
+
+    strsplit
+
+Loading required package: bumphunter
+Loading required package: foreach
+
+Attaching package: 'foreach'
+
+The following objects are masked from 'package:purrr':
+
+    accumulate, when
+
+Loading required package: iterators
+Loading required package: parallel
+Loading required package: locfit
+locfit 1.5-9.12 	 2025-03-05
+
+Attaching package: 'locfit'
+
+The following object is masked from 'package:purrr':
+
+    none
+```
+
+``` warning
+Warning: replacing previous import 'S4Arrays::makeNindexFromArrayViewport' by
+'DelayedArray::makeNindexFromArrayViewport' when loading 'HDF5Array'
+```
+
+``` output
+Setting options('download.file.method.GEOquery'='auto')
+Setting options('GEOquery.inmemory.gpl'=FALSE)
 ```
 
 ``` r
 library(GEOquery)
-```
-
-``` error
-Error in `library()`:
-! there is no package called 'GEOquery'
-```
-
-``` r
 library(limma)
 ```
 
-``` error
-Error in `library()`:
-! there is no package called 'limma'
+``` output
+
+Attaching package: 'limma'
+
+The following object is masked from 'package:BiocGenerics':
+
+    plotMA
 ```
 
 ``` r
 library(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
-```
-
-``` error
-Error in `library()`:
-! there is no package called 'IlluminaHumanMethylationEPICv2anno.20a1.hg38'
-```
-
-``` r
 library(IlluminaHumanMethylationEPICv2manifest)
-```
-
-``` error
-Error in `library()`:
-! there is no package called 'IlluminaHumanMethylationEPICv2manifest'
-```
-
-``` r
 library(AnnotationHub)
 ```
 
-``` error
-Error in `library()`:
-! there is no package called 'AnnotationHub'
+``` output
+Loading required package: BiocFileCache
+Loading required package: dbplyr
+
+Attaching package: 'dbplyr'
+
+The following objects are masked from 'package:dplyr':
+
+    ident, sql, sql_escape_ident, sql_escape_string
+
+
+Attaching package: 'AnnotationHub'
+
+The following object is masked from 'package:Biobase':
+
+    cache
 ```
 
 ``` r
 library(DMRcate)
 ```
 
-``` error
-Error in `library()`:
-! there is no package called 'DMRcate'
+``` output
+
 ```
 
 ``` r
 library(methylKit)
 ```
 
-``` error
-Error in `library()`:
-! there is no package called 'methylKit'
+``` output
+
+Attaching package: 'methylKit'
+
+The following object is masked from 'package:dplyr':
+
+    select
+
+The following object is masked from 'package:tidyr':
+
+    unite
 ```
 
 ``` r
 library(missMethyl)
 ```
 
-``` error
-Error in `library()`:
-! there is no package called 'missMethyl'
+``` output
+Loading required package: IlluminaHumanMethylation450kanno.ilmn12.hg19
+
+Attaching package: 'IlluminaHumanMethylation450kanno.ilmn12.hg19'
+
+The following objects are masked from 'package:IlluminaHumanMethylationEPICv2anno.20a1.hg38':
+
+    Islands.UCSC, Locations, Manifest, Other, SNPs.141CommonSingle,
+    SNPs.142CommonSingle, SNPs.144CommonSingle, SNPs.146CommonSingle,
+    SNPs.147CommonSingle, SNPs.Illumina
+
+Loading required package: IlluminaHumanMethylationEPICanno.ilm10b4.hg19
+
+Attaching package: 'IlluminaHumanMethylationEPICanno.ilm10b4.hg19'
+
+The following objects are masked from 'package:IlluminaHumanMethylation450kanno.ilmn12.hg19':
+
+    Islands.UCSC, Locations, Manifest, Other, SNPs.132CommonSingle,
+    SNPs.135CommonSingle, SNPs.137CommonSingle, SNPs.138CommonSingle,
+    SNPs.141CommonSingle, SNPs.142CommonSingle, SNPs.144CommonSingle,
+    SNPs.146CommonSingle, SNPs.147CommonSingle, SNPs.Illumina
+
+The following objects are masked from 'package:IlluminaHumanMethylationEPICv2anno.20a1.hg38':
+
+    Islands.UCSC, Locations, Manifest, Other, SNPs.141CommonSingle,
+    SNPs.142CommonSingle, SNPs.144CommonSingle, SNPs.146CommonSingle,
+    SNPs.147CommonSingle, SNPs.Illumina
 ```
 
 ``` r
 library(clusterProfiler)
 ```
 
-``` error
-Error in `library()`:
-! there is no package called 'clusterProfiler'
+``` output
+
+clusterProfiler v4.20.0 Learn more at https://yulab-smu.top/contribution-knowledge-mining/
+
+Please cite:
+
+G Yu. Thirteen years of clusterProfiler. The Innovation. 2024,
+5(6):100722
+
+Attaching package: 'clusterProfiler'
+
+The following object is masked from 'package:methylKit':
+
+    select
+
+The following object is masked from 'package:XVector':
+
+    slice
+
+The following object is masked from 'package:IRanges':
+
+    slice
+
+The following object is masked from 'package:S4Vectors':
+
+    rename
+
+The following object is masked from 'package:purrr':
+
+    simplify
+
+The following object is masked from 'package:stats':
+
+    filter
 ```
 
 ``` r
 library(org.Hs.eg.db)
 ```
 
-``` error
-Error in `library()`:
-! there is no package called 'org.Hs.eg.db'
+``` output
+Loading required package: AnnotationDbi
+
+Attaching package: 'AnnotationDbi'
+
+The following object is masked from 'package:clusterProfiler':
+
+    select
+
+The following object is masked from 'package:methylKit':
+
+    select
+
+The following object is masked from 'package:dplyr':
+
+    select
 ```
 
 ``` r
@@ -169,9 +417,26 @@ library(Polychrome)
 library(ComplexHeatmap)
 ```
 
-``` error
-Error in `library()`:
-! there is no package called 'ComplexHeatmap'
+``` output
+Loading required package: grid
+========================================
+ComplexHeatmap version 2.28.0
+Bioconductor page: http://bioconductor.org/packages/ComplexHeatmap/
+Github page: https://github.com/jokergoo/ComplexHeatmap
+Documentation: http://jokergoo.github.io/ComplexHeatmap-reference
+
+If you use it in published research, please cite either one:
+- Gu, Z. Complex Heatmap Visualization. iMeta 2022.
+- Gu, Z. Complex heatmaps reveal patterns and correlations in multidimensional 
+    genomic data. Bioinformatics 2016.
+
+
+The new InteractiveComplexHeatmap package can directly export static 
+complex heatmaps into an interactive Shiny app with zero effort. Have a try!
+
+This message can be suppressed by:
+  suppressPackageStartupMessages(library(ComplexHeatmap))
+========================================
 ```
 
 ``` r
@@ -182,6 +447,18 @@ library(gridExtra)
 ``` output
 
 Attaching package: 'gridExtra'
+
+The following object is masked from 'package:minfi':
+
+    combine
+
+The following object is masked from 'package:Biobase':
+
+    combine
+
+The following object is masked from 'package:BiocGenerics':
+
+    combine
 
 The following object is masked from 'package:dplyr':
 
@@ -198,20 +475,107 @@ library(parallel)
 
 ``` r
 epic <- getAnnotation(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
-```
-
-``` error
-Error in `getAnnotation()`:
-! could not find function "getAnnotation"
-```
-
-``` r
 head(epic)
 ```
 
-``` error
-Error:
-! object 'epic' not found
+``` output
+DataFrame with 6 rows and 42 columns
+                        chr       pos      strand            Name    AddressA
+                <character> <integer> <character>     <character> <character>
+cg25324105_BC11       chr19  37692358           + cg25324105_BC11     1754126
+cg25383568_TC11       chr19  38727081           - cg25383568_TC11    79792482
+cg25455143_BC11       chr19   1591515           - cg25455143_BC11    80699190
+cg25459778_BC11       chr16   1614581           + cg25459778_BC11    60797262
+cg25487775_BC11        chr2 161237458           + cg25487775_BC11     5799427
+cg25595446_BC11       chr19  49677322           + cg25595446_BC11    65640459
+                   AddressB              ProbeSeqA              ProbeSeqB
+                <character>            <character>            <character>
+cg25324105_BC11    99753217 ATTTATAAACTAATAACCCA.. GTTTATAAACTAATAACCCG..
+cg25383568_TC11    69667133 AAACCAAAAAAATAACAAAC.. AAACCGAAAAAATAACAAAC..
+cg25455143_BC11     7659147 ATAAAAAAAAATATACAACT.. ATAAAAAAAAATATACGACT..
+cg25459778_BC11    65710482 AAAAATTTAAAACAAACAAC.. AAAAATTTAAAACAAACAAC..
+cg25487775_BC11    89606481 AAAAACAACCTAAAAAACAA.. AAAAACAACCTAAAAAACAA..
+cg25595446_BC11    39619855 AATAAAAATAACAACAACCA.. AATAAAAATAACGACAACCG..
+                       Type    NextBase       Color    Probe_rs Probe_maf
+                <character> <character> <character> <character> <numeric>
+cg25324105_BC11           I           A         Red          NA        NA
+cg25383568_TC11           I           C         Grn          NA        NA
+cg25455143_BC11           I           T         Red          NA        NA
+cg25459778_BC11           I           C         Grn          NA        NA
+cg25487775_BC11           I           A         Red          NA        NA
+cg25595446_BC11           I           C         Grn          NA        NA
+                     CpG_rs   CpG_maf      SBE_rs   SBE_maf
+                <character> <numeric> <character> <numeric>
+cg25324105_BC11          NA        NA          NA        NA
+cg25383568_TC11          NA        NA          NA        NA
+cg25455143_BC11          NA        NA          NA        NA
+cg25459778_BC11          NA        NA          NA        NA
+cg25487775_BC11          NA        NA          NA        NA
+cg25595446_BC11          NA        NA          NA        NA
+                          Islands_Name Relation_to_Island         col
+                           <character>        <character> <character>
+cg25324105_BC11 chr19:37691892-37692..             Island           R
+cg25383568_TC11 chr19:38726890-38727..             Island           G
+cg25455143_BC11 chr19:1591428-159162..             Island           R
+cg25459778_BC11  chr16:1610053-1615094             Island           G
+cg25487775_BC11 chr2:161237949-16123..              Shore           R
+cg25595446_BC11 chr19:49676753-49677..             Island           G
+                 Probe_Type   Strand_FR   Strand_TB   Strand_CO Infinium_Design
+                <character> <character> <character> <character>     <character>
+cg25324105_BC11          cg           F           B           C               1
+cg25383568_TC11          cg           R           T           C               1
+cg25455143_BC11          cg           R           B           C               1
+cg25459778_BC11          cg           F           B           C               1
+cg25487775_BC11          cg           F           B           C               1
+cg25595446_BC11          cg           F           B           C               1
+                    Species     Rep_Num     UCSC_RefGene_Group
+                <character> <character>            <character>
+cg25324105_BC11       Human           1 TSS200;TSS200;TSS200..
+cg25383568_TC11       Human           1        exon_18;exon_18
+cg25455143_BC11       Human           1                       
+cg25459778_BC11       Human           1                       
+cg25487775_BC11       Human           1                       
+cg25595446_BC11       Human           1                       
+                     UCSC_RefGene_Name UCSC_RefGene_Accession
+                           <character>            <character>
+cg25324105_BC11 ZNF781;ZNF781;ZNF781.. NR_173332.1;NR_17333..
+cg25383568_TC11            ACTN4;ACTN4 NM_001322033.2_2;NM_..
+cg25455143_BC11                                              
+cg25459778_BC11                                              
+cg25487775_BC11                                              
+cg25595446_BC11                                              
+                      GencodeV41_Group        GencodeV41_Name
+                           <character>            <character>
+cg25324105_BC11 TSS200;TSS200;TSS200.. ENSG00000120784.17;E..
+cg25383568_TC11 exon_18;exon_18;exon.. ACTN4;ACTN4;ACTN4;AC..
+cg25455143_BC11                                              
+cg25459778_BC11                 TSS200     ENSG00000007545.16
+cg25487775_BC11                                              
+cg25595446_BC11  exon_1;TSS200;TSS1500 PRMT1;ENSG0000012645..
+                  GencodeV41_Accession Phantom5_Enhancers  HMM_Island
+                           <character>        <character> <character>
+cg25324105_BC11 ENST00000587199.5;EN..                               
+cg25383568_TC11 ENST00000252699.7;EN..                               
+cg25455143_BC11                                                      
+cg25459778_BC11      ENST00000293925.9                               
+cg25487775_BC11                                                      
+cg25595446_BC11 ENST00000524771.5;EN..                               
+                Regulatory_Feature_Group Methyl450_Enhancer         DMR
+                             <character>        <character> <character>
+cg25324105_BC11   Unclassified_Cell_ty..               TRUE         DMR
+cg25383568_TC11   Gene_Associated_Cell..               TRUE            
+cg25455143_BC11                                       FALSE            
+cg25459778_BC11                                       FALSE            
+cg25487775_BC11                                       FALSE            
+cg25595446_BC11      Promoter_Associated               TRUE            
+                Methyl450_Loci Methyl27_Loci EPICv1_Loci Manifest_probe_match
+                   <character>   <character> <character>          <character>
+cg25324105_BC11     cg25324105                cg25324105                 TRUE
+cg25383568_TC11     cg25383568                cg25383568                 TRUE
+cg25455143_BC11     cg25455143                cg25455143                 TRUE
+cg25459778_BC11     cg25459778    cg25459778  cg25459778                 TRUE
+cg25487775_BC11     cg25487775                cg25487775                 TRUE
+cg25595446_BC11     cg25595446    cg25595446  cg25595446                 TRUE
 ```
 
 ## Download data
@@ -291,20 +655,7 @@ gsmlist <- lapply(
   baseDir = getwd(),
   filter_regex = "[.]idat([.]gz)?$"
 )
-```
-
-``` error
-Error in `loadNamespace()`:
-! there is no package called 'GEOquery'
-```
-
-``` r
 names(gsmlist) <- targets$Accession
-```
-
-``` error
-Error:
-! object 'gsmlist' not found
 ```
 
 ## Read in .idats
@@ -323,41 +674,26 @@ targets$Basename <- file.path(
 
 # Read in raw data from the red/green IDAT files.
 rgSet <- read.metharray.exp(targets = targets)
-```
-
-``` error
-Error in `read.metharray.exp()`:
-! could not find function "read.metharray.exp"
-```
-
-``` r
 sampleNames(rgSet) <- targets$Sample
-```
-
-``` error
-Error:
-! object 'rgSet' not found
-```
-
-``` r
 rgSet@annotation <- c(
   array = "IlluminaHumanMethylationEPICv2",
   annotation = "20a1.hg38"
 )
-```
-
-``` error
-Error:
-! object 'rgSet' not found
-```
-
-``` r
 rgSet
 ```
 
-``` error
-Error:
-! object 'rgSet' not found
+``` output
+class: RGChannelSet 
+dim: 1105209 6 
+metadata(0):
+assays(2): Green Red
+rownames(1105209): 1600157 1600179 ... 99810982 99810990
+rowData names(0):
+colnames(6): LNCAP_500_1 LNCAP_500_2 ... PREC_500_2 PREC_500_3
+colData names(7): Accession Name ... Basename filenames
+Annotation
+  array: IlluminaHumanMethylationEPICv2
+  annotation: 20a1.hg38
 ```
 
 `rgSet` contains the raw intensities for the six samples. For your own data,
