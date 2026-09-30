@@ -128,6 +128,9 @@ jobs:
         RENV_PROFILE: "lesson-requirements"
         RENV_VERSION: ${{ needs.check-renv.outputs.renv-cache-hashsum }}
         RENV_CONFIG_EXTERNAL_LIBRARIES: "/usr/local/lib/R/site-library"
+        # Limit source builds to one package at a time in the CPU-limited container.
+        RENV_CONFIG_INSTALL_JOBS: "1"
+        RENV_CONFIG_INSTALL_VERBOSE: "TRUE"
       volumes:
         - ${{ github.workspace }}:/home/rstudio/lesson
       options: --cpus 2

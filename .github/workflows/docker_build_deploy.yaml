@@ -95,6 +95,9 @@ jobs:
         RENV_PATHS_ROOT: /home/rstudio/lesson/renv
         RENV_PROFILE: "lesson-requirements"
         RENV_CONFIG_EXTERNAL_LIBRARIES: "/usr/local/lib/R/site-library"
+        # Limit source builds to one package at a time in the CPU-limited container.
+        RENV_CONFIG_INSTALL_JOBS: "1"
+        RENV_CONFIG_INSTALL_VERBOSE: "TRUE"
       volumes:
         - ${{ github.workspace }}:/home/rstudio/lesson
       options: --cpus 1
