@@ -37,7 +37,9 @@ if (!all(loadable)) {
 lockfile <- renv::paths$lockfile()
 previous <- renv::lockfile_read(lockfile)
 # Preserve the updater's package records and include all recursive dependencies.
-renv::snapshot(library = lesson_library, lockfile = lockfile,
+# Include R's recommended packages from the active system/sandbox library too.
+# Restricting this to lesson_library incorrectly reports them as uninstalled.
+renv::snapshot(library = .libPaths(), lockfile = lockfile,
   packages = unique(c(names(previous$Packages), "BiocManager", required)),
   repos = repos, prompt = FALSE)
 lock <- renv::lockfile_read(lockfile)
