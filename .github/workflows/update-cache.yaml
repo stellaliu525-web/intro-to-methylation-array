@@ -97,10 +97,37 @@ jobs:
           use-public-rspm: true
           install-r: false
 
+      - name: "Configure Bioconductor repositories"
+        id: bioconductor
+        shell: Rscript --vanilla {0}
+        run: |
+          bootstrap <- tempfile("bioc-library-")
+          dir.create(bootstrap)
+          .libPaths(c(bootstrap, .libPaths()))
+          install.packages("BiocManager", lib = bootstrap,
+            repos = "https://cloud.r-project.org")
+          options(repos = c(CRAN = "https://cloud.r-project.org"))
+          repos <- c(
+            carpentries = "https://carpentries.r-universe.dev/",
+            carpentries_archive = "https://carpentries.github.io/drat/",
+            BiocManager::repositories()
+          )
+          print(repos)
+          # The action accepts a literal R vector, not a function call.
+          expression <- paste0("c(", paste(sprintf("%s = '%s'",
+            names(repos), repos), collapse = ", "), ")")
+          cat(paste0("repos=", expression, "\n"),
+            file = Sys.getenv("GITHUB_OUTPUT"), append = TRUE)
+          # Keep these repositories active when renv loads the old lockfile.
+          override <- paste(names(repos), repos, sep = "=", collapse = ";")
+          cat(paste0("RENV_CONFIG_REPOS_OVERRIDE=", override, "\n"),
+            file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+
       - name: "Update {renv} deps and determine if a PR is needed"
         id: update
         uses: carpentries/actions/update-lockfile@main
         with:
+          repos: ${{ steps.bioconductor.outputs.repos }}
           update: ${{ env.UPDATE_PACKAGES }}
           force-renv-init: ${{ env.FORCE_RENV_INIT }}
           generate-cache: ${{ env.LOCKFILE_CACHE_GEN }}
