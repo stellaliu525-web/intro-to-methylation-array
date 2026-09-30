@@ -115,6 +115,10 @@ jobs:
             /usr/local/lib/R/site-library
           key: ${{ github.repository }}/${{ needs.preflight.outputs.wb-vers }}_renv-${{ vars.CACHE_VERSION || github.event.inputs.CACHE_VERSION || needs.preflight.outputs.renv-cache-hashsum }}
 
+      - name: "Mark Repository as Safe"
+        shell: bash
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Keep dependency definitions from this commit
         shell: bash
         run: git restore --source=HEAD -- renv/profiles/lesson-requirements/renv.lock renv/profiles/lesson-requirements/renv/settings.json
@@ -137,11 +141,6 @@ jobs:
           ls -lah /home/rstudio/.workbench
           ls -lah $(pwd)
           Rscript -e 'sessionInfo()'
-        shell: bash
-
-      - name: "Mark Repository as Safe"
-        run: |
-          git config --global --add safe.directory $(pwd)
         shell: bash
 
       - name: Setup system dependencies
