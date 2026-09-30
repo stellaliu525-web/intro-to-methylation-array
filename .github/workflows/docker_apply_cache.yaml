@@ -132,7 +132,9 @@ jobs:
         # Limit source builds to one package at a time in the CPU-limited container.
         RENV_CONFIG_INSTALL_JOBS: "1"
         RENV_CONFIG_INSTALL_VERBOSE: "TRUE"
-        RENV_PATHS_CACHE: /home/rstudio/lesson/renv/ci-cache
+        # Write new installs to ci-cache; also search the original Workbench cache.
+        RENV_PATHS_CACHE: /home/rstudio/lesson/renv/ci-cache:/home/rstudio/lesson/renv/cache
+        RENV_CONFIG_CACHE_ENABLED: "TRUE"
       volumes:
         - ${{ github.workspace }}:/home/rstudio/lesson
       options: --cpus 2
@@ -188,6 +190,14 @@ jobs:
           )
           project <- "/home/rstudio/lesson"
           renv::load(project = project, profile = "lesson-requirements")
+          cat("renv version:", as.character(packageVersion("renv")), "\n")
+          cat("Active library:", renv::paths$library(project = project), "\n")
+          cat("Cache search paths:\n")
+          print(renv::paths$cache())
+          for (cache in renv::paths$cache()) {
+            descriptions <- list.files(cache, pattern = "^DESCRIPTION$", recursive = TRUE)
+            cat(cache, ":", length(descriptions), "cached package entries\n")
+          }
           renv::restore(
             project = project,
             lockfile = file.path(project, "renv/profiles/lesson-requirements/renv.lock"),
