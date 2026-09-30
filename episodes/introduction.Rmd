@@ -30,7 +30,7 @@ Installing a package downloads it to your computer. Loading it with `library()`
 makes its functions available in the current session. Load the packages again
 whenever you restart R.
 
-```{r load-packages, eval=FALSE}
+```{r load-packages, eval=TRUE}
 # Data handling
 library(tidyverse)
 library(readxl)
@@ -60,7 +60,7 @@ library(parallel)
 
 ## Load annotation data
 
-```{r load-annotation-data, eval=FALSE}
+```{r load-annotation-data, eval=TRUE}
 epic <- getAnnotation(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
 head(epic)
 ```
@@ -82,7 +82,7 @@ The GEO download chunk is only needed for data hosted on GEO.
 Each row describes one sample. `Accession` identifies the GEO sample, `Name`
 matches its filename label, and `Type` identifies the cell line to compare.
 
-```{r sample-table, eval=FALSE}
+```{r sample-table, eval=TRUE}
 # Create the sample table for IDAT downloads. Replace this table with your own sample information when using your own data.
 
 targets <- data.frame(
@@ -121,7 +121,7 @@ The following chunk downloads the IDAT files for the six accessions in
 `targets`. Each sample is saved in its own accession-named folder within
 your current project directory.
 
-```{r download-data, eval=FALSE}
+```{r download-data, eval=TRUE}
 # Download only IDAT files for the selected tutorial samples.
 gsmlist <- lapply(
   targets$Accession,
@@ -139,7 +139,7 @@ Add the sample names and file paths to `targets`, preserving its sample order.
 `Basename` is the path to each file pair without the `_Grn.idat` or `_Red.idat`
 suffix (or their compressed `.gz` equivalents).
 
-```{r read-idats, eval=FALSE}
+```{r read-idats, eval=TRUE}
 # Link the sample information to the downloaded IDAT files.
 targets$Sample <- targets$Name
 targets$Basename <- file.path(
