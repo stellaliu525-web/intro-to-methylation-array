@@ -98,11 +98,22 @@ jobs:
         # Limit source builds to one package at a time in the CPU-limited container.
         RENV_CONFIG_INSTALL_JOBS: "1"
         RENV_CONFIG_INSTALL_VERBOSE: "TRUE"
+        RENV_PATHS_CACHE: /home/rstudio/lesson/renv/ci-cache
       volumes:
         - ${{ github.workspace }}:/home/rstudio/lesson
       options: --cpus 1
     steps:
       - uses: actions/checkout@v6
+
+      # Cache only completed renv package entries, never temporary staging directories.
+      - name: Restore installed R packages
+        id: restore-r-packages
+        uses: actions/cache/restore@v4
+        with:
+          path: /home/rstudio/lesson/renv/ci-cache
+          key: r-packages-v1-${{ runner.os }}-${{ vars.WORKBENCH_TAG || 'latest' }}-${{ hashFiles('renv/profiles/lesson-requirements/renv.lock', '.github/workbench-docker-version.txt') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            r-packages-v1-${{ runner.os }}-${{ vars.WORKBENCH_TAG || 'latest' }}-${{ hashFiles('renv/profiles/lesson-requirements/renv.lock', '.github/workbench-docker-version.txt') }}-
 
       - name: "Debugging Info"
         run: |

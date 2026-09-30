@@ -78,6 +78,7 @@ jobs:
 
   update-renv-cache:
     name: "Update renv Cache"
+    timeout-minutes: 350
     runs-on: ubuntu-latest
     needs: check-renv
     if: |
@@ -131,11 +132,22 @@ jobs:
         # Limit source builds to one package at a time in the CPU-limited container.
         RENV_CONFIG_INSTALL_JOBS: "1"
         RENV_CONFIG_INSTALL_VERBOSE: "TRUE"
+        RENV_PATHS_CACHE: /home/rstudio/lesson/renv/ci-cache
       volumes:
         - ${{ github.workspace }}:/home/rstudio/lesson
       options: --cpus 2
     steps:
       - uses: actions/checkout@v6
+
+      # Cache only completed renv package entries, never temporary staging directories.
+      - name: Restore installed R packages
+        id: restore-r-packages
+        uses: actions/cache/restore@v4
+        with:
+          path: /home/rstudio/lesson/renv/ci-cache
+          key: r-packages-v1-${{ runner.os }}-${{ vars.WORKBENCH_TAG || 'latest' }}-${{ hashFiles('renv/profiles/lesson-requirements/renv.lock', '.github/workbench-docker-version.txt') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            r-packages-v1-${{ runner.os }}-${{ vars.WORKBENCH_TAG || 'latest' }}-${{ hashFiles('renv/profiles/lesson-requirements/renv.lock', '.github/workbench-docker-version.txt') }}-
 
       - name: "Debugging Info"
         run: |
@@ -161,10 +173,33 @@ jobs:
           Rscript /home/rstudio/.workbench/setup_lesson_deps.R
         shell: bash
 
-      - name: "Fortify renv Cache"
+      - name: Restore locked lesson packages
+        id: install-r-packages
+        shell: Rscript {0}
         run: |
-          Rscript /home/rstudio/.workbench/fortify_renv_cache.R
-        shell: bash
+          # The default renv deadline covers the entire install queue (one hour).
+          # Keep successful installs if a later package fails, and avoid the
+          # manage_deps fallback that changes package versions during retries.
+          options(
+            renv.install.timeout = 4 * 60 * 60,
+            renv.config.install.jobs = 1L,
+            renv.config.install.verbose = TRUE,
+            renv.config.install.transactional = FALSE
+          )
+          project <- "/home/rstudio/lesson"
+          renv::load(project = project, profile = "lesson-requirements")
+          renv::restore(
+            project = project,
+            lockfile = file.path(project, "renv/profiles/lesson-requirements/renv.lock"),
+            prompt = FALSE
+          )
+
+      - name: Save installed R packages for retries
+        if: ${{ always() && steps.install-r-packages.outcome != 'skipped' && steps.install-r-packages.outcome != '' }}
+        uses: actions/cache/save@v4
+        with:
+          path: /home/rstudio/lesson/renv/ci-cache
+          key: ${{ steps.restore-r-packages.outputs.cache-primary-key }}
 
       - name: "Get Container Version Used"
         id: wb-vers
