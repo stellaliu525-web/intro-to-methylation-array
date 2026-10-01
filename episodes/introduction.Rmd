@@ -30,7 +30,7 @@ Installing a package downloads it to your computer. Loading it with `library()`
 makes its functions available in the current session. Load the packages again
 whenever you restart R.
 
-```{r load-packages, eval=TRUE}
+```{r load-packages, eval=TRUE, message=FALSE}
 # Data handling
 library(tidyverse)
 library(readxl)
@@ -42,6 +42,7 @@ library(GEOquery)
 library(limma)
 library(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
 library(IlluminaHumanMethylationEPICv2manifest)
+library(IlluminaHumanMethylationEPICmanifest)
 library(AnnotationHub)
 library(DMRcate)
 library(methylKit)
