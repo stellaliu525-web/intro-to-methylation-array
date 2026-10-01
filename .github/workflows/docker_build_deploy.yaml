@@ -95,11 +95,45 @@ jobs:
         RENV_PATHS_ROOT: /home/rstudio/lesson/renv
         RENV_PROFILE: "lesson-requirements"
         RENV_CONFIG_EXTERNAL_LIBRARIES: "/usr/local/lib/R/site-library"
+        # Limit source builds to one package at a time in the CPU-limited container.
+        RENV_CONFIG_INSTALL_JOBS: "1"
+        RENV_CONFIG_INSTALL_VERBOSE: "TRUE"
+        # Write new installs to ci-cache; also search the original Workbench cache.
+        RENV_PATHS_CACHE: /home/rstudio/lesson/renv/ci-cache:/home/rstudio/lesson/renv/cache
+        RENV_CONFIG_CACHE_ENABLED: "TRUE"
       volumes:
         - ${{ github.workspace }}:/home/rstudio/lesson
       options: --cpus 1
     steps:
       - uses: actions/checkout@v6
+
+      # Match the paths and key used by workflow 03's existing Workbench cache.
+      - name: Restore Workbench package cache
+        id: restore-workbench-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            /home/rstudio/lesson/renv
+            /usr/local/lib/R/site-library
+          key: ${{ github.repository }}/${{ needs.preflight.outputs.wb-vers }}_renv-${{ vars.CACHE_VERSION || github.event.inputs.CACHE_VERSION || needs.preflight.outputs.renv-cache-hashsum }}
+
+      - name: "Mark Repository as Safe"
+        shell: bash
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Keep dependency definitions from this commit
+        shell: bash
+        run: git restore --source=HEAD -- renv/profiles/lesson-requirements/renv.lock renv/profiles/lesson-requirements/renv/settings.json
+
+      # Cache only completed renv package entries, never temporary staging directories.
+      - name: Restore installed R packages
+        id: restore-r-packages
+        uses: actions/cache/restore@v4
+        with:
+          path: /home/rstudio/lesson/renv/ci-cache
+          key: r-packages-v1-${{ runner.os }}-${{ vars.WORKBENCH_TAG || 'latest' }}-${{ hashFiles('renv/profiles/lesson-requirements/renv.lock', '.github/workbench-docker-version.txt') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            r-packages-v1-${{ runner.os }}-${{ vars.WORKBENCH_TAG || 'latest' }}-${{ hashFiles('renv/profiles/lesson-requirements/renv.lock', '.github/workbench-docker-version.txt') }}-
 
       - name: "Debugging Info"
         run: |
@@ -111,17 +145,56 @@ jobs:
           Rscript -e 'sessionInfo()'
         shell: bash
 
-      - name: "Mark Repository as Safe"
-        run: |
-          git config --global --add safe.directory $(pwd)
+      - name: Setup system dependencies
         shell: bash
+        run: Rscript /home/rstudio/.workbench/setup_lesson_deps.R
+
+      - name: Restore and verify locked lesson packages
+        id: verify-r-packages
+        shell: Rscript {0}
+        run: |
+          options(
+            renv.install.timeout = 4 * 60 * 60,
+            renv.config.install.jobs = 1L,
+            renv.config.install.verbose = TRUE,
+            renv.config.install.transactional = FALSE
+          )
+          project <- "/home/rstudio/lesson"
+          renv::load(project = project, profile = "lesson-requirements")
+          cat("renv version:", as.character(packageVersion("renv")), "\n")
+          cat("Active library:", renv::paths$library(project = project), "\n")
+          cat("Cache search paths:\n")
+          print(renv::paths$cache())
+          for (cache in renv::paths$cache()) {
+            descriptions <- list.files(cache, pattern = "^DESCRIPTION$", recursive = TRUE)
+            cat(cache, ":", length(descriptions), "cached package entries\n")
+          }
+          renv::restore(
+            project = project,
+            lockfile = file.path(project, "renv/profiles/lesson-requirements/renv.lock"),
+            prompt = FALSE
+          )
+          # setup_lesson_deps creates DESCRIPTION for system dependency discovery.
+          if (file.exists("DESCRIPTION.bak")) {
+            file.copy("DESCRIPTION.bak", "DESCRIPTION", overwrite = TRUE)
+            unlink("DESCRIPTION.bak")
+          } else {
+            unlink("DESCRIPTION")
+          }
+
+      - name: Save installed R packages for retries
+        if: ${{ always() && steps.verify-r-packages.outcome != 'skipped' && steps.verify-r-packages.outcome != '' }}
+        uses: actions/cache/save@v4
+        with:
+          path: /home/rstudio/lesson/renv/ci-cache
+          key: ${{ steps.restore-r-packages.outputs.cache-primary-key }}
 
       - name: "Run Container and Build Site"
         id: build-and-deploy
         uses: carpentries/actions/build-and-deploy@v1
         with:
           reset: ${{ vars.BUILD_RESET || github.event.inputs.reset || 'false' }}
-          skip-manage-deps: ${{ github.event.inputs.force-skip-manage-deps == 'true' || contains(needs.preflight.outputs.dependency-image-ref, '-deps:') }}
+          skip-manage-deps: 'true'
           lang-code: ${{ vars.LANG_CODE || '' }}
 
   update-container-version:
