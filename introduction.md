@@ -6,19 +6,30 @@ exercises: 5
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- FIXME
-- FIXME
+- How is whole genome methylation interrogated?
+- How are methylation values commonly reported?
+- What preliminary R packages and data is necessary to begin methylation analysis?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Load the required R packages.
-- Create a sample table and define the variable of interest.
-- Download the six tutorial samples from GEO.
-- Import the IDAT files into a `minfi` object.
+- Setting up the R environment and required  packages
+- Create a sample table and define the variable of interest
+- Download the six publicly available sample data from GEO
+- Import the IDAT files into a `minfi` object
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Introduction
+
+Methylation in the human genome is known to be associated with development and disease. The Illumina Infinium methylation arrays are by far the most common way to interrogate methylation across the human genome. This workshop provides an easy and reproducible workflow using multiple packages for the analysis of methylation array data. Specifically, we demonstrate the steps involved in a typical differential methylation analysis pipeline including: quality control, filtering, normalization, data exploration and statistical testing for probe-wise differential methylation.
+
+DNA methylation, the addition of a methyl group to a CG dinucleotide of the DNA, is the most extensively studied epigenetic mark due to its role in both development and disease. Although DNA methylation can be measured in several ways, the epigenetics community has enthusiastically embraced the Illumina HumanMethylation450 (450k) array as a cost-effective way to assay methylation across the human genome. Illumina has increased the genomic coverage of the platform with their MethylationEPIC (850k) array, and more recently MethylationEPICv2 (935k) covering to >935,000 sites. As methylation arrays are likely to remain popular for measuring methylation for the foreseeable future, it is necessary to provide robust workflows for methylation array analysis.
+
+For each CpG, there are two measurements: a methylated intensity (denoted by 𝑀) and an unmethylated intensity (denoted by 𝑈). These intensity values can be used to determine the proportion of methylation at each CpG locus. Methylation levels are commonly reported as either beta values (𝛽=𝑀/(𝑀+𝑈)) or M-values (𝑀𝑣𝑎𝑙𝑢𝑒=𝑙𝑜𝑔2(𝑀/𝑈)).
+
+Beta values (proportion of methylation at a particular CpG site) are generally preferable for describing the level of methylation at a locus or for graphical presentation because percentage methylation is easily interpretable. M-values (log2 ratio of methylated to unmethylated signal intensity) are more appropriate for statistical testing.
 
 ## Load packages
 
@@ -31,11 +42,6 @@ makes its functions available in the current session. Load the packages again
 whenever you restart R.
 
 
-``` r
-# Data handling
-library(tidyverse)
-```
-
 ``` output
 ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.2.1     ✔ readr     2.2.0
@@ -47,40 +53,32 @@ library(tidyverse)
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-```
-
-``` r
-library(readxl)
-library(reshape2)
-```
-
-``` output
 
 Attaching package: 'reshape2'
+
 
 The following object is masked from 'package:tidyr':
 
     smiths
-```
 
-``` r
-# Methylation analysis and annotation
-library(minfi)
-```
 
-``` output
 Loading required package: BiocGenerics
+
 Loading required package: generics
 
+
 Attaching package: 'generics'
+
 
 The following object is masked from 'package:lubridate':
 
     as.difftime
 
+
 The following object is masked from 'package:dplyr':
 
     explain
+
 
 The following objects are masked from 'package:base':
 
@@ -88,15 +86,19 @@ The following objects are masked from 'package:base':
     setequal, union
 
 
+
 Attaching package: 'BiocGenerics'
+
 
 The following object is masked from 'package:dplyr':
 
     combine
 
+
 The following objects are masked from 'package:stats':
 
     IQR, mad, sd, var, xtabs
+
 
 The following objects are masked from 'package:base':
 
@@ -107,61 +109,83 @@ The following objects are masked from 'package:base':
     rbind, Reduce, rownames, sapply, saveRDS, table, tapply, unique,
     unsplit, which.max, which.min
 
+
 Loading required package: GenomicRanges
+
 Loading required package: stats4
+
 Loading required package: S4Vectors
 
+
 Attaching package: 'S4Vectors'
+
 
 The following objects are masked from 'package:lubridate':
 
     second, second<-
 
+
 The following objects are masked from 'package:dplyr':
 
     first, rename
+
 
 The following object is masked from 'package:tidyr':
 
     expand
 
+
 The following object is masked from 'package:utils':
 
     findMatches
+
 
 The following objects are masked from 'package:base':
 
     expand.grid, I, unname
 
+
 Loading required package: IRanges
 
+
 Attaching package: 'IRanges'
+
 
 The following object is masked from 'package:lubridate':
 
     %within%
 
+
 The following objects are masked from 'package:dplyr':
 
     collapse, desc, slice
+
 
 The following object is masked from 'package:purrr':
 
     reduce
 
+
 Loading required package: Seqinfo
+
 Loading required package: SummarizedExperiment
+
 Loading required package: MatrixGenerics
+
 Loading required package: matrixStats
 
+
 Attaching package: 'matrixStats'
+
 
 The following object is masked from 'package:dplyr':
 
     count
 
 
+
 Attaching package: 'MatrixGenerics'
+
 
 The following objects are masked from 'package:matrixStats':
 
@@ -181,7 +205,9 @@ The following objects are masked from 'package:matrixStats':
     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
     rowWeightedSds, rowWeightedVars
 
+
 Loading required package: Biobase
+
 Welcome to Bioconductor
 
     Vignettes contain introductory material; view with
@@ -189,11 +215,14 @@ Welcome to Bioconductor
     'citation("Biobase")', and for packages 'citation("pkgname")'.
 
 
+
 Attaching package: 'Biobase'
+
 
 The following object is masked from 'package:MatrixGenerics':
 
     rowMedians
+
 
 The following objects are masked from 'package:matrixStats':
 
@@ -251,29 +280,13 @@ Warning: replacing previous import 'S4Arrays::makeNindexFromArrayViewport' by
 ``` output
 Setting options('download.file.method.GEOquery'='auto')
 Setting options('GEOquery.inmemory.gpl'=FALSE)
-```
-
-``` r
-library(GEOquery)
-library(limma)
-```
-
-``` output
 
 Attaching package: 'limma'
 
 The following object is masked from 'package:BiocGenerics':
 
     plotMA
-```
 
-``` r
-library(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
-library(IlluminaHumanMethylationEPICv2manifest)
-library(AnnotationHub)
-```
-
-``` output
 Loading required package: BiocFileCache
 Loading required package: dbplyr
 
@@ -289,21 +302,8 @@ Attaching package: 'AnnotationHub'
 The following object is masked from 'package:Biobase':
 
     cache
-```
 
-``` r
-library(DMRcate)
-```
 
-``` output
-
-```
-
-``` r
-library(methylKit)
-```
-
-``` output
 
 Attaching package: 'methylKit'
 
@@ -314,13 +314,7 @@ The following object is masked from 'package:dplyr':
 The following object is masked from 'package:tidyr':
 
     unite
-```
 
-``` r
-library(missMethyl)
-```
-
-``` output
 Loading required package: IlluminaHumanMethylation450kanno.ilmn12.hg19
 
 Attaching package: 'IlluminaHumanMethylation450kanno.ilmn12.hg19'
@@ -347,20 +341,14 @@ The following objects are masked from 'package:IlluminaHumanMethylationEPICv2ann
     Islands.UCSC, Locations, Manifest, Other, SNPs.141CommonSingle,
     SNPs.142CommonSingle, SNPs.144CommonSingle, SNPs.146CommonSingle,
     SNPs.147CommonSingle, SNPs.Illumina
-```
 
-``` r
-library(clusterProfiler)
-```
-
-``` output
 
 clusterProfiler v4.20.0 Learn more at https://yulab-smu.top/contribution-knowledge-mining/
 
 Please cite:
 
-G Yu. Thirteen years of clusterProfiler. The Innovation. 2024,
-5(6):100722
+G Yu. Background bias in functional enrichment analysis: Insights from
+clusterProfiler. The Innovation Life. 2026, 4(1):100181
 
 Attaching package: 'clusterProfiler'
 
@@ -387,13 +375,7 @@ The following object is masked from 'package:purrr':
 The following object is masked from 'package:stats':
 
     filter
-```
 
-``` r
-library(org.Hs.eg.db)
-```
-
-``` output
 Loading required package: AnnotationDbi
 
 Attaching package: 'AnnotationDbi'
@@ -409,15 +391,7 @@ The following object is masked from 'package:methylKit':
 The following object is masked from 'package:dplyr':
 
     select
-```
 
-``` r
-# Plotting and parallel computing
-library(Polychrome)
-library(ComplexHeatmap)
-```
-
-``` output
 Loading required package: grid
 ========================================
 ComplexHeatmap version 2.28.0
@@ -437,14 +411,7 @@ complex heatmaps into an interactive Shiny app with zero effort. Have a try!
 This message can be suppressed by:
   suppressPackageStartupMessages(library(ComplexHeatmap))
 ========================================
-```
 
-``` r
-library(ggsci)
-library(gridExtra)
-```
-
-``` output
 
 Attaching package: 'gridExtra'
 
@@ -465,12 +432,9 @@ The following object is masked from 'package:dplyr':
     combine
 ```
 
-``` r
-library(RColorBrewer)
-library(parallel)
-```
-
 ## Load annotation data
+
+This is information that describes each CpG probe on the Illumina EPICv2 methylation array. It tells you where each probe is located in the genome and which genes or genomic features it is associated with.
 
 
 ``` r
@@ -582,9 +546,9 @@ cg25595446_BC11     cg25595446    cg25595446  cg25595446                 TRUE
 
 For this tutorial we are using the publicly available LNCaP and PREC cell lines
 (500 ng DNA input) from Peters *et al.* (2024), available from GEO
-([GSE240469](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE240469)).
-We will download these data in the chunk below, so you do not have to manually
-get them from the above link.
+([GSE240469](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE240469)). This contains data for 3 technical replicates per cell line. 
+The code below executes when this episode renders. It downloads the IDAT
+files, imports the raw measurements, and saves the objects for the next episode.
 
 If you would like to use your own data, create a sample table and variables of
 interest in the same format, with your own IDAT files, samples and variables.
@@ -655,14 +619,76 @@ gsmlist <- lapply(
   baseDir = getwd(),
   filter_regex = "[.]idat([.]gz)?$"
 )
+```
+
+``` output
+Using locally cached version of supplementary file(s) GSM7698438 found here:
+/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698438/GSM7698438_LNCAP_500_1_Grn.idat.gz 
+```
+
+``` output
+Using locally cached version of supplementary file(s) GSM7698438 found here:
+/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698438/GSM7698438_LNCAP_500_1_Red.idat.gz 
+```
+
+``` output
+Using locally cached version of supplementary file(s) GSM7698446 found here:
+/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698446/GSM7698446_LNCAP_500_2_Grn.idat.gz 
+```
+
+``` output
+Using locally cached version of supplementary file(s) GSM7698446 found here:
+/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698446/GSM7698446_LNCAP_500_2_Red.idat.gz 
+```
+
+``` output
+Using locally cached version of supplementary file(s) GSM7698462 found here:
+/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698462/GSM7698462_LNCAP_500_3_Grn.idat.gz 
+```
+
+``` output
+Using locally cached version of supplementary file(s) GSM7698462 found here:
+/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698462/GSM7698462_LNCAP_500_3_Red.idat.gz 
+```
+
+``` output
+Using locally cached version of supplementary file(s) GSM7698435 found here:
+/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698435/GSM7698435_PREC_500_1_Grn.idat.gz 
+```
+
+``` output
+Using locally cached version of supplementary file(s) GSM7698435 found here:
+/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698435/GSM7698435_PREC_500_1_Red.idat.gz 
+```
+
+``` output
+Using locally cached version of supplementary file(s) GSM7698443 found here:
+/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698443/GSM7698443_PREC_500_2_Grn.idat.gz 
+```
+
+``` output
+Using locally cached version of supplementary file(s) GSM7698443 found here:
+/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698443/GSM7698443_PREC_500_2_Red.idat.gz 
+```
+
+``` output
+Using locally cached version of supplementary file(s) GSM7698459 found here:
+/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698459/GSM7698459_PREC_500_3_Grn.idat.gz 
+```
+
+``` output
+Using locally cached version of supplementary file(s) GSM7698459 found here:
+/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698459/GSM7698459_PREC_500_3_Red.idat.gz 
+```
+
+``` r
 names(gsmlist) <- targets$Accession
 ```
 
 ## Read in .idats
 
 Add the sample names and file paths to `targets`, preserving its sample order.
-`Basename` is the path to each file pair without the `_Grn.idat` or `_Red.idat`
-suffix (or their compressed `.gz` equivalents).
+`Basename` is the path to each file pair.
 
 
 ``` r
@@ -700,6 +726,17 @@ Annotation
 set `targets$Basename` to your file paths and use the annotation matching your
 array type. Quality control, filtering and normalisation follow in the next
 episode.
+
+## Save the input objects for reuse
+
+`targets` contains sample information; `rgSet` contains the raw measurements.
+
+
+``` r
+dir.create("data", showWarnings = FALSE)
+saveRDS(targets, "data/targets.rds")
+saveRDS(rgSet, "data/rgSet.rds")
+```
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
