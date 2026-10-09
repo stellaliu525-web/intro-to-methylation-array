@@ -93,6 +93,8 @@ jobs:
         WORKBENCH_PROFILE: "ci"
         GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         RENV_PATHS_ROOT: /home/rstudio/lesson/renv
+        # Checkout and container mount paths must resolve to the same library.
+        RENV_PATHS_LIBRARY: /home/rstudio/lesson/renv/ci-library
         RENV_PROFILE: "lesson-requirements"
         RENV_CONFIG_EXTERNAL_LIBRARIES: "/usr/local/lib/R/site-library"
         # Limit source builds to one package at a time in the CPU-limited container.
@@ -159,7 +161,8 @@ jobs:
             renv.config.install.verbose = TRUE,
             renv.config.install.transactional = FALSE
           )
-          project <- "/home/rstudio/lesson"
+          project <- Sys.getenv("GITHUB_WORKSPACE")
+          stopifnot(nzchar(project), dir.exists(project))
           renv::load(project = project, profile = "lesson-requirements")
           cat("renv version:", as.character(packageVersion("renv")), "\n")
           cat("Active library:", renv::paths$library(project = project), "\n")
@@ -173,6 +176,27 @@ jobs:
             project = project,
             lockfile = file.path(project, "renv/profiles/lesson-requirements/renv.lock"),
             prompt = FALSE
+          )
+          # Exercise package loading in a fresh process from the build checkout.
+          # A successful restore alone does not prove the render can see it.
+          callr::r(
+            function(project) {
+              renv::load(project = project, profile = "lesson-requirements")
+              cat("Render library paths:\n")
+              print(.libPaths())
+              packages <- c(
+                "minfi", "limma", "Polychrome", "AnnotationHub",
+                "IlluminaHumanMethylationEPICv2anno.20a1.hg38",
+                "IlluminaHumanMethylationEPICv2manifest"
+              )
+              for (package in packages) {
+                library(package, character.only = TRUE)
+                cat(package, "loaded from", find.package(package), "\n")
+              }
+            },
+            args = list(project = project),
+            wd = project,
+            show = TRUE
           )
           # setup_lesson_deps creates DESCRIPTION for system dependency discovery.
           if (file.exists("DESCRIPTION.bak")) {
