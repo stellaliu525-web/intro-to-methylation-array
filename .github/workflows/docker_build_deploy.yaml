@@ -213,12 +213,12 @@ jobs:
           path: /home/rstudio/lesson/renv/ci-cache
           key: ${{ steps.restore-r-packages.outputs.cache-primary-key }}
 
-      # The source branch contains generated markdown. Sandpaper needs this
-      # destination absent so it can attach the md-outputs branch as a worktree.
-      - name: Clear generated markdown before creating the worktree
+      # The source branch contains generated markdown and HTML. Sandpaper needs
+      # both destinations absent to attach the md-outputs and gh-pages worktrees.
+      - name: Clear generated outputs before creating worktrees
         shell: bash
         run: |
-          rm -rf -- "$GITHUB_WORKSPACE/site/built"
+          rm -rf -- "$GITHUB_WORKSPACE/site/built" "$GITHUB_WORKSPACE/site/docs"
           git worktree prune
 
       - name: "Run Container and Build Site"
