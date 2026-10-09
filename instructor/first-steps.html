@@ -117,11 +117,11 @@
     -->
     <a id="search-button" class="btn btn-primary" href="../instructor/aio.html" role="button" aria-label="Search the All In One page">Search the All In One page</a>
   </div><!--/div.container-fluid -->
-</nav><aside class="col-md-12 lesson-progress"><div style="width: 100%" class="percentage">
-    100%
+</nav><aside class="col-md-12 lesson-progress"><div style="width: 25%" class="percentage">
+    25%
   </div>
   <div class="progress uom">
-    <div class="progress-bar uom" role="progressbar" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" style="width: 100%">
+    <div class="progress-bar uom" role="progressbar" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" style="width: 25%">
     </div>
   </div>
 </aside><div class="container">
@@ -223,9 +223,17 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#quality-control">Quality control</a></li>
-<li><a href="#filtering">Filtering</a></li>
+<li><a href="#filter-poor-quality-samples">Filter poor quality samples</a></li>
+<li><a href="#explore-sample-identity-with-snp-control-probes">Explore sample identity with SNP control probes</a></li>
+<li><a href="#create-a-raw-methylset-and-inspect-outlier-peaks">Create a raw MethylSet and inspect outlier peaks</a></li>
 <li><a href="#normalisation">Normalisation</a></li>
-<li><a href="#basic-visualisation">Basic visualisation</a></li>
+<li><a href="#preliminary-visualisation-of-data-with-mds-plot">Preliminary visualisation of data with MDS plot</a></li>
+<li><a href="#filter-failed-or-poor-quality-probes">Filter failed or poor quality probes</a></li>
+<li><a href="#filter-sex-chromosomes">Filter sex chromosomes</a></li>
+<li><a href="#filter-cpgs-with-snps">Filter CpGs with SNPs</a></li>
+<li><a href="#filter-cpgs-with-potential-cross-reactivity">Filter CpGs with potential cross-reactivity</a></li>
+<li><a href="#save-files">Save files</a></li>
+<li><a href="#re-examine-mds-after-filtering">Re-examine MDS after filtering</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
 
@@ -308,20 +316,20 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>First steps: quality control, filtering, normalisation and basic visualisation</h1>
-        <p>Last updated on 2026-09-30 |
+        <p>Last updated on 2026-10-09 |
 
         <a href="https://github.com/stellaliu525-web/intro-to-methylation-array/edit/main/episodes/first-steps.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
 
 
-        <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 0 minutes</p>
+        <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 60 minutes</p>
 
         <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
 
         
-<!-- Draft outline: update teaching and exercise times when content is developed. -->
+
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -329,8 +337,20 @@
 <div class="card-body">
 <div class="inner">
 <h3 class="card-title">Questions</h3>
-<ul><li>How do we assess the quality of methylation array data?</li>
-<li>How do filtering and normalisation prepare data for analysis?</li>
+<ul><li>Why should we filter poor-quality samples and unreliable probes
+before differential methylation analysis?</li>
+<li>What do detection p-values tell us about methylation array
+quality?</li>
+<li>How can density and MDS plots help us identify unusual samples and
+unwanted variation?</li>
+<li>How can biological differences, sample preparation and array batch
+affect methylation profiles?</li>
+<li>Why do we normalise methylation array data, and why use functional
+normalisation for this comparison?</li>
+<li>Why might we exclude probes based on chromosome location, SNPs or
+cross-reactivity?</li>
+<li>How can we assess the effects of normalisation and filtering without
+mistaking biological differences for technical variation?</li>
 </ul></div>
 </div>
 </div>
@@ -338,28 +358,844 @@
 <div class="card-body">
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
-<ul><li>Inspect sample and probe quality.</li>
-<li>Apply filtering and normalisation.</li>
-<li>Create basic visualisations of the processed data.</li>
+<ul><li>Calculate and interpret detection p-values to assess sample and
+probe quality</li>
+<li>Apply sample and probe filters while keeping methylation
+measurements and sample metadata aligned</li>
+<li>Create and interpret beta-value density plots and MDS plots to
+explore sample relationships and potential quality problems</li>
+<li>Distinguish possible biological differences from variation
+associated with sample preparation or array batch</li>
+<li>Perform functional normalisation and explain why it suits a
+cancer–normal comparison</li>
+<li>Explain the rationale and limitations of chromosome, SNP and
+cross-reactivity filters</li>
+<li>Compare plots before and after processing to assess changes in
+methylation distributions and sample relationships</li>
+<li>Recognise when batch effects or confounding require further
+investigation beyond normalisation</li>
 </ul></div>
 </div>
 </div>
 </div>
 </div>
-<p>This episode is under development. The sections below outline the
-planned content.</p>
 <section><h2 class="section-heading" id="quality-control">Quality control<a class="anchor" aria-label="anchor" href="#quality-control"></a></h2>
-<hr class="half-width"><!-- Add explanations, code examples, and exercises here. --></section><section><h2 class="section-heading" id="filtering">Filtering<a class="anchor" aria-label="anchor" href="#filtering"></a></h2>
-<hr class="half-width"><!-- Add explanations, code examples, and exercises here. --></section><section><h2 class="section-heading" id="normalisation">Normalisation<a class="anchor" aria-label="anchor" href="#normalisation"></a></h2>
-<hr class="half-width"><!-- Add explanations, code examples, and exercises here. --></section><section><h2 class="section-heading" id="basic-visualisation">Basic visualisation<a class="anchor" aria-label="anchor" href="#basic-visualisation"></a></h2>
-<hr class="half-width"><!-- Add explanations, code examples, and exercises here. --><div id="keypoints1" class="callout keypoints">
+<hr class="half-width"><p>A detection p-value measures whether a probe’s signal can be
+distinguished from background. Smaller values support detectable
+signal.</p>
+<p>We calculate the detection p-values (<code>detP</code>) and examine
+their mean across probes for each sample to identify potentially failed
+samples. The red line marks a mean detection p-value of 0.05. The PDF
+report provides additional sample quality information.</p>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">detP</span> <span class="op">&lt;-</span> <span class="fu">detectionP</span><span class="op">(</span><span class="va">rgSet</span><span class="op">)</span></span>
+<span><span class="fu">head</span><span class="op">(</span><span class="va">detP</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>                LNCAP_500_1 LNCAP_500_2 LNCAP_500_3 PREC_500_1 PREC_500_2
+cg25324105_BC11           0           0           0          0          0
+cg25383568_TC11           0           0           0          0          0
+cg25455143_BC11           0           0           0          0          0
+cg25459778_BC11           0           0           0          0          0
+cg25487775_BC11           0           0           0          0          0
+cg25595446_BC11           0           0           0          0          0
+                PREC_500_3
+cg25324105_BC11          0
+cg25383568_TC11          0
+cg25455143_BC11          0
+cg25459778_BC11          0
+cg25487775_BC11          0
+cg25595446_BC11          0</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu">Polychrome</span><span class="fu">::</span><span class="fu">palette36.colors</span><span class="op">(</span><span class="fl">36</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">barplot</span><span class="op">(</span></span>
+<span>  <span class="fu">colMeans</span><span class="op">(</span><span class="va">detP</span><span class="op">)</span>,</span>
+<span>  col <span class="op">=</span> <span class="va">pal</span><span class="op">[</span><span class="fu">factor</span><span class="op">(</span><span class="va">targets</span><span class="op">$</span><span class="va">Type</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>  las <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  cex.names <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>  ylab <span class="op">=</span> <span class="st">"Mean detection p-values"</span>,</span>
+<span>  ylim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fu">max</span><span class="op">(</span><span class="fl">0.06</span>, <span class="fu">max</span><span class="op">(</span><span class="fu">colMeans</span><span class="op">(</span><span class="va">detP</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">abline</span><span class="op">(</span>h <span class="op">=</span> <span class="fl">0.05</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span><span class="fu">legend</span><span class="op">(</span></span>
+<span>  <span class="st">"topright"</span>,</span>
+<span>  legend <span class="op">=</span> <span class="fu">levels</span><span class="op">(</span><span class="fu">factor</span><span class="op">(</span><span class="va">targets</span><span class="op">$</span><span class="va">Type</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  fill <span class="op">=</span> <span class="va">pal</span><span class="op">[</span><span class="fu">seq_along</span><span class="op">(</span><span class="fu">levels</span><span class="op">(</span><span class="fu">factor</span><span class="op">(</span><span class="va">targets</span><span class="op">$</span><span class="va">Type</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>  cex <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>  bg <span class="op">=</span> <span class="st">"white"</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/first-steps-rendered-detection-quality-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"data/figures"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">qcReport</span><span class="op">(</span></span>
+<span>  <span class="va">rgSet</span>,</span>
+<span>  sampNames <span class="op">=</span> <span class="va">targets</span><span class="op">$</span><span class="va">Sample</span>,</span>
+<span>  pdf <span class="op">=</span> <span class="st">"data/figures/qcReport_combined_all_samples.pdf"</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE
+Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
+the caller; using TRUE</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code><span><span class="va">png</span></span>
+<span>  <span class="fl">2</span> </span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="filter-poor-quality-samples">Filter poor quality samples<a class="anchor" aria-label="anchor" href="#filter-poor-quality-samples"></a></h2>
+<hr class="half-width"><p>Retain samples with a mean detection p-value below 0.05. Poor quality
+samples with a detection p-value &gt;0.05 are removed. Subset
+<code>rgSet</code>, <code>targets</code> and <code>detP</code> together
+so the sample information for the poor quality samples are removed
+together.</p>
+<p>This threshold is an example rather than a universal quality
+standard. A mean can conceal individual failed probes; inspect the
+quality report and raw intensities before making sample exclusion
+decisions.</p>
+<div class="codewrapper sourceCode" id="cb7">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu">colMeans</span><span class="op">(</span><span class="va">detP</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">0.05</span></span>
+<span><span class="va">rgSet</span> <span class="op">&lt;-</span> <span class="va">rgSet</span><span class="op">[</span>,<span class="va">keep</span><span class="op">]</span></span>
+<span><span class="va">rgSet</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>class: RGChannelSet
+dim: 1105209 6
+metadata(0):
+assays(2): Green Red
+rownames(1105209): 1600157 1600179 ... 99810982 99810990
+rowData names(0):
+colnames(6): LNCAP_500_1 LNCAP_500_2 ... PREC_500_2 PREC_500_3
+colData names(7): Accession Name ... Basename filenames
+Annotation
+  array: IlluminaHumanMethylationEPICv2
+  annotation: 20a1.hg38</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb9">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">targets</span> <span class="op">&lt;-</span> <span class="va">targets</span><span class="op">[</span><span class="va">keep</span>,<span class="op">]</span></span>
+<span><span class="va">targets</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>   Accession        Name  Type                  Name2      Sample
+1 GSM7698438 LNCAP_500_1 LNCaP GSM7698438_LNCAP_500_1 LNCAP_500_1
+2 GSM7698446 LNCAP_500_2 LNCaP GSM7698446_LNCAP_500_2 LNCAP_500_2
+3 GSM7698462 LNCAP_500_3 LNCaP GSM7698462_LNCAP_500_3 LNCAP_500_3
+4 GSM7698435  PREC_500_1  PREC  GSM7698435_PREC_500_1  PREC_500_1
+5 GSM7698443  PREC_500_2  PREC  GSM7698443_PREC_500_2  PREC_500_2
+6 GSM7698459  PREC_500_3  PREC  GSM7698459_PREC_500_3  PREC_500_3</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb11">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">detP</span> <span class="op">&lt;-</span> <span class="va">detP</span><span class="op">[</span>,<span class="va">keep</span><span class="op">]</span></span>
+<span><span class="fu">dim</span><span class="op">(</span><span class="va">detP</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>[1] 936990      6</code></pre>
+</div>
+<div id="sample-quality-versus-probe-quality" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="sample-quality-versus-probe-quality" class="callout-inner">
+<h3 class="callout-title">Sample quality versus probe quality</h3>
+<div class="callout-content">
+<p>Why do we subset <code>targets</code> and <code>detP</code> when we
+remove a sample from <code>rgSet</code>? Could a sample pass the mean
+detection p-value filter but still contain failed probes?</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
+  <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
+</button>
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div class="accordion-body">
+<p>All three objects must describe the same samples in the same order.
+Otherwise, we could assign the wrong group to a sample or filter using
+another sample’s measurements. Yes: averaging can conceal individual
+failed probes, so we also apply a probe-level filter later.</p>
+</div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="explore-sample-identity-with-snp-control-probes">Explore sample identity with SNP control probes<a class="anchor" aria-label="anchor" href="#explore-sample-identity-with-snp-control-probes"></a></h2>
+<hr class="half-width"><p>The EPIC array also contains 65 probes designed to target SNPs which
+can help investigate sample identity and possible mix-ups. SNP beta
+values reflect allele signals rather than CpG methylation levels. Here
+we plot a simple heatmap where rows represent SNP probes and columns
+represent samples. Samples with similar SNP profiles cluster
+together.</p>
+<div class="codewrapper sourceCode" id="cb13">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">snp_beta</span> <span class="op">&lt;-</span> <span class="fu">getSnpBeta</span><span class="op">(</span><span class="va">rgSet</span><span class="op">)</span></span>
+<span><span class="fu">dim</span><span class="op">(</span><span class="va">snp_beta</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>[1] 65  6</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb15">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sample_annotation</span> <span class="op">&lt;-</span> <span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu">HeatmapAnnotation</span><span class="op">(</span></span>
+<span>  Cell_line <span class="op">=</span> <span class="va">targets</span><span class="op">$</span><span class="va">Type</span>,</span>
+<span>  col <span class="op">=</span> <span class="fu">list</span><span class="op">(</span>Cell_line <span class="op">=</span> <span class="fu">c</span><span class="op">(</span>LNCaP <span class="op">=</span> <span class="st">"#D55E00"</span>, PREC <span class="op">=</span> <span class="st">"#0072B2"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu">draw</span><span class="op">(</span><span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu">Heatmap</span><span class="op">(</span></span>
+<span>  <span class="va">snp_beta</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"SNP beta"</span>,</span>
+<span>  col <span class="op">=</span> <span class="fu">circlize</span><span class="fu">::</span><span class="fu">colorRamp2</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu">c</span><span class="op">(</span><span class="st">"#2166AC"</span>, <span class="st">"white"</span>, <span class="st">"#B2182B"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  top_annotation <span class="op">=</span> <span class="va">sample_annotation</span>,</span>
+<span>  cluster_rows <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cluster_columns <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  show_row_names <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  column_names_rot <span class="op">=</span> <span class="fl">45</span></span>
+<span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/first-steps-rendered-explore-snp-beta-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section><h2 class="section-heading" id="create-a-raw-methylset-and-inspect-outlier-peaks">Create a raw MethylSet and inspect outlier peaks<a class="anchor" aria-label="anchor" href="#create-a-raw-methylset-and-inspect-outlier-peaks"></a></h2>
+<hr class="half-width"><p><code>preprocessRaw()</code> converts the raw channels to methylated
+and unmethylated intensities. Beta values near zero indicate low
+methylation; values near one indicate high methylation.</p>
+<p>We then filter out any outlier peaks that may skew our results. We do
+this by counting peaks in each sample’s density curve and flagging
+samples with more than three peaks for visual inspection. This is a
+diagnostic heuristic: peak counts depend on smoothing and can reflect
+biology.</p>
+<div class="codewrapper sourceCode" id="cb16">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mSetRaw</span> <span class="op">&lt;-</span> <span class="fu">preprocessRaw</span><span class="op">(</span><span class="va">rgSet</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">densityPlot</span><span class="op">(</span><span class="fu">getBeta</span><span class="op">(</span><span class="va">mSetRaw</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">"Raw"</span>, legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/first-steps-rendered-raw-density-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb17">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">find_peaks</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">density</span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="op">!</span><span class="fu">is.na</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">d</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fu">c</span><span class="op">(</span><span class="cn">FALSE</span>, <span class="fu">diff</span><span class="op">(</span><span class="fu">diff</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">all_peaks</span> <span class="op">&lt;-</span> <span class="fu">apply</span><span class="op">(</span><span class="fu">getBeta</span><span class="op">(</span><span class="va">mSetRaw</span><span class="op">)</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">find_peaks</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="fu">table</span><span class="op">(</span><span class="fu">lengths</span><span class="op">(</span><span class="va">all_peaks</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">3</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>
+FALSE  TRUE
+    2     4 </code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb19">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">beta_mat</span> <span class="op">&lt;-</span> <span class="fu">as.matrix</span><span class="op">(</span><span class="fu">getBeta</span><span class="op">(</span><span class="va">mSetRaw</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">is_outlier</span> <span class="op">&lt;-</span> <span class="fu">lengths</span><span class="op">(</span><span class="va">all_peaks</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">3</span></span>
+<span><span class="va">peak_outlier_check</span> <span class="op">&lt;-</span> <span class="fu">factor</span><span class="op">(</span></span>
+<span>  <span class="fu">ifelse</span><span class="op">(</span><span class="va">is_outlier</span>, <span class="st">"Outlier"</span>, <span class="st">"Non-outlier"</span><span class="op">)</span>,</span>
+<span>  levels <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"Non-outlier"</span>, <span class="st">"Outlier"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">densityPlot</span><span class="op">(</span></span>
+<span>  <span class="va">beta_mat</span>,</span>
+<span>  sampGroups <span class="op">=</span> <span class="va">peak_outlier_check</span>,</span>
+<span>  main <span class="op">=</span> <span class="st">"Raw beta densities (outliers in red)"</span>,</span>
+<span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  pal <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"grey70"</span>, <span class="st">"red"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">legend</span><span class="op">(</span></span>
+<span>  <span class="st">"top"</span>,</span>
+<span>  legend <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"Non-outlier"</span>, <span class="st">"Outlier"</span><span class="op">)</span>,</span>
+<span>  col <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"grey70"</span>, <span class="st">"red"</span><span class="op">)</span>,</span>
+<span>  lty <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  horiz <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  bty <span class="op">=</span> <span class="st">"n"</span>,</span>
+<span>  inset <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="op">-</span><span class="fl">0.02</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/first-steps-rendered-raw-density-2.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Samples identified with outlier peaks have similar distribution to
+non-outliers. Hence visual inspection does not justify filtering out any
+samples.</p>
+</section><section><h2 class="section-heading" id="normalisation">Normalisation<a class="anchor" aria-label="anchor" href="#normalisation"></a></h2>
+<hr class="half-width"><p>Normalisation aims to reduce unwanted technical variation. We perform
+functional normalisation, then compare raw and normalised beta-value
+distributions.</p>
+<div id="why-use-functional-normalisation-here" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="why-use-functional-normalisation-here" class="callout-inner">
+<h3 class="callout-title">Why use functional normalisation here?</h3>
+<div class="callout-content">
+<p>LNCaP cancer cells and PrEC normal prostate epithelial cells may have
+widespread biological methylation differences. We use
+<code>preprocessFunnorm()</code> because it uses control-probe
+information to adjust unwanted variation while aiming to preserve these
+global biological differences.</p>
+<p>In contrast, <code>preprocessQuantile()</code> assumes broadly
+comparable methylation distributions and is more appropriate when
+substantial global differences are not expected. This choice follows the
+<a href="https://www.bioconductor.org/help/course-materials/2015/BioC2015/methylation450k.html" class="external-link">minfi
+preprocessing guidance</a> for cancer–normal comparisons; it is a
+starting guideline rather than a guarantee that one method is always
+best.</p>
+<p>Compare density plots, MDS and technical-replicate agreement after
+processing. The two cell types do not need identical density curves.
+Normalisation also does not automatically resolve batch effects or
+confounding.</p>
+</div>
+</div>
+</div>
+<div class="codewrapper sourceCode" id="cb20">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mSetFn</span> <span class="op">&lt;-</span> <span class="fu">preprocessFunnorm</span><span class="op">(</span><span class="va">rgSet</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>[preprocessFunnorm] Background and dye bias correction with noob</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>[preprocessFunnorm] Mapping to genome</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>[preprocessFunnorm] Quantile extraction</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning in .getSex(CN = CN, xIndex = xIndex, yIndex = yIndex, cutoff = cutoff):
+An inconsistency was encountered while determining sex. One possibility is that
+only one sex is present. We recommend further checks, for example with the
+plotSex function.</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>[preprocessFunnorm] Normalization</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb26">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">layout</span><span class="op">(</span></span>
+<span>  <span class="fu">matrix</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fl">2</span>, <span class="fl">3</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  widths <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0.3</span><span class="op">)</span>,</span>
+<span>  heights <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">densityPlot</span><span class="op">(</span><span class="va">rgSet</span>, sampGroups <span class="op">=</span> <span class="va">targets</span><span class="op">$</span><span class="va">Type</span>, main <span class="op">=</span> <span class="st">"Raw"</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, pal <span class="op">=</span> <span class="va">pal</span><span class="op">)</span></span>
+<span><span class="fu">densityPlot</span><span class="op">(</span><span class="fu">getBeta</span><span class="op">(</span><span class="va">mSetFn</span><span class="op">)</span>, sampGroups <span class="op">=</span> <span class="va">targets</span><span class="op">$</span><span class="va">Type</span>, main <span class="op">=</span> <span class="st">"Normalised"</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, pal <span class="op">=</span> <span class="va">pal</span><span class="op">)</span></span>
+<span><span class="fu">par</span><span class="op">(</span>mar <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">plot.new</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/first-steps-rendered-normalise-data-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section><h2 class="section-heading" id="preliminary-visualisation-of-data-with-mds-plot">Preliminary visualisation of data with MDS plot<a class="anchor" aria-label="anchor" href="#preliminary-visualisation-of-data-with-mds-plot"></a></h2>
+<hr class="half-width"><p>Multidimensional scaling (MDS) summarises similarities between
+samples using M-values. <code>top=1000</code> and
+<code>gene.selection="common"</code> select the same 1,000 most variable
+probes across samples for the plot.</p>
+<p>The first pair of panels shows uncoloured samples and samples
+coloured by cell line. The next panels examine higher dimensions,
+coloured by cell line.</p>
+<div class="codewrapper sourceCode" id="cb27">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">par</span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">plotMDS</span><span class="op">(</span><span class="fu">getM</span><span class="op">(</span><span class="va">mSetFn</span><span class="op">)</span>, top<span class="op">=</span><span class="fl">1000</span>, gene.selection<span class="op">=</span><span class="st">"common"</span>, cex<span class="op">=</span><span class="fl">0.9</span>, pch <span class="op">=</span> <span class="fl">19</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">plotMDS</span><span class="op">(</span><span class="fu">getM</span><span class="op">(</span><span class="va">mSetFn</span><span class="op">)</span>, top<span class="op">=</span><span class="fl">1000</span>, gene.selection<span class="op">=</span><span class="st">"common"</span>,</span>
+<span>        col<span class="op">=</span><span class="va">pal</span><span class="op">[</span><span class="fu">factor</span><span class="op">(</span><span class="va">targets</span><span class="op">$</span><span class="va">Type</span><span class="op">)</span><span class="op">]</span>, cex<span class="op">=</span><span class="fl">0.9</span>, pch <span class="op">=</span> <span class="fl">19</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/first-steps-rendered-mds-before-filtering-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb28">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># higher dimensions</span></span>
+<span><span class="fu">par</span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">plotMDS</span><span class="op">(</span><span class="fu">getM</span><span class="op">(</span><span class="va">mSetFn</span><span class="op">)</span>, top<span class="op">=</span><span class="fl">1000</span>, gene.selection<span class="op">=</span><span class="st">"common"</span>,</span>
+<span>        col<span class="op">=</span><span class="va">pal</span><span class="op">[</span><span class="fu">factor</span><span class="op">(</span><span class="va">targets</span><span class="op">$</span><span class="va">Type</span><span class="op">)</span><span class="op">]</span>, dim<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">19</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">plotMDS</span><span class="op">(</span><span class="fu">getM</span><span class="op">(</span><span class="va">mSetFn</span><span class="op">)</span>, top<span class="op">=</span><span class="fl">1000</span>, gene.selection<span class="op">=</span><span class="st">"common"</span>,</span>
+<span>        col<span class="op">=</span><span class="va">pal</span><span class="op">[</span><span class="fu">factor</span><span class="op">(</span><span class="va">targets</span><span class="op">$</span><span class="va">Type</span><span class="op">)</span><span class="op">]</span>, dim<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">19</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">plotMDS</span><span class="op">(</span><span class="fu">getM</span><span class="op">(</span><span class="va">mSetFn</span><span class="op">)</span>, top<span class="op">=</span><span class="fl">1000</span>, gene.selection<span class="op">=</span><span class="st">"common"</span>,</span>
+<span>        col<span class="op">=</span><span class="va">pal</span><span class="op">[</span><span class="fu">factor</span><span class="op">(</span><span class="va">targets</span><span class="op">$</span><span class="va">Type</span><span class="op">)</span><span class="op">]</span>, dim<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">19</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/first-steps-rendered-mds-before-filtering-2.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Look for grouping by cell line, agreement between replicates and
+isolated samples. These plots are exploratory; separation does not
+identify individual differentially methylated probes.</p>
+</section><section><h2 class="section-heading" id="filter-failed-or-poor-quality-probes">Filter failed or poor quality probes<a class="anchor" aria-label="anchor" href="#filter-failed-or-poor-quality-probes"></a></h2>
+<hr class="half-width"><p>Remove probes that fail detection in one or more samples. First align
+the detection p-value rows with the normalised probe identifiers, then
+retain probes with detection p-values below 0.01 in every sample.</p>
+<p>This is a stringent rule and becomes more restrictive as sample
+numbers grow.</p>
+<div class="codewrapper sourceCode" id="cb29">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Ensure probes in same order</span></span>
+<span><span class="va">detP</span> <span class="op">&lt;-</span> <span class="va">detP</span><span class="op">[</span><span class="fu">match</span><span class="op">(</span><span class="fu">featureNames</span><span class="op">(</span><span class="va">mSetFn</span><span class="op">)</span>, <span class="fu">rownames</span><span class="op">(</span><span class="va">detP</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="fu">stopifnot</span><span class="op">(</span><span class="fu">identical</span><span class="op">(</span><span class="fu">colnames</span><span class="op">(</span><span class="va">mSetFn</span><span class="op">)</span>, <span class="fu">colnames</span><span class="op">(</span><span class="va">detP</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu">rowSums</span><span class="op">(</span><span class="va">detP</span> <span class="op">&lt;</span> <span class="fl">0.01</span><span class="op">)</span> <span class="op">==</span> <span class="fu">ncol</span><span class="op">(</span><span class="va">mSetFn</span><span class="op">)</span></span>
+<span><span class="fu">table</span><span class="op">(</span><span class="va">keep</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>keep
+ FALSE   TRUE
+  5936 924139 </code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb31">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mSetFnFlt</span> <span class="op">&lt;-</span> <span class="va">mSetFn</span><span class="op">[</span><span class="va">keep</span>, <span class="op">]</span></span>
+<span><span class="va">mSetFnFlt</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>class: GenomicRatioSet
+dim: 924139 6
+metadata(0):
+assays(2): Beta CN
+rownames(924139): cg00381604_BC11 cg21870274_BC21 ... cg27912920_TC21
+  cg16855331_BC21
+rowData names(0):
+colnames(6): LNCAP_500_1 LNCAP_500_2 ... PREC_500_2 PREC_500_3
+colData names(10): Accession Name ... yMed predictedSex
+Annotation
+  array: IlluminaHumanMethylationEPICv2
+  annotation: 20a1.hg38
+Preprocessing
+  Method: NA
+  minfi version: NA
+  Manifest version: NA</code></pre>
+</div>
+<p>5936 poor quality probes filtered from our methylation dataset.
+924139 probes remaining.</p>
+</section><section><h2 class="section-heading" id="filter-sex-chromosomes">Filter sex chromosomes<a class="anchor" aria-label="anchor" href="#filter-sex-chromosomes"></a></h2>
+<hr class="half-width"><p>Remove probes annotated to chromosomes X and Y. This is to remove any
+sex variability in our analysis, not a statement that these measurements
+are unreliable. Keep them if your biological question concerns sex
+chromosomes and plan the analysis accordingly.</p>
+<div class="codewrapper sourceCode" id="cb33">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="op">!</span><span class="op">(</span><span class="fu">featureNames</span><span class="op">(</span><span class="va">mSetFnFlt</span><span class="op">)</span> <span class="op">%in%</span></span>
+<span>            <span class="va">epic</span><span class="op">$</span><span class="va">Name</span><span class="op">[</span><span class="va">epic</span><span class="op">$</span><span class="va">chr</span> <span class="op">%in%</span> <span class="fu">c</span><span class="op">(</span><span class="st">"chrX"</span>, <span class="st">"chrY"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu">table</span><span class="op">(</span><span class="va">keep</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>keep
+ FALSE   TRUE
+ 24054 900085 </code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb35">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mSetFnFlt</span> <span class="op">&lt;-</span> <span class="va">mSetFnFlt</span><span class="op">[</span><span class="va">keep</span>, <span class="op">]</span></span>
+<span><span class="va">mSetFnFlt</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>class: GenomicRatioSet
+dim: 900085 6
+metadata(0):
+assays(2): Beta CN
+rownames(900085): cg00381604_BC11 cg21870274_BC21 ... cg26570081_BC21
+  cg26570107_TC11
+rowData names(0):
+colnames(6): LNCAP_500_1 LNCAP_500_2 ... PREC_500_2 PREC_500_3
+colData names(10): Accession Name ... yMed predictedSex
+Annotation
+  array: IlluminaHumanMethylationEPICv2
+  annotation: 20a1.hg38
+Preprocessing
+  Method: NA
+  minfi version: NA
+  Manifest version: NA</code></pre>
+</div>
+<p>24054 probes filtered from our methylation dataset. 9000085 probes
+remaining.</p>
+</section><section><h2 class="section-heading" id="filter-cpgs-with-snps">Filter CpGs with SNPs<a class="anchor" aria-label="anchor" href="#filter-cpgs-with-snps"></a></h2>
+<hr class="half-width"><p>Variants at the interrogated CpG or single-base extension site can
+affect the measurement. Use the matching array annotation to remove loci
+with annotated SNPs.</p>
+<div class="codewrapper sourceCode" id="cb37">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mSetFnFlt</span> <span class="op">&lt;-</span> <span class="fu">mapToGenome</span><span class="op">(</span><span class="va">mSetFnFlt</span><span class="op">)</span></span>
+<span><span class="va">mSetFnFlt</span> <span class="op">&lt;-</span> <span class="fu">dropLociWithSnps</span><span class="op">(</span><span class="va">mSetFnFlt</span><span class="op">)</span></span>
+<span><span class="va">mSetFnFlt</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>class: GenomicRatioSet
+dim: 886487 6
+metadata(0):
+assays(2): Beta CN
+rownames(886487): cg00381604_BC11 cg21870274_BC21 ... cg26570081_BC21
+  cg26570107_TC11
+rowData names(0):
+colnames(6): LNCAP_500_1 LNCAP_500_2 ... PREC_500_2 PREC_500_3
+colData names(10): Accession Name ... yMed predictedSex
+Annotation
+  array: IlluminaHumanMethylationEPICv2
+  annotation: 20a1.hg38
+Preprocessing
+  Method: NA
+  minfi version: NA
+  Manifest version: NA</code></pre>
+</div>
+<p>886487 probes remain after SNP filtering.</p>
+</section><section><h2 class="section-heading" id="filter-cpgs-with-potential-cross-reactivity">Filter CpGs with potential cross-reactivity<a class="anchor" aria-label="anchor" href="#filter-cpgs-with-potential-cross-reactivity"></a></h2>
+<hr class="half-width"><p>Some probes can bind to more than one genomic region. We use the
+Peters <em>et al.</em> EPICv2 manifest from AnnotationHub and exclude
+probes flagged by <code>CH_BLAT</code> for predicted
+cross-hybridisation.</p>
+<div class="codewrapper sourceCode" id="cb39">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ah</span> <span class="op">&lt;-</span> <span class="fu">AnnotationHub</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb40">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">epicv2_manifest</span> <span class="op">&lt;-</span> <span class="va">ah</span><span class="op">[[</span><span class="st">"AH116484"</span><span class="op">]</span><span class="op">]</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>downloading 1 resources</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>retrieving 1 resource</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>loading from cache</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb44">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">xReactiveProbes</span> <span class="op">&lt;-</span> <span class="fu">rownames</span><span class="op">(</span><span class="va">epicv2_manifest</span><span class="op">)</span><span class="op">[</span><span class="va">epicv2_manifest</span><span class="op">$</span><span class="va">CH_BLAT</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">]</span></span>
+<span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="op">!</span><span class="op">(</span><span class="fu">featureNames</span><span class="op">(</span><span class="va">mSetFnFlt</span><span class="op">)</span> <span class="op">%in%</span> <span class="va">xReactiveProbes</span><span class="op">)</span></span>
+<span><span class="fu">table</span><span class="op">(</span><span class="va">keep</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>keep
+ FALSE   TRUE
+ 27592 858895 </code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb46">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mSetFnFlt</span> <span class="op">&lt;-</span> <span class="va">mSetFnFlt</span><span class="op">[</span><span class="va">keep</span>, <span class="op">]</span></span>
+<span><span class="va">mSetFnFlt</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>class: GenomicRatioSet
+dim: 858895 6
+metadata(0):
+assays(2): Beta CN
+rownames(858895): cg00002271_BC21 cg00004581_TC21 ... cg13801850_TC21
+  cg08423507_BC11
+rowData names(0):
+colnames(6): LNCAP_500_1 LNCAP_500_2 ... PREC_500_2 PREC_500_3
+colData names(10): Accession Name ... yMed predictedSex
+Annotation
+  array: IlluminaHumanMethylationEPICv2
+  annotation: 20a1.hg38
+Preprocessing
+  Method: NA
+  minfi version: NA
+  Manifest version: NA</code></pre>
+</div>
+<p>27592 cross reactive probes were detected and filtered from our
+methylation data. 858895 probes remain.</p>
+<div id="alternativeadditional-workflows" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="alternativeadditional-workflows" class="callout-inner">
+<h3 class="callout-title">Alternative/additional workflows</h3>
+<div class="callout-content">
+<p>As an alternative to the separate SNP and cross-reactivity filters
+above, <code>DMRcate::rmSNPandCH()</code> filters a matrix of beta
+values or M-values. For example, start with the normalised data after
+detection filtering:</p>
+<div class="codewrapper sourceCode" id="cb48">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">betaFnFlt</span> <span class="op">&lt;-</span> <span class="fu">DMRcate</span><span class="fu">::</span><span class="fu">rmSNPandCH</span><span class="op">(</span><span class="va">betaFn</span><span class="op">)</span></span></code></pre>
+</div>
+<p>By default, <code>rmSNPandCH()</code> filters SNP-associated probes
+and removes cross-reactive probes (<code>rmcrosshyb = TRUE</code>).
+Sex-chromosome probes are retained by default; add
+<code>rmXY = TRUE</code> to exclude them too. Its criteria and
+annotation resources can differ from the separate
+<code>dropLociWithSnps()</code> and <code>CH_BLAT</code> filtering steps
+used here, so the retained probe sets need not be identical. See the <a href="https://www.bioconductor.org/packages/release/bioc/manuals/DMRcate/man/DMRcate.pdf" class="external-link">DMRcate
+reference manual</a>.</p>
+<p>EPICv2 includes multiple probes that map to the same CpG site. These
+are <strong>replicate probes within an array</strong>, distinct from the
+technical replicate samples in this lesson. Keeping multiple
+measurements per locus can give some sites extra weight in region
+analysis. The filters above remove unreliable probes but do not collapse
+replicate groups.</p>
+<p>Replicate handling is a separate optional step: options include
+averaging measurements or selecting a representative probe. In current
+DMRcate versions,
+<code>cpg.annotate(..., arraytype = "EPICv2", epicv2Filter = "mean")</code>
+handles replicate groups during annotation. Keep complete EPICv2 probe
+IDs until this step; removing their suffixes alone does not combine the
+measurements.</p>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="save-files">Save files<a class="anchor" aria-label="anchor" href="#save-files"></a></h2>
+<hr class="half-width"><div class="codewrapper sourceCode" id="cb49">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"data/processed"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">saveRDS</span><span class="op">(</span><span class="va">mSetFnFlt</span>, file <span class="op">=</span> <span class="st">"data/processed/normalised-filtered.rds"</span><span class="op">)</span></span>
+<span><span class="fu">saveRDS</span><span class="op">(</span><span class="va">targets</span>, file <span class="op">=</span> <span class="st">"data/processed/targets.rds"</span><span class="op">)</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="re-examine-mds-after-filtering">Re-examine MDS after filtering<a class="anchor" aria-label="anchor" href="#re-examine-mds-after-filtering"></a></h2>
+<hr class="half-width"><p>Plot the filtered M-values, to re-visualise the methylation data.</p>
+<div class="codewrapper sourceCode" id="cb50">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"data/figures"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu">Polychrome</span><span class="fu">::</span><span class="fu">palette36.colors</span><span class="op">(</span><span class="fl">30</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Cell line</span></span>
+<span><span class="va">cols_type</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="st">"LNCaP"</span> <span class="op">=</span> <span class="st">"#D55E00"</span>, <span class="st">"PREC"</span> <span class="op">=</span> <span class="st">"#0072B2"</span><span class="op">)</span></span>
+<span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu">factor</span><span class="op">(</span><span class="va">targets</span><span class="op">$</span><span class="va">Type</span>, levels <span class="op">=</span> <span class="fu">names</span><span class="op">(</span><span class="va">cols_type</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">png</span><span class="op">(</span></span>
+<span>  filename <span class="op">=</span> <span class="st">"data/figures/mds_cell_line.png"</span>,</span>
+<span>  width <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  height <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>  units <span class="op">=</span> <span class="st">"in"</span>,</span>
+<span>  res <span class="op">=</span> <span class="fl">300</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">plotMDS</span><span class="op">(</span><span class="fu">getM</span><span class="op">(</span><span class="va">mSetFnFlt</span><span class="op">)</span>, top<span class="op">=</span><span class="fl">1000</span>, gene.selection<span class="op">=</span><span class="st">"common"</span>,</span>
+<span>        col <span class="op">=</span> <span class="va">cols_type</span><span class="op">[</span><span class="va">f</span><span class="op">]</span>, cex<span class="op">=</span><span class="fl">0.8</span>, pch<span class="op">=</span><span class="fl">19</span><span class="op">)</span></span>
+<span><span class="fu">legend</span><span class="op">(</span><span class="st">"bottom"</span>, legend<span class="op">=</span><span class="fu">names</span><span class="op">(</span><span class="va">cols_type</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">cols_type</span>, pch <span class="op">=</span> <span class="fl">19</span>,</span>
+<span>       cex<span class="op">=</span><span class="fl">0.8</span>, bg<span class="op">=</span><span class="st">"white"</span><span class="op">)</span></span>
+<span><span class="fu">dev.off</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code><span><span class="va">png</span></span>
+<span>  <span class="fl">2</span> </span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb52">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">plotMDS</span><span class="op">(</span><span class="fu">getM</span><span class="op">(</span><span class="va">mSetFnFlt</span><span class="op">)</span>, top<span class="op">=</span><span class="fl">1000</span>, gene.selection<span class="op">=</span><span class="st">"common"</span>,</span>
+<span>        col <span class="op">=</span> <span class="va">cols_type</span><span class="op">[</span><span class="va">f</span><span class="op">]</span>, cex<span class="op">=</span><span class="fl">0.8</span>, pch<span class="op">=</span><span class="fl">19</span><span class="op">)</span></span>
+<span><span class="fu">legend</span><span class="op">(</span><span class="st">"bottom"</span>, legend<span class="op">=</span><span class="fu">names</span><span class="op">(</span><span class="va">cols_type</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">cols_type</span>, pch <span class="op">=</span> <span class="fl">19</span>,</span>
+<span>       cex<span class="op">=</span><span class="fl">0.8</span>, bg<span class="op">=</span><span class="st">"white"</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/first-steps-rendered-mds-after-filtering-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Check whether replicates cluster together, whether cell lines
+separate, and whether any sample is unusual. The most variable probes
+can change after filtering, so the before- and after-filtering plots can
+be plotting different probes. An MDS plot is exploratory and does not
+identify differentially methylated probes.</p>
+<div id="interpret-the-plots" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="interpret-the-plots" class="callout-inner">
+<h3 class="callout-title">Interpret the plots</h3>
+<div class="callout-content">
+<ol style="list-style-type: decimal"><li>What are some other variables in a given dataset that you would want
+to explore with MDS?</li>
+<li>What would you investigate before removing an isolated sample?</li>
+</ol></div>
+</div>
+</div>
+<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
+  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
+</button>
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div class="accordion-body">
+<ol style="list-style-type: decimal"><li>Other variables that can contribute to differential methylation:
+sex, batch, age etc</li>
+<li>Check detection failures, raw intensities, sample labels,
+experimental records and known technical factors. An isolated point can
+also reflect genuine biology; a plot alone is not a sufficient exclusion
+rule.</li>
+</ol></div>
+</div>
+</div>
+</div>
+<div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <span class="callout-header">Key Points</span>
 <div class="callout-inner">
 <div class="callout-content">
-<ul><li>Key points will be added when this episode is completed.</li>
+<ul><li>Calculate detection p-values on raw data and inspect both sample and
+probe quality.</li>
+<li>Keep metadata, detection p-values and methylation objects aligned by
+identifier.</li>
+<li>Normalisation assumptions must fit the biological comparison.</li>
+<li>Detection, chromosome, SNP and cross-reactivity filters address
+different questions.</li>
+<li>Density and MDS plots help identify patterns worth investigating;
+they do not prove a batch effect or differential methylation.</li>
+<li>Save processed objects and record filtering decisions for
+reproducible downstream analysis.</li>
 </ul></div>
 </div>
 </div>
@@ -405,7 +1241,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors.</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a> Custom fork by <a href="https://www.melbournebioinformatics.org.au/" class="external-link">Melbourne Bioinformatics</a>.</p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/" class="external-link">sandpaper (0.21.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/melbournebioinformatics/uom-varnish/tree/main" class="external-link">varnish (1.1.3)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/" class="external-link">sandpaper (0.21.1)</a>, <a href="https://github.com/carpentries/pegboard/tree/" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/melbournebioinformatics/uom-varnish/tree/main" class="external-link">varnish (1.1.3)</a></p>
 		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -426,9 +1262,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://stellaliu525-web.github.io/intro-to-methylation-array/instructor/first-steps.html",
   "identifier": "https://stellaliu525-web.github.io/intro-to-methylation-array/instructor/first-steps.html",
-  "dateCreated": "2026-09-30",
-  "dateModified": "2026-09-30",
-  "datePublished": "2026-09-30"
+  "dateCreated": "2026-10-09",
+  "dateModified": "2026-10-09",
+  "datePublished": "2026-10-09"
 }
 
   </script><script>
