@@ -51,7 +51,7 @@ We calculate the detection p-values (`detP`) and examine their mean across
 probes for each sample to identify potentially failed samples. The red line marks a mean detection p-value of 0.05.
 The PDF report provides additional sample quality information.
 
-```{r detection-quality}
+```{r detection-quality, eval=TRUE, warning=FALSE, message=FALSE}
 detP <- detectionP(rgSet)
 head(detP)
 
@@ -224,7 +224,7 @@ does not automatically resolve batch effects or confounding.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-```{r normalise-data}
+```{r normalise-data, message=FALSE, warning=FALSE}
 mSetFn <- preprocessFunnorm(rgSet)
 
 layout(
