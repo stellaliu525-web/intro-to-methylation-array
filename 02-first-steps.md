@@ -30,14 +30,15 @@ exercises: 15
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-
 ## Quality control
 
 A detection p-value measures whether a probe's signal can be distinguished from
 background. Smaller values support detectable signal. 
 
 We calculate the detection p-values (`detP`) and examine their mean across
-probes for each sample to identify potentially failed samples. The red line marks a mean detection p-value of 0.05.
+probes for each sample to identify potentially failed samples. The [Bioconductor methylation-array workflow](https://www.bioconductor.org/packages/release/workflows/vignettes/methylationArrayAnalysis/inst/doc/methylationArrayAnalysis.html)
+uses a mean detection p-value cutoff of 0.05 for sample filtering. The red line marks a mean detection p-value of 0.05.
+
 The PDF report provides additional sample quality information.
 
 
@@ -64,6 +65,7 @@ cg25595446_BC11          0
 ```
 
 ``` r
+# Choose plot colours - Polychrome uses a maximum of 36 discrete colours
 pal <- Polychrome::palette36.colors(36)
 
 barplot(
@@ -84,7 +86,7 @@ legend(
 )
 ```
 
-<img src="fig/first-steps-rendered-detection-quality-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/02-first-steps-rendered-detection-quality-1.png" alt="" style="display: block; margin: auto;" />
 
 ``` r
 dir.create("data/figures", recursive = TRUE, showWarnings = FALSE)
@@ -99,14 +101,9 @@ qcReport(
 png 
   2 
 ```
-
 ## Filter poor quality samples
 
-Retain samples with a mean detection p-value below 0.05. Poor quality samples with a detection p-value >0.05 are removed. Subset `rgSet`, `targets` and `detP` together so the sample information for the poor quality samples are removed together. 
-
-This threshold is an example rather than a universal quality standard. A mean
-can conceal individual failed probes; inspect the quality report and raw
-intensities before making sample exclusion decisions.
+Retain samples with a mean detection p-value below 0.05. Samples with a mean detection p-value at or above 0.05 are removed. Subset `rgSet`, `targets` and `detP` together so the sample information for the poor quality samples are removed together. 
 
 
 ``` r
@@ -172,7 +169,6 @@ apply a probe-level filter later.
 
 :::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
 ## Explore sample identity with SNP control probes
 
 The EPIC array also contains 65 probes designed to target SNPs which can help investigate sample identity and possible mix-ups. SNP beta values reflect allele signals rather than CpG methylation levels. Here we plot a simple heatmap where rows represent SNP probes and columns represent samples. Samples with similar SNP profiles cluster together. 
@@ -205,15 +201,14 @@ ComplexHeatmap::draw(ComplexHeatmap::Heatmap(
 ))
 ```
 
-<img src="fig/first-steps-rendered-explore-snp-beta-1.png" alt="" style="display: block; margin: auto;" />
-
+<img src="fig/02-first-steps-rendered-explore-snp-beta-1.png" alt="" style="display: block; margin: auto;" />
 ## Create a raw MethylSet and inspect outlier peaks
 
 `preprocessRaw()` converts the raw channels to methylated and unmethylated
 intensities. Beta values near zero indicate low methylation; values near one
 indicate high methylation.
 
-We then filter out any outlier peaks that may skew our results. We do this by counting peaks in each sample's density curve and flagging
+We investigate unusual density curves by counting peaks in each sample's density curve and flagging
 samples with more than three peaks for visual inspection. This is a diagnostic
 heuristic: peak counts depend on smoothing and can reflect biology. 
 
@@ -224,7 +219,7 @@ mSetRaw <- preprocessRaw(rgSet)
 densityPlot(getBeta(mSetRaw), main = "Raw", legend = FALSE)
 ```
 
-<img src="fig/first-steps-rendered-raw-density-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/02-first-steps-rendered-raw-density-1.png" alt="" style="display: block; margin: auto;" />
 
 ``` r
 find_peaks <- function(x) {
@@ -269,10 +264,9 @@ legend(
 )
 ```
 
-<img src="fig/first-steps-rendered-raw-density-2.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/02-first-steps-rendered-raw-density-2.png" alt="" style="display: block; margin: auto;" />
 
 Samples identified with outlier peaks have similar distribution to non-outliers. Hence visual inspection does not justify filtering out any samples. 
-
 ## Normalisation
 
 Normalisation aims to reduce unwanted technical variation. We perform functional
@@ -314,8 +308,7 @@ par(mar = c(0, 0, 0, 0))
 plot.new()
 ```
 
-<img src="fig/first-steps-rendered-normalise-data-1.png" alt="" style="display: block; margin: auto;" />
-
+<img src="fig/02-first-steps-rendered-normalise-data-1.png" alt="" style="display: block; margin: auto;" />
 ## Preliminary visualisation of data with MDS plot
 
 Multidimensional scaling (MDS) summarises similarities between samples using
@@ -327,18 +320,22 @@ higher dimensions, coloured by cell line.
 
 
 ``` r
-par(mfrow=c(1,2))
+par(mfrow=c(1,2), mar=c(4,4,2,1), pty="s")
 plotMDS(getM(mSetFn), top=1000, gene.selection="common", cex=0.9, pch = 19)
 
 plotMDS(getM(mSetFn), top=1000, gene.selection="common",
         col=pal[factor(targets$Type)], cex=0.9, pch = 19)
 ```
 
-<img src="fig/first-steps-rendered-mds-before-filtering-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/02-first-steps-rendered-mds-before-filtering-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 
 ``` r
-# higher dimensions
-par(mfrow=c(1,3))
+par(mfrow=c(1,1), pty="m")
+```
+
+
+``` r
+par(mfrow=c(1,3), mar=c(4,4,2,1), pty="s")
 plotMDS(getM(mSetFn), top=1000, gene.selection="common",
         col=pal[factor(targets$Type)], dim=c(1,3), pch = 19)
 
@@ -349,19 +346,20 @@ plotMDS(getM(mSetFn), top=1000, gene.selection="common",
         col=pal[factor(targets$Type)], dim=c(3,4), pch = 19)
 ```
 
-<img src="fig/first-steps-rendered-mds-before-filtering-2.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/02-first-steps-rendered-mds-higher-dimensions-1.png" alt="" width="100%" style="display: block; margin: auto;" />
+
+``` r
+par(mfrow=c(1,1), pty="m")
+```
 
 Look for grouping by cell line, agreement between replicates and isolated
 samples. These plots are exploratory; separation does not identify individual
 differentially methylated probes.
-
 ## Filter failed or poor quality probes
 
-Remove probes that fail detection in one or more samples. First align
-the detection p-value rows with the normalised probe identifiers, then retain
-probes with detection p-values below 0.01 in every sample.
+When microarrays run, each probe measures a fluorescent intensity signal. To determine if a probe actually caught a biological signal or is just showing random machine noise, software calculates a detection p-value against a background noise distribution.
 
-This is a stringent rule and becomes more restrictive as sample numbers grow.
+The [Bioconductor methylation-array workflow](https://www.bioconductor.org/packages/release/workflows/vignettes/methylationArrayAnalysis/inst/doc/methylationArrayAnalysis.html) uses detection p-values below 0.01 for probe filtering. This means the signal is statistically different from background noise and the probe is kept. Probes are retained only when detection p-values are below 0.01 in every retained sample.
 
 
 ``` r
@@ -447,7 +445,6 @@ Preprocessing
   Manifest version: NA
 ```
 24054 probes filtered from our methylation dataset. 9000085 probes remaining. 
-
 ## Filter CpGs with SNPs
 
 Variants at the interrogated CpG or single-base extension site can affect the
@@ -480,14 +477,31 @@ Preprocessing
   Manifest version: NA
 ```
 886487 probes remain after SNP filtering. 
-
 ## Filter CpGs with potential cross-reactivity
 
-Some probes can bind to more than one genomic region. We use the Peters *et al.* EPICv2 manifest from AnnotationHub and
-exclude probes flagged by `CH_BLAT` for predicted cross-hybridisation.
+A probe is designed to measure methylation at a particular genomic location.
+If its sequence also binds elsewhere (**cross-hybridisation**, or
+cross-reactivity), its intensity may mix signals from multiple locations.
+A strong signal can still pass detection QC while representing the wrong or
+more than one locus, potentially misleading differential methylation results. These cross-reactive probes need to be filtered out. 
+
+A **manifest** is a reference table describing the array's probes, including
+probe identifiers, sequences and design information. The extended EPICv2 manifest from
+[Peters *et al.* (2024)](https://link.springer.com/article/10.1186/s12864-024-10027-5)
+adds probe annotations, including predicted cross-hybridisation. See the
+[EPICv2manifest reference manual](https://bioconductor.org/packages/release/data/annotation/manuals/EPICv2manifest/man/EPICv2manifest.pdf)
+for the extended table.
+
+We use **AnnotationHub**, a Bioconductor service for retrieving reference resources, to retrieve the extended EPICv2 manifest (`AH116484`). This table supplies extra filtering information beyond the `epic` genomic annotation loaded earlier. 
+
+The `CH_BLAT` field flags predicted cross-hybridisation based on probe-sequence
+alignment using BLAT. We exclude entries marked `"Y"`, matching their full
+EPICv2 probe IDs to our measurement rows. This is a prediction-based filter,
+not evidence that cross-hybridisation occurred in each sample. 
 
 
 ``` r
+# Retrieve the reference table
 ah <- AnnotationHub()
 ```
 
@@ -495,20 +509,11 @@ ah <- AnnotationHub()
 epicv2_manifest <- ah[["AH116484"]]
 ```
 
-``` output
-downloading 1 resources
-```
-
-``` output
-retrieving 1 resource
-```
-
-``` output
-loading from cache
-```
-
 ``` r
+# Select IDs flagged for predicted cross-hybridisation
 xReactiveProbes <- rownames(epicv2_manifest)[epicv2_manifest$CH_BLAT == "Y"]
+
+# Keep measured probes whose IDs are absent from the flagged list
 keep <- !(featureNames(mSetFnFlt) %in% xReactiveProbes)
 table(keep)
 ```
@@ -573,7 +578,6 @@ or selecting a representative probe. In current DMRcate versions,
 groups during annotation. Keep complete EPICv2 probe IDs until this step;
 removing their suffixes alone does not combine the measurements. 
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
 ## Save files
 
 
@@ -583,47 +587,42 @@ dir.create("data/processed", recursive = TRUE, showWarnings = FALSE)
 saveRDS(mSetFnFlt, file = "data/processed/normalised-filtered.rds")
 saveRDS(targets, file = "data/processed/targets.rds")
 ```
-
 ## Re-examine MDS after filtering
 
 Plot the filtered M-values, to re-visualise the methylation data. 
 
 
 ``` r
-dir.create("data/figures", recursive = TRUE, showWarnings = FALSE)
-pal <- Polychrome::palette36.colors(30)
-
-# Cell line
-cols_type <- c("LNCaP" = "#D55E00", "PREC" = "#0072B2")
+cols_type <- setNames(pal[seq_along(levels(factor(targets$Type)))],
+                      levels(factor(targets$Type)))
 f <- factor(targets$Type, levels = names(cols_type))
 
-png(
-  filename = "data/figures/mds_cell_line.png",
-  width = 8,
-  height = 7,
-  units = "in",
-  res = 300
-)
+par(mfrow=c(1,1), mar=c(4,4,2,1), pty="s")
 plotMDS(getM(mSetFnFlt), top=1000, gene.selection="common",
         col = cols_type[f], cex=0.8, pch=19)
 legend("bottom", legend=names(cols_type), col = cols_type, pch = 19,
        cex=0.8, bg="white")
+```
+
+<img src="fig/02-first-steps-rendered-mds-after-filtering-1.png" alt="" style="display: block; margin: auto;" />
+
+``` r
 dev.off()
 ```
 
 ``` output
-png 
-  2 
+null device 
+          1 
 ```
 
 ``` r
+par(mfrow=c(1,1), mar=c(4,4,2,1), pty="s")
 plotMDS(getM(mSetFnFlt), top=1000, gene.selection="common",
         col = cols_type[f], cex=0.8, pch=19)
 legend("bottom", legend=names(cols_type), col = cols_type, pch = 19,
        cex=0.8, bg="white")
+par(pty="m")
 ```
-
-<img src="fig/first-steps-rendered-mds-after-filtering-1.png" alt="" style="display: block; margin: auto;" />
 
 Check whether replicates cluster together, whether cell lines separate, and
 whether any sample is unusual. The most variable probes can change after

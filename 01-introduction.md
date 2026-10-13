@@ -20,7 +20,6 @@ exercises: 5
 - Import the IDAT files into a `minfi` object
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
 ## Introduction
 
 Methylation in the human genome is known to be associated with development and disease. The Illumina Infinium methylation arrays are by far the most common way to interrogate methylation across the human genome. This workshop provides an easy and reproducible workflow using multiple packages for the analysis of methylation array data. Specifically, we demonstrate the steps involved in a typical differential methylation analysis pipeline including: quality control, filtering, normalization, data exploration and statistical testing for probe-wise differential methylation.
@@ -30,7 +29,6 @@ DNA methylation, the addition of a methyl group to a CG dinucleotide of the DNA,
 For each CpG, there are two measurements: a methylated intensity (denoted by 𝑀) and an unmethylated intensity (denoted by 𝑈). These intensity values can be used to determine the proportion of methylation at each CpG locus. Methylation levels are commonly reported as either beta values (𝛽=𝑀/(𝑀+𝑈)) or M-values (𝑀𝑣𝑎𝑙𝑢𝑒=𝑙𝑜𝑔2(𝑀/𝑈)).
 
 Beta values (proportion of methylation at a particular CpG site) are generally preferable for describing the level of methylation at a locus or for graphical presentation because percentage methylation is easily interpretable. M-values (log2 ratio of methylated to unmethylated signal intensity) are more appropriate for statistical testing.
-
 ## Load packages
 
 Complete the [setup instructions](../learners/setup.md) first. Open RStudio and
@@ -50,19 +48,6 @@ library(reshape2)
 
 # Methylation analysis and annotation
 library(minfi)
-```
-
-``` warning
-Warning: replacing previous import 'S4Arrays::makeNindexFromArrayViewport' by
-'DelayedArray::makeNindexFromArrayViewport' when loading 'SummarizedExperiment'
-```
-
-``` warning
-Warning: replacing previous import 'S4Arrays::makeNindexFromArrayViewport' by
-'DelayedArray::makeNindexFromArrayViewport' when loading 'HDF5Array'
-```
-
-``` r
 library(GEOquery)
 library(limma)
 library(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
@@ -74,15 +59,16 @@ library(missMethyl)
 library(clusterProfiler)
 library(org.Hs.eg.db)
 
-# Plotting and parallel computing
+# Plotting: these packages are used when we create our plots. Some of these packages are used for the colour palette 
 library(Polychrome)
 library(ComplexHeatmap)
 library(ggsci)
 library(gridExtra)
 library(RColorBrewer)
+
+# Parallel computing utilities 
 library(parallel)
 ```
-
 ## Load annotation data
 
 This is information that describes each CpG probe on the Illumina EPICv2 methylation array. It tells you where each probe is located in the genome and which genes or genomic features it is associated with.
@@ -192,18 +178,23 @@ cg25459778_BC11     cg25459778    cg25459778  cg25459778                 TRUE
 cg25487775_BC11     cg25487775                cg25487775                 TRUE
 cg25595446_BC11     cg25595446    cg25595446  cg25595446                 TRUE
 ```
-
 ## Download data
 
-For this tutorial we are using the publicly available LNCaP and PREC cell lines
-(500 ng DNA input) from Peters *et al.* (2024), available from GEO
-([GSE240469](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE240469)). This contains data for 3 technical replicates per cell line. 
-The code below executes when this episode renders. It downloads the IDAT
-files, imports the raw measurements, and saves the objects for the next episode.
+We use six EPICv2 arrays from [GEO GSE240469](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE240469):
+three technical replicates each of LNCaP and PrEC, all at 500 ng DNA input.
 
-If you would like to use your own data, create a sample table and variables of
-interest in the same format, with your own IDAT files, samples and variables.
-The GEO download chunk is only needed for data hosted on GEO.
+- **LNCaP** is a prostate cancer cell line: cells grown in culture that model
+  aspects of prostate cancer.
+- **PrEC** is a primary culture of normal prostate epithelial cells. It provides
+  a non-cancer comparison, but is not matched normal tissue from the same patient.
+
+These data come from Peters *et al.* (2024),
+[Characterisation and reproducibility of the HumanMethylationEPIC v2.0 BeadChip for DNA methylation profiling](https://link.springer.com/article/10.1186/s12864-024-10027-5).
+The study evaluated the array's performance, including reproducibility and the
+impact of DNA input, across cell cultures and tumour-derived samples. Our
+workshop uses only the six 500 ng prostate culture arrays. 
+
+Because these are technical replicates of the same culture, we expect them to have similar methylation profiles and cluster together. Whilst methylation studies can be performed on cultured cells, it is more traditionally used for primary human tissue (e.g. tumour tissue). 
 
 ### Create the sample table
 
@@ -272,7 +263,6 @@ gsmlist <- lapply(
 )
 names(gsmlist) <- targets$Accession
 ```
-
 ## Read in .idats
 
 Add the sample names and file paths to `targets`, preserving its sample order.
@@ -314,7 +304,6 @@ Annotation
 set `targets$Basename` to your file paths and use the annotation matching your
 array type. Quality control, filtering and normalisation follow in the next
 episode.
-
 ## Save the input objects for reuse
 
 `targets` contains sample information; `rgSet` contains the raw measurements.
