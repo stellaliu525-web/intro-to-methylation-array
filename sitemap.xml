@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://stellaliu525-web.github.io/intro-to-methylation-array/01-introduction.html</loc>
+  </url>
+  <url>
+    <loc>https://stellaliu525-web.github.io/intro-to-methylation-array/02-first-steps.html</loc>
+  </url>
+  <url>
+    <loc>https://stellaliu525-web.github.io/intro-to-methylation-array/03-differentially-methylated-probes.html</loc>
+  </url>
+  <url>
+    <loc>https://stellaliu525-web.github.io/intro-to-methylation-array/04-differentially-methylated-regions.html</loc>
+  </url>
+  <url>
     <loc>https://stellaliu525-web.github.io/intro-to-methylation-array/404.html</loc>
   </url>
   <url>
@@ -29,6 +41,18 @@
   </url>
   <url>
     <loc>https://stellaliu525-web.github.io/intro-to-methylation-array/index.html</loc>
+  </url>
+  <url>
+    <loc>https://stellaliu525-web.github.io/intro-to-methylation-array/instructor/01-introduction.html</loc>
+  </url>
+  <url>
+    <loc>https://stellaliu525-web.github.io/intro-to-methylation-array/instructor/02-first-steps.html</loc>
+  </url>
+  <url>
+    <loc>https://stellaliu525-web.github.io/intro-to-methylation-array/instructor/03-differentially-methylated-probes.html</loc>
+  </url>
+  <url>
+    <loc>https://stellaliu525-web.github.io/intro-to-methylation-array/instructor/04-differentially-methylated-regions.html</loc>
   </url>
   <url>
     <loc>https://stellaliu525-web.github.io/intro-to-methylation-array/instructor/404.html</loc>

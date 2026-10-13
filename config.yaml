@@ -51,8 +51,8 @@ contact: 'fixme@fixme.org'
 # Example -------------
 #
 # episodes:
-# - introduction.md
-# - first-steps.md
+# - 01-introduction.md
+# - 02-first-steps.md
 #
 # learners:
 # - setup.md
@@ -66,10 +66,10 @@ contact: 'fixme@fixme.org'
 
 # Order of episodes in your lesson
 episodes:
-- introduction.Rmd
-- first-steps.Rmd
-- differentially-methylated-probes.Rmd
-- differentially-methylated-regions.Rmd
+- 01-introduction.Rmd
+- 02-first-steps.Rmd
+- 03-differentially-methylated-probes.Rmd
+- 04-differentially-methylated-regions.Rmd
 
 # Information for Learners
 learners:
