@@ -95,77 +95,6 @@ qcReport(
 )
 ```
 
-``` warning
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-Warning in type.convert.default(X[[i]], ...): 'as.is' should be specified by
-the caller; using TRUE
-```
-
 ``` output
 png 
   2 
@@ -373,32 +302,7 @@ does not automatically resolve batch effects or confounding.
 
 ``` r
 mSetFn <- preprocessFunnorm(rgSet)
-```
 
-``` output
-[preprocessFunnorm] Background and dye bias correction with noob
-```
-
-``` output
-[preprocessFunnorm] Mapping to genome
-```
-
-``` output
-[preprocessFunnorm] Quantile extraction
-```
-
-``` warning
-Warning in .getSex(CN = CN, xIndex = xIndex, yIndex = yIndex, cutoff = cutoff):
-An inconsistency was encountered while determining sex. One possibility is that
-only one sex is present. We recommend further checks, for example with the
-plotSex function.
-```
-
-``` output
-[preprocessFunnorm] Normalization
-```
-
-``` r
 layout(
   matrix(c(1, 1, 3, 2, 2, 3), 2, 3, byrow = TRUE),
   widths = c(1, 1, 0.3),

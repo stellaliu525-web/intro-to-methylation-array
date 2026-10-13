@@ -42,191 +42,14 @@ makes its functions available in the current session. Load the packages again
 whenever you restart R.
 
 
-``` output
-── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.2.1     ✔ readr     2.2.0
-✔ forcats   1.0.1     ✔ stringr   1.6.0
-✔ ggplot2   4.0.3     ✔ tibble    3.3.1
-✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-✔ purrr     1.2.2     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-Attaching package: 'reshape2'
-
-
-The following object is masked from 'package:tidyr':
-
-    smiths
-
-
-Loading required package: BiocGenerics
-
-Loading required package: generics
-
-
-Attaching package: 'generics'
-
-
-The following object is masked from 'package:lubridate':
-
-    as.difftime
-
-
-The following object is masked from 'package:dplyr':
-
-    explain
-
-
-The following objects are masked from 'package:base':
-
-    as.difftime, as.factor, as.ordered, intersect, is.element, setdiff,
-    setequal, union
-
-
-
-Attaching package: 'BiocGenerics'
-
-
-The following object is masked from 'package:dplyr':
-
-    combine
-
-
-The following objects are masked from 'package:stats':
-
-    IQR, mad, sd, var, xtabs
-
-
-The following objects are masked from 'package:base':
-
-    anyDuplicated, aperm, append, as.data.frame, basename, cbind,
-    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
-    get, grep, grepl, is.unsorted, lapply, Map, mapply, match, mget,
-    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
-    rbind, Reduce, rownames, sapply, saveRDS, table, tapply, unique,
-    unsplit, which.max, which.min
-
-
-Loading required package: GenomicRanges
-
-Loading required package: stats4
-
-Loading required package: S4Vectors
-
-
-Attaching package: 'S4Vectors'
-
-
-The following objects are masked from 'package:lubridate':
-
-    second, second<-
-
-
-The following objects are masked from 'package:dplyr':
-
-    first, rename
-
-
-The following object is masked from 'package:tidyr':
-
-    expand
-
-
-The following object is masked from 'package:utils':
-
-    findMatches
-
-
-The following objects are masked from 'package:base':
-
-    expand.grid, I, unname
-
-
-Loading required package: IRanges
-
-
-Attaching package: 'IRanges'
-
-
-The following object is masked from 'package:lubridate':
-
-    %within%
-
-
-The following objects are masked from 'package:dplyr':
-
-    collapse, desc, slice
-
-
-The following object is masked from 'package:purrr':
-
-    reduce
-
-
-Loading required package: Seqinfo
-
-Loading required package: SummarizedExperiment
-
-Loading required package: MatrixGenerics
-
-Loading required package: matrixStats
-
-
-Attaching package: 'matrixStats'
-
-
-The following object is masked from 'package:dplyr':
-
-    count
-
-
-
-Attaching package: 'MatrixGenerics'
-
-
-The following objects are masked from 'package:matrixStats':
-
-    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
-    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
-    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
-    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
-    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
-    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
-    colWeightedMeans, colWeightedMedians, colWeightedSds,
-    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
-    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
-    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
-    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
-    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
-    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
-    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
-    rowWeightedSds, rowWeightedVars
-
-
-Loading required package: Biobase
-
-Welcome to Bioconductor
-
-    Vignettes contain introductory material; view with
-    'browseVignettes()'. To cite Bioconductor, see
-    'citation("Biobase")', and for packages 'citation("pkgname")'.
-
-
-
-Attaching package: 'Biobase'
-
-
-The following object is masked from 'package:MatrixGenerics':
-
-    rowMedians
-
-
-The following objects are masked from 'package:matrixStats':
-
-    anyMissing, rowMedians
+``` r
+# Data handling
+library(tidyverse)
+library(readxl)
+library(reshape2)
+
+# Methylation analysis and annotation
+library(minfi)
 ```
 
 ``` warning
@@ -234,202 +57,30 @@ Warning: replacing previous import 'S4Arrays::makeNindexFromArrayViewport' by
 'DelayedArray::makeNindexFromArrayViewport' when loading 'SummarizedExperiment'
 ```
 
-``` output
-Loading required package: Biostrings
-Loading required package: XVector
-
-Attaching package: 'XVector'
-
-The following object is masked from 'package:purrr':
-
-    compact
-
-
-Attaching package: 'Biostrings'
-
-The following object is masked from 'package:base':
-
-    strsplit
-
-Loading required package: bumphunter
-Loading required package: foreach
-
-Attaching package: 'foreach'
-
-The following objects are masked from 'package:purrr':
-
-    accumulate, when
-
-Loading required package: iterators
-Loading required package: parallel
-Loading required package: locfit
-locfit 1.5-9.12 	 2025-03-05
-
-Attaching package: 'locfit'
-
-The following object is masked from 'package:purrr':
-
-    none
-```
-
 ``` warning
 Warning: replacing previous import 'S4Arrays::makeNindexFromArrayViewport' by
 'DelayedArray::makeNindexFromArrayViewport' when loading 'HDF5Array'
 ```
 
-``` output
-Setting options('download.file.method.GEOquery'='auto')
-Setting options('GEOquery.inmemory.gpl'=FALSE)
-
-Attaching package: 'limma'
-
-The following object is masked from 'package:BiocGenerics':
-
-    plotMA
-
-Loading required package: BiocFileCache
-Loading required package: dbplyr
-
-Attaching package: 'dbplyr'
-
-The following objects are masked from 'package:dplyr':
-
-    ident, sql, sql_escape_ident, sql_escape_string
-
-
-Attaching package: 'AnnotationHub'
-
-The following object is masked from 'package:Biobase':
-
-    cache
-
-
-
-Attaching package: 'methylKit'
-
-The following object is masked from 'package:dplyr':
-
-    select
-
-The following object is masked from 'package:tidyr':
-
-    unite
-
-Loading required package: IlluminaHumanMethylation450kanno.ilmn12.hg19
-
-Attaching package: 'IlluminaHumanMethylation450kanno.ilmn12.hg19'
-
-The following objects are masked from 'package:IlluminaHumanMethylationEPICv2anno.20a1.hg38':
-
-    Islands.UCSC, Locations, Manifest, Other, SNPs.141CommonSingle,
-    SNPs.142CommonSingle, SNPs.144CommonSingle, SNPs.146CommonSingle,
-    SNPs.147CommonSingle, SNPs.Illumina
-
-Loading required package: IlluminaHumanMethylationEPICanno.ilm10b4.hg19
-
-Attaching package: 'IlluminaHumanMethylationEPICanno.ilm10b4.hg19'
-
-The following objects are masked from 'package:IlluminaHumanMethylation450kanno.ilmn12.hg19':
-
-    Islands.UCSC, Locations, Manifest, Other, SNPs.132CommonSingle,
-    SNPs.135CommonSingle, SNPs.137CommonSingle, SNPs.138CommonSingle,
-    SNPs.141CommonSingle, SNPs.142CommonSingle, SNPs.144CommonSingle,
-    SNPs.146CommonSingle, SNPs.147CommonSingle, SNPs.Illumina
-
-The following objects are masked from 'package:IlluminaHumanMethylationEPICv2anno.20a1.hg38':
-
-    Islands.UCSC, Locations, Manifest, Other, SNPs.141CommonSingle,
-    SNPs.142CommonSingle, SNPs.144CommonSingle, SNPs.146CommonSingle,
-    SNPs.147CommonSingle, SNPs.Illumina
-
-
-clusterProfiler v4.20.0 Learn more at https://yulab-smu.top/contribution-knowledge-mining/
-
-Please cite:
-
-G Yu. Background bias in functional enrichment analysis: Insights from
-clusterProfiler. The Innovation Life. 2026, 4(1):100181
-
-Attaching package: 'clusterProfiler'
-
-The following object is masked from 'package:methylKit':
-
-    select
-
-The following object is masked from 'package:XVector':
-
-    slice
-
-The following object is masked from 'package:IRanges':
-
-    slice
-
-The following object is masked from 'package:S4Vectors':
-
-    rename
-
-The following object is masked from 'package:purrr':
-
-    simplify
-
-The following object is masked from 'package:stats':
-
-    filter
-
-Loading required package: AnnotationDbi
-
-Attaching package: 'AnnotationDbi'
-
-The following object is masked from 'package:clusterProfiler':
-
-    select
-
-The following object is masked from 'package:methylKit':
-
-    select
-
-The following object is masked from 'package:dplyr':
-
-    select
-
-Loading required package: grid
-========================================
-ComplexHeatmap version 2.28.0
-Bioconductor page: http://bioconductor.org/packages/ComplexHeatmap/
-Github page: https://github.com/jokergoo/ComplexHeatmap
-Documentation: http://jokergoo.github.io/ComplexHeatmap-reference
-
-If you use it in published research, please cite either one:
-- Gu, Z. Complex Heatmap Visualization. iMeta 2022.
-- Gu, Z. Complex heatmaps reveal patterns and correlations in multidimensional 
-    genomic data. Bioinformatics 2016.
-
-
-The new InteractiveComplexHeatmap package can directly export static 
-complex heatmaps into an interactive Shiny app with zero effort. Have a try!
-
-This message can be suppressed by:
-  suppressPackageStartupMessages(library(ComplexHeatmap))
-========================================
-
-
-Attaching package: 'gridExtra'
-
-The following object is masked from 'package:minfi':
-
-    combine
-
-The following object is masked from 'package:Biobase':
-
-    combine
-
-The following object is masked from 'package:BiocGenerics':
-
-    combine
-
-The following object is masked from 'package:dplyr':
-
-    combine
+``` r
+library(GEOquery)
+library(limma)
+library(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
+library(IlluminaHumanMethylationEPICv2manifest)
+library(AnnotationHub)
+library(DMRcate)
+library(methylKit)
+library(missMethyl)
+library(clusterProfiler)
+library(org.Hs.eg.db)
+
+# Plotting and parallel computing
+library(Polychrome)
+library(ComplexHeatmap)
+library(ggsci)
+library(gridExtra)
+library(RColorBrewer)
+library(parallel)
 ```
 
 ## Load annotation data
@@ -619,69 +270,6 @@ gsmlist <- lapply(
   baseDir = getwd(),
   filter_regex = "[.]idat([.]gz)?$"
 )
-```
-
-``` output
-Using locally cached version of supplementary file(s) GSM7698438 found here:
-/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698438/GSM7698438_LNCAP_500_1_Grn.idat.gz 
-```
-
-``` output
-Using locally cached version of supplementary file(s) GSM7698438 found here:
-/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698438/GSM7698438_LNCAP_500_1_Red.idat.gz 
-```
-
-``` output
-Using locally cached version of supplementary file(s) GSM7698446 found here:
-/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698446/GSM7698446_LNCAP_500_2_Grn.idat.gz 
-```
-
-``` output
-Using locally cached version of supplementary file(s) GSM7698446 found here:
-/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698446/GSM7698446_LNCAP_500_2_Red.idat.gz 
-```
-
-``` output
-Using locally cached version of supplementary file(s) GSM7698462 found here:
-/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698462/GSM7698462_LNCAP_500_3_Grn.idat.gz 
-```
-
-``` output
-Using locally cached version of supplementary file(s) GSM7698462 found here:
-/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698462/GSM7698462_LNCAP_500_3_Red.idat.gz 
-```
-
-``` output
-Using locally cached version of supplementary file(s) GSM7698435 found here:
-/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698435/GSM7698435_PREC_500_1_Grn.idat.gz 
-```
-
-``` output
-Using locally cached version of supplementary file(s) GSM7698435 found here:
-/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698435/GSM7698435_PREC_500_1_Red.idat.gz 
-```
-
-``` output
-Using locally cached version of supplementary file(s) GSM7698443 found here:
-/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698443/GSM7698443_PREC_500_2_Grn.idat.gz 
-```
-
-``` output
-Using locally cached version of supplementary file(s) GSM7698443 found here:
-/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698443/GSM7698443_PREC_500_2_Red.idat.gz 
-```
-
-``` output
-Using locally cached version of supplementary file(s) GSM7698459 found here:
-/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698459/GSM7698459_PREC_500_3_Grn.idat.gz 
-```
-
-``` output
-Using locally cached version of supplementary file(s) GSM7698459 found here:
-/__w/intro-to-methylation-array/intro-to-methylation-array/site/built/GSM7698459/GSM7698459_PREC_500_3_Red.idat.gz 
-```
-
-``` r
 names(gsmlist) <- targets$Accession
 ```
 
