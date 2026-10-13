@@ -65,12 +65,11 @@ cg25595446_BC11          0
 ```
 
 ``` r
-# Choose plot colours - Polychrome uses a maximum of 36 discrete colours
-pal <- Polychrome::palette36.colors(36)
+cols_type <- c(LNCaP = "#D55E00", PREC = "#0072B2")
 
 barplot(
   colMeans(detP),
-  col = pal[factor(targets$Type)],
+  col = cols_type[as.character(targets$Type)],
   las = 2,
   cex.names = 0.6,
   ylab = "Mean detection p-values",
@@ -80,7 +79,7 @@ abline(h = 0.05, col = "red")
 legend(
   "topright",
   legend = levels(factor(targets$Type)),
-  fill = pal[seq_along(levels(factor(targets$Type)))],
+  fill = cols_type[levels(factor(targets$Type))],
   cex = 0.7,
   bg = "white"
 )
@@ -186,7 +185,7 @@ dim(snp_beta)
 ``` r
 sample_annotation <- ComplexHeatmap::HeatmapAnnotation(
   Cell_line = targets$Type,
-  col = list(Cell_line = c(LNCaP = "#D55E00", PREC = "#0072B2"))
+  col = list(Cell_line = cols_type)
 )
 
 ComplexHeatmap::draw(ComplexHeatmap::Heatmap(
@@ -302,8 +301,8 @@ layout(
   widths = c(1, 1, 0.3),
   heights = c(1, 1)
 )
-densityPlot(rgSet, sampGroups = targets$Type, main = "Raw", legend = FALSE, pal = pal)
-densityPlot(getBeta(mSetFn), sampGroups = targets$Type, main = "Normalised", legend = FALSE, pal = pal)
+densityPlot(rgSet, sampGroups = targets$Type, main = "Raw", legend = FALSE, pal = cols_type[levels(factor(targets$Type))])
+densityPlot(getBeta(mSetFn), sampGroups = targets$Type, main = "Normalised", legend = FALSE, pal = cols_type[levels(factor(targets$Type))])
 par(mar = c(0, 0, 0, 0))
 plot.new()
 ```
@@ -324,7 +323,7 @@ par(mfrow=c(1,2), mar=c(4,4,2,1), pty="s")
 plotMDS(getM(mSetFn), top=1000, gene.selection="common", cex=0.9, pch = 19)
 
 plotMDS(getM(mSetFn), top=1000, gene.selection="common",
-        col=pal[factor(targets$Type)], cex=0.9, pch = 19)
+        col=cols_type[as.character(targets$Type)], cex=0.9, pch = 19)
 ```
 
 <img src="fig/02-first-steps-rendered-mds-before-filtering-1.png" alt="" width="100%" style="display: block; margin: auto;" />
@@ -337,13 +336,13 @@ par(mfrow=c(1,1), pty="m")
 ``` r
 par(mfrow=c(1,3), mar=c(4,4,2,1), pty="s")
 plotMDS(getM(mSetFn), top=1000, gene.selection="common",
-        col=pal[factor(targets$Type)], dim=c(1,3), pch = 19)
+        col=cols_type[as.character(targets$Type)], dim=c(1,3), pch = 19)
 
 plotMDS(getM(mSetFn), top=1000, gene.selection="common",
-        col=pal[factor(targets$Type)], dim=c(2,3), pch = 19)
+        col=cols_type[as.character(targets$Type)], dim=c(2,3), pch = 19)
 
 plotMDS(getM(mSetFn), top=1000, gene.selection="common",
-        col=pal[factor(targets$Type)], dim=c(3,4), pch = 19)
+        col=cols_type[as.character(targets$Type)], dim=c(3,4), pch = 19)
 ```
 
 <img src="fig/02-first-steps-rendered-mds-higher-dimensions-1.png" alt="" width="100%" style="display: block; margin: auto;" />
@@ -593,13 +592,9 @@ Plot the filtered M-values, to re-visualise the methylation data.
 
 
 ``` r
-cols_type <- setNames(pal[seq_along(levels(factor(targets$Type)))],
-                      levels(factor(targets$Type)))
-f <- factor(targets$Type, levels = names(cols_type))
-
 par(mfrow=c(1,1), mar=c(4,4,2,1), pty="s")
 plotMDS(getM(mSetFnFlt), top=1000, gene.selection="common",
-        col = cols_type[f], cex=0.8, pch=19)
+        col = cols_type[as.character(targets$Type)], cex=0.8, pch=19)
 legend("bottom", legend=names(cols_type), col = cols_type, pch = 19,
        cex=0.8, bg="white")
 ```
@@ -607,20 +602,6 @@ legend("bottom", legend=names(cols_type), col = cols_type, pch = 19,
 <img src="fig/02-first-steps-rendered-mds-after-filtering-1.png" alt="" style="display: block; margin: auto;" />
 
 ``` r
-dev.off()
-```
-
-``` output
-null device 
-          1 
-```
-
-``` r
-par(mfrow=c(1,1), mar=c(4,4,2,1), pty="s")
-plotMDS(getM(mSetFnFlt), top=1000, gene.selection="common",
-        col = cols_type[f], cex=0.8, pch=19)
-legend("bottom", legend=names(cols_type), col = cols_type, pch = 19,
-       cex=0.8, bg="white")
 par(pty="m")
 ```
 

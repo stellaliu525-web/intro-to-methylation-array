@@ -59,8 +59,7 @@ library(missMethyl)
 library(clusterProfiler)
 library(org.Hs.eg.db)
 
-# Plotting: these packages are used when we create our plots. Some of these packages are used for the colour palette 
-library(Polychrome)
+# Plotting
 library(ComplexHeatmap)
 library(ggsci)
 library(gridExtra)
