@@ -40,6 +40,7 @@ targets <- readRDS("data/targets.rds")
 rgSet <- readRDS("data/rgSet.rds")
 epic <- getAnnotation(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
 ```
+
 ## Quality control
 
 A detection p-value measures whether a probe's signal can be distinguished from
@@ -81,6 +82,7 @@ qcReport(
   pdf = "data/figures/qcReport_combined_all_samples.pdf"
 )
 ```
+
 ## Filter poor quality samples
 
 Retain samples with a mean detection p-value below 0.05. Samples with a mean detection p-value at or above 0.05 are removed. Subset `rgSet`, `targets` and `detP` together so the sample information for the poor quality samples are removed together. 
@@ -116,6 +118,7 @@ apply a probe-level filter later.
 
 :::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
 ## Explore sample identity with SNP control probes
 
 The EPIC array also contains 65 probes designed to target SNPs which can help investigate sample identity and possible mix-ups. SNP beta values reflect allele signals rather than CpG methylation levels. Here we plot a simple heatmap where rows represent SNP probes and columns represent samples. Samples with similar SNP profiles cluster together. 
@@ -140,6 +143,7 @@ ComplexHeatmap::draw(ComplexHeatmap::Heatmap(
   column_names_rot = 45
 ))
 ```
+
 ## Create a raw MethylSet and inspect outlier peaks
 
 `preprocessRaw()` converts the raw channels to methylated and unmethylated
@@ -190,6 +194,7 @@ legend(
 ```
 
 Samples identified with outlier peaks have similar distribution to non-outliers. Hence visual inspection does not justify filtering out any samples. 
+
 ## Normalisation
 
 Normalisation aims to reduce unwanted technical variation. We perform functional
@@ -229,6 +234,7 @@ densityPlot(getBeta(mSetFn), sampGroups = targets$Type, main = "Normalised", leg
 par(mar = c(0, 0, 0, 0))
 plot.new()
 ```
+
 ## Preliminary visualisation of data with MDS plot
 
 Multidimensional scaling (MDS) summarises similarities between samples using
@@ -245,7 +251,6 @@ plotMDS(getM(mSetFn), top=1000, gene.selection="common", cex=0.9, pch = 19)
 plotMDS(getM(mSetFn), top=1000, gene.selection="common",
         col=cols_type[as.character(targets$Type)], cex=0.9, pch = 19)
 
-par(mfrow=c(1,1), pty="m")
 ```
 
 ```{r mds-higher-dimensions, fig.width=12, fig.height=4, out.width="100%"}
@@ -258,12 +263,12 @@ plotMDS(getM(mSetFn), top=1000, gene.selection="common",
 
 plotMDS(getM(mSetFn), top=1000, gene.selection="common",
         col=cols_type[as.character(targets$Type)], dim=c(3,4), pch = 19)
-par(mfrow=c(1,1), pty="m")
 ```
 
 Look for grouping by cell line, agreement between replicates and isolated
 samples. These plots are exploratory; separation does not identify individual
 differentially methylated probes.
+
 ## Filter failed or poor quality probes
 
 When microarrays run, each probe measures a fluorescent intensity signal. To determine if a probe actually caught a biological signal or is just showing random machine noise, software calculates a detection p-value against a background noise distribution.
@@ -298,6 +303,7 @@ mSetFnFlt <- mSetFnFlt[keep, ]
 mSetFnFlt
 ```
 24054 probes filtered from our methylation dataset. 9000085 probes remaining. 
+
 ## Filter CpGs with SNPs
 
 Variants at the interrogated CpG or single-base extension site can affect the
@@ -310,6 +316,7 @@ mSetFnFlt <- dropLociWithSnps(mSetFnFlt)
 mSetFnFlt
 ```
 886487 probes remain after SNP filtering. 
+
 ## Filter CpGs with potential cross-reactivity
 
 A probe is designed to measure methylation at a particular genomic location.
@@ -378,6 +385,7 @@ or selecting a representative probe. In current DMRcate versions,
 groups during annotation. Keep complete EPICv2 probe IDs until this step;
 removing their suffixes alone does not combine the measurements. 
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
 ## Save files
 
 ```{r save-processed-data}
@@ -386,6 +394,7 @@ dir.create("data/processed", recursive = TRUE, showWarnings = FALSE)
 saveRDS(mSetFnFlt, file = "data/processed/normalised-filtered.rds")
 saveRDS(targets, file = "data/processed/targets.rds")
 ```
+
 ## Re-examine MDS after filtering
 
 Plot the filtered M-values, to re-visualise the methylation data. 
@@ -396,7 +405,6 @@ plotMDS(getM(mSetFnFlt), top=1000, gene.selection="common",
         col = cols_type[as.character(targets$Type)], cex=0.8, pch=19)
 legend("bottom", legend=names(cols_type), col = cols_type, pch = 19,
        cex=0.8, bg="white")
-par(pty="m")
 ```
 
 Check whether replicates cluster together, whether cell lines separate, and
