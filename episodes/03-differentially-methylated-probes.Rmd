@@ -1,46 +1,321 @@
 ---
 title: "Differentially methylated probes with limma"
-teaching: 0
-exercises: 0
+teaching: 40
+exercises: 15
 ---
-
-<!-- Draft outline: update teaching and exercise times when content is developed. -->
 
 ::::::::::::::::::::::::::::::::::::: questions
 
 - How do we compare methylation at individual probes between groups?
-- How do we interpret the results from limma?
+- How do we define a design matrix and a contrast for limma?
+- How do we interpret and visualise differentially methylated probes?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Define a design matrix and contrasts for the comparison.
-- Identify differentially methylated probes with limma.
-- Summarise and visualise the results.
+- Extract M-values and beta values from the filtered methylation data
+- Define a design matrix and contrast for LNCaP versus PrEC
+- Fit probe-wise models and identify differentially methylated probes with limma
+- Interpret effect direction, adjusted p-values and beta-value differences
+- Plot individual probes and cluster samples using the top-ranked probes
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-This episode is under development. The sections below outline the planned content.
+A differentially methylated probe (DMP) measures a difference in methylation at
+an individual probe between the groups of interest. We use M-values for
+statistical testing and beta values to visualise methylation levels.
 
-## Prepare the data
+## Load filtered methylation data
 
-<!-- Add explanations, code examples, and exercises here. -->
+Start from the previously saved normalised and filtered objects. The annotation must match our EPICv2 array and hg38 genome build.
+
+```{r dmp-setup, message=FALSE, warning=FALSE}
+library(minfi)
+library(limma)
+library(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
+library(ComplexHeatmap)
+library(dplyr)
+library(missMethyl)
+
+mSetFnFlt <- readRDS(file="data/processed/normalised-filtered.rds")
+targets <- readRDS(file = "data/processed/targets.rds")
+epic <- getAnnotation(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
+```
+
+## Global M-values and beta values
+
+Here we look at the global M and Beta values across all probes.
+Beta values near zero indicate low methylation; values near one indicate high methylation.
+M-values are on a log-ratio scale. Inspect their distributions before fitting the model.
+
+```{r dmp-values}
+cols_type <- c(LNCaP = "#D55E00", PREC = "#0072B2")
+
+mVals <- getM(mSetFnFlt)
+head(mVals)
+
+bVals <- getBeta(mSetFnFlt)
+head(bVals)
+
+densityPlot(bVals, sampGroups=targets$Type, main="Beta values",
+            legend=FALSE, xlab="Beta values", pal = cols_type[levels(factor(targets$Type))])
+legend("top", legend = levels(factor(targets$Type)),
+       text.col=cols_type[levels(factor(targets$Type))], cex = 0.8)
+
+densityPlot(mVals, sampGroups=targets$Type, main="M-values",
+            legend=FALSE, xlab="M-values", pal = cols_type[levels(factor(targets$Type))])
+legend("left", legend = levels(factor(targets$Type)),
+       text.col=cols_type[levels(factor(targets$Type))], cex = 0.8)
+```
 
 ## Define the design matrix and contrasts
 
-<!-- Add explanations, code examples, and exercises here. -->
+We compare LNCaP with PrEC. `~0+sampleType` creates a column for each cell type, without an intercept; each coefficient represents that group's mean M-value. Inspect the design to check that the sample labels are assigned correctly.
+
+```{r dmp-design}
+sampleType <- factor(targets$Type)
+
+design <- model.matrix(~0+sampleType, data=targets)
+colnames(design) <- levels(sampleType)
+design
+```
+
+::::::::::::::::::::::::::::::::::::: callout
+
+### Technical replicates versus biological replicates
+
+For this example, we compare one prostate cancer cell line (LNCaP)
+with one normal prostate epithelial culture (PrEC), with three technical
+replicate arrays for each. These are repeated measurements of the same
+biological material, rather than three independent biological samples per group.
+
+In a typical research study, we would use biological replicates: e.g.
+tumours from different patients with the same disease type, in each comparison
+group. These samples capture biological variation between patients or tumours,
+which technical replicates alone cannot represent. Repeating measurements of
+one sample does not replace collecting independent biological samples.
+
+For your own study, define the groups using the biological question and account for
+the study design, including patient pairing where appropriate. Multiple
+tumours from the same patient are related samples and need that relationship
+accounted for in the analysis. See the **Blocking and Correlation** section of the
+[limma User's Guide](https://bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf) to account for related samples using patient blocks and `duplicateCorrelation()`.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Fit models with limma
 
-<!-- Add explanations, code examples, and exercises here. -->
+`lmFit()` fits a linear model at each probe. The contrast `LNCaP-PREC` subtracts the PrEC mean M-value from the LNCaP mean M-value.
+`contrasts.fit()` calculates this comparison, and `eBayes()` moderates the variance estimates across probes.
+
+Positive coefficients indicate higher methylation in LNCaP; negative coefficients indicate higher methylation in PrEC.
+The summary counts probes with negative significant, non-significant and positive significant results at the default Benjamini–Hochberg adjusted p-value threshold of 0.05 (conventional choice is false dicovery rate 5%).
+
+```{r dmp-fit}
+fit <- lmFit(mVals, design)
+contMatrix <- makeContrasts(LNCaP-PREC,
+                           levels=design)
+contMatrix
+
+fit2 <- contrasts.fit(fit, contMatrix)
+fit2 <- eBayes(fit2)
+
+# Differentially methylated CpGs at FDR < 0.05
+summary(decideTests(fit2))
+```
 
 ## Interpret and visualise differentially methylated probes
 
-<!-- Add explanations, code examples, and exercises here. -->
+We create a results table containing all tested probes, ranked by evidence for differential methylation.
+
+`topTable()` ranks probes by evidence for differential methylation. In the table:
+
+- `logFC` is the difference in mean **M-values** for LNCaP minus PrEC
+- `P.Value` is the unadjusted p-value for that probe
+- `adj.P.Val` accounts for testing many probes using Benjamini–Hochberg adjustment
+- `B` is the log-odds of differential methylation under the fitted model
+- `deltaBeta` is the mean beta value in LNCaP minus the mean beta value in PrEC; positive values indicate higher methylation in LNCaP (the magnitude of methylation change)
+
+We then plot the 4 top-ranked probes. These probes are only considered statistically significant if their adjusted p-values meet our FDR threshold.
+
+The four plots show the top-ranked probes, which may or may not pass the FDR
+threshold. Check the adjusted p-values before describing them as significant.
+
+```{r dmp-results, fig.width=8, fig.height=8}
+# results table of top differentially methylated probes for this contrast
+epicSub <- epic[match(rownames(mVals),epic$Name), ]
+DMPs <- topTable(fit2, num=Inf, coef=1, genelist=epicSub)
+
+# Mean beta-value difference: LNCaP minus PrEC
+deltaBeta <- rowMeans(bVals[, sampleType == "LNCaP", drop=FALSE]) -
+  rowMeans(bVals[, sampleType == "PREC", drop=FALSE])
+DMPs$deltaBeta <- deltaBeta[rownames(DMPs)]
+head(DMPs)
+
+dir.create("data/output", recursive = TRUE, showWarnings = FALSE)
+write.table(DMPs, file="data/output/DMPs_epicv2_LNCaP_vs_PREC.csv", sep=",", row.names=FALSE)
+
+# Plot the four top-ranked CpGs
+par(mfrow=c(2,2))
+sapply(rownames(DMPs)[1:4], function(cpg){
+  plotCpg(bVals, cpg=cpg, pheno=targets$Type, ylab="Beta values")
+})
+```
+
+We can also extract only the statistically significant probes, retaining their
+statistics, annotation and beta-value differences.
+
+```{r dmp-effect-size}
+sigDMPs <- DMPs[DMPs$adj.P.Val < 0.05, ]
+nrow(sigDMPs)
+head(sigDMPs)
+```
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+### Interpret the contrast
+
+1. A probe has `logFC = -2` and `adj.P.Val = 0.01`. Which cell type has higher methylation?
+2. Does this mean methylation differs by two percentage points?
+3. What would happen to the sign and significance if we used `PREC-LNCaP`?
+
+:::::::::::::::::::::::: solution
+
+### Solution
+
+1. PrEC has higher mean M-values for this probe.
+2. No. `logFC` is an M-value difference. Inspect `deltaBeta` and the beta-value plot for an interpretable effect size.
+3. The coefficient and effect direction reverse. The two-sided p-values and adjusted p-values remain the same.
+
+:::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Plot specific genes of interest
+
+We explore GSTP1 and APC, genes with documented promoter methylation in prostate cancer models. See the studies of [GSTP1 in LNCaP](https://pmc.ncbi.nlm.nih.gov/articles/PMC1867052/) and [LNCaP versus PrEC methylation](https://pmc.ncbi.nlm.nih.gov/articles/PMC3129246/).
+
+We can plot the methylation profiles of specific genes of interest 
+* To do this, we find any relevant probes relating to the target gene by searching the reference (epic dataframe)
+* Note: We are typically most interested in probes relating to the promoter region of genes. Therefore, for genes that have a large number of probes, you may choose to only focus on the probes relating to the promoter region. We can filter probes in this region by refining our search to CpG 'islands' that are typically located in or near promoter regions (this information can be found in the `Relation_to_Island` column). For a more precise search, we can also filter probes in the promoter region by refining our search to probes located within 200 base pairs (`TSS200`) and 1500 base pairs (`TSS1500`) upstream of the transcriptional start site (TSS) - both of which are typically considered parts of the promoter region (this information can be found in the `UCSC_RefGene_Group` column). You will need to play around with these parameters to suit your analysis of interest.
+
+```{r dmp-gene-probes, fig.width=7, fig.height=5}
+# GSTP1 - search for related probes
+applicable_probes <- as.data.frame(epicSub) %>%
+  filter(grepl("\\bGSTP1\\b", UCSC_RefGene_Name))
+applicable_probes
+
+# Two GSTP1 probes annotated as both promoter-associated and within a CpG island (cg04920951_BC11, cg02659086_BC11). There are another five probes which are promoter-associated (TSS1500) but lie in an island shore. 
+
+# Plot the two promoter-associated CpG-island probes for GSTP1.
+geneMap <- c("cg04920951_BC11" = "GSTP1", "cg02659086_BC11" = "GSTP1")
+lapply(names(geneMap), function(probeID) {
+  plotCpg(bVals, cpg=probeID, pheno=targets$Type,
+          mainPrefix=paste(geneMap[probeID], "-"), ylab="Beta values")
+})
+
+# APC - search for related probes
+applicable_probes <- as.data.frame(epicSub) %>%
+  filter(grepl("\\bAPC\\b", UCSC_RefGene_Name))
+applicable_probes
+
+# Eight APC probes annotated as both promoter-associated (TSS200) and within a CpG island. 
+
+# Plot the eight promoter-associated CpG-island probes for APC
+geneMap <- c("cg07003745_TC21" = "APC", "cg04011030_BC21" = "APC",
+             "cg16481008_TC21" = "APC", "cg18315896_BC21" = "APC",
+             "cg01528425_TC21" = "APC", "cg08934600_BC21" = "APC",
+             "cg18536802_TC21" = "APC", "cg26660754_BC11" = "APC")
+lapply(names(geneMap), function(probeID) {
+  plotCpg(bVals, cpg=probeID, pheno=targets$Type,
+          mainPrefix=paste(geneMap[probeID], "-"), ylab="Beta values")
+})
+```
+
+## Hierarchical clustering of the top CpG probes
+
+We will use the top 100 most differentiated CpG sites (this can be changed depending on your preference). Rows in the heatmap represent probes and columns represent samples. The code uses Euclidean distances and Ward's clustering method, as in the example.
+
+```{r dmp-clustering, fig.width=10, fig.height=8}
+# extract top 100 DMPs
+top_DMPs <- DMPs[1:100, ]
+
+selected_bVals <- bVals[rownames(bVals) %in% rownames(top_DMPs), ]
+
+# computing the distance matrix using Euclidean distance
+dist_matrix <- dist(t(selected_bVals), method = "euclidean")
+
+# Performing hierarchical clustering using Ward's method
+hc <- hclust(dist_matrix, method = "ward.D2")
+
+# Plot dendrogram
+plot(hc, main = "Hierarchical Clustering of DMPs - LNCaP vs PrEC", sub = "", xlab = "", cex.lab = 0.75, cex.axis = 0.75, cex.main = 1)
+
+# Plot heatmap
+sample_annotation <- HeatmapAnnotation(
+  Cell_line = targets$Type,
+  col = list(Cell_line = cols_type)
+)
+
+Heatmap(selected_bVals,
+        top_annotation = sample_annotation,
+        cluster_rows = TRUE,
+        cluster_columns = TRUE,
+        name = "Beta Value",
+        column_title = "Hierarchical Clustering of Samples by Top 100 DMPs - LNCaP vs PrEC",
+        row_title = "Top 100 CpG Sites",
+        clustering_method_rows = "ward.D2",
+        clustering_method_columns = "ward.D2",
+        row_names_gp = grid::gpar(fontsize = 6)
+)
+```
+
+## Gene set enrichment and gene ontology testing
+
+We can ask whether genes associated with significant CpG probes are enriched
+for particular biological processes (**GO terms**) or **KEGG pathways**.
+`gometh()` accounts for differences in the number of probes associated with
+each gene. We use probes with `adj.P.Val < 0.05`, matching our false discovery rate of 5%. All tested probes will be used as the background.
+
+The bias plots show how the probability of identifying a significant CpG varies with the number of probes associated with a gene. 
+In the enrichment tables, inspect `FDR` to assess significance after testing many gene sets; the top ten terms are not necessarily significant.
+
+Enrichment indicates that genes associated with differential methylation are overrepresented in a gene set. It does not establish that a pathway is activated or inhibited, or that gene expression has changed. This analysis combines probes with positive and negative methylation differences. 
+
+This code requires a version of `missMethyl` that supports `array.type="EPIC_V2"`. See the
+[missMethyl vignette](https://bioconductor.org/packages/release/bioc/vignettes/missMethyl/inst/doc/missMethyl.html)
+for details, including recommendations for handling EPICv2 replicate probes
+that measure the same CpG site. It is recommended that EPICv2 replicate probes are handelled before continuing with differential methylation analysis. Replicate probes in our dataset were collapsed in the previous lesson. 
+
+```{r dmp-enrichment, message=FALSE, fig.width=7, fig.height=5}
+# Extract significant probes at 5% FDR.
+sigCpGs <- DMPs$Name[DMPs$adj.P.Val < 0.05]
+sigCpGs[1:10]
+length(sigCpGs)
+
+# Background: all probes tested in this comparison.
+allCpGs <- DMPs$Name
+length(allCpGs)
+
+# GO enrichment analysis
+par(mfrow=c(1,1))
+gst <- gometh(sig.cpg=sigCpGs, all.cpg=allCpGs,
+              array.type="EPIC_V2", collection="GO", plot.bias=TRUE)
+print(topGSA(gst, number=10))
+
+# KEGG enrichment analysis
+gst.kegg <- gometh(sig.cpg=sigCpGs, all.cpg=allCpGs,
+                   array.type="EPIC_V2", collection="KEGG", plot.bias=TRUE)
+print(topGSA(gst.kegg, number=10))
+```
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
-- Key points will be added when this episode is completed.
+- Use M-values for probe-wise modelling and beta values to describe methylation levels.
+- The design encodes the groups; the contrast defines the comparison and effect direction.
+- Investigate genes of interest by searching the annotation and selecting probes relevant to the biological question, such as promoter-associated CpG-island probes.
+- Plot individual probes to compare methylation levels and variation within each group.
+- Use hierarchical clustering and an annotated heatmap of the top-ranked probes to visualise methylation patterns and sample relationships.
+- Explore GO and KEGG enrichment using significant probes and all tested probes as the background.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
