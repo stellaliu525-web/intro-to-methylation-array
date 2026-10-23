@@ -185,7 +185,8 @@ jobs:
               cat("Render library paths:\n")
               print(.libPaths())
               packages <- c(
-                "minfi", "limma", "Polychrome", "AnnotationHub",
+                "dplyr", "circlize", "minfi", "limma", "GEOquery",
+                "AnnotationHub", "ComplexHeatmap", "DMRcate", "missMethyl",
                 "IlluminaHumanMethylationEPICv2anno.20a1.hg38",
                 "IlluminaHumanMethylationEPICv2manifest"
               )

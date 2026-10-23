@@ -6,10 +6,9 @@ lesson_library <- renv::paths$library()
 options(timeout = 1200, warn = 1)
 
 required <- c(
-  "AnnotationHub", "clusterProfiler", "ComplexHeatmap", "DMRcate", "GEOquery",
+  "AnnotationHub", "ComplexHeatmap", "DMRcate", "GEOquery",
   "IlluminaHumanMethylationEPICv2anno.20a1.hg38",
-  "IlluminaHumanMethylationEPICv2manifest", "limma", "methylKit", "minfi",
-  "missMethyl", "org.Hs.eg.db"
+  "IlluminaHumanMethylationEPICv2manifest", "limma", "minfi", "missMethyl"
 )
 
 renv::install("BiocManager", library = lesson_library, prompt = FALSE)
@@ -35,12 +34,12 @@ if (!all(loadable)) {
 }
 
 lockfile <- renv::paths$lockfile()
-previous <- renv::lockfile_read(lockfile)
 # Preserve the updater's package records and include all recursive dependencies.
 # Include R's recommended packages from the active system/sandbox library too.
 # Restricting this to lesson_library incorrectly reports them as uninstalled.
 renv::snapshot(library = .libPaths(), lockfile = lockfile,
-  packages = unique(c(names(previous$Packages), "BiocManager", required)),
+  packages = c("BiocManager", "renv", "knitr", "rmarkdown", "callr",
+    "dplyr", "circlize", required),
   repos = repos, prompt = FALSE)
 lock <- renv::lockfile_read(lockfile)
 missing <- setdiff(required, names(lock$Packages))
