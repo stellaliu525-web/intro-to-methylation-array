@@ -340,7 +340,7 @@
         
 <section id="aio-01-introduction"><p>Content from <a href="01-introduction.html">Introduction: loading packages and downloading data</a></p>
 <hr>
-<p>Last updated on 2026-10-13 |
+<p>Last updated on 2026-10-23 |
 
         <a href="https://github.com/stellaliu525-web/intro-to-methylation-array/edit/main/episodes/01-introduction.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 20 minutes</p>
@@ -425,9 +425,7 @@ session. Load the packages again whenever you restart R.</p>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Data handling</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">readxl</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">reshape2</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">dplyr</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Methylation analysis and annotation</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">minfi</span><span class="op">)</span></span>
@@ -437,19 +435,10 @@ session. Load the packages again whenever you restart R.</p>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">IlluminaHumanMethylationEPICv2manifest</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">AnnotationHub</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">DMRcate</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">methylKit</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">missMethyl</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">clusterProfiler</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">org.Hs.eg.db</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plotting</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">ComplexHeatmap</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">ggsci</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">RColorBrewer</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Parallel computing utilities </span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span></span></code></pre>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">ComplexHeatmap</span><span class="op">)</span></span></code></pre>
 </div>
 </section><section><h2 class="section-heading" id="load-annotation-data">Load annotation data<a class="anchor" aria-label="anchor" href="#load-annotation-data"></a>
 </h2>
@@ -2055,7 +2044,7 @@ cg07493922_TC21             exon_4             GSTP1</code></pre>
 <span><span class="va">geneMap</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="st">"cg04920951_BC11"</span> <span class="op">=</span> <span class="st">"GSTP1"</span>,</span>
 <span>             <span class="st">"cg02659086_BC11"</span> <span class="op">=</span> <span class="st">"GSTP1"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">par</span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">par</span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">probeID</span> <span class="kw">in</span> <span class="fu">names</span><span class="op">(</span><span class="va">geneMap</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">plotCpg</span><span class="op">(</span><span class="va">bVals</span>, cpg<span class="op">=</span><span class="va">probeID</span>, pheno<span class="op">=</span><span class="va">targets</span><span class="op">$</span><span class="va">Type</span>,</span>
@@ -2436,7 +2425,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-04-differentially-methylated-regions"><p>Content from <a href="04-differentially-methylated-regions.html">Differentially methylated regions with DMRcate</a></p>
 <hr>
-<p>Last updated on 2026-10-13 |
+<p>Last updated on 2026-10-23 |
 
         <a href="https://github.com/stellaliu525-web/intro-to-methylation-array/edit/main/episodes/04-differentially-methylated-regions.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 0 minutes</p>

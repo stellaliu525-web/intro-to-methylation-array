@@ -739,7 +739,7 @@ cg07493922_TC21             exon_4             GSTP1</code></pre>
 <span><span class="va">geneMap</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="st">"cg04920951_BC11"</span> <span class="op">=</span> <span class="st">"GSTP1"</span>,</span>
 <span>             <span class="st">"cg02659086_BC11"</span> <span class="op">=</span> <span class="st">"GSTP1"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">par</span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">par</span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">probeID</span> <span class="kw">in</span> <span class="fu">names</span><span class="op">(</span><span class="va">geneMap</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">plotCpg</span><span class="op">(</span><span class="va">bVals</span>, cpg<span class="op">=</span><span class="va">probeID</span>, pheno<span class="op">=</span><span class="va">targets</span><span class="op">$</span><span class="va">Type</span>,</span>

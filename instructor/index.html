@@ -432,10 +432,7 @@ are installed automatically.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">install.packages</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span></span>
-<span>  <span class="st">"tidyverse"</span>, <span class="st">"readxl"</span>, <span class="st">"Polychrome"</span>, <span class="st">"ggsci"</span>,</span>
-<span>  <span class="st">"gridExtra"</span>, <span class="st">"RColorBrewer"</span>, <span class="st">"reshape2"</span>, <span class="st">"R.utils"</span></span>
-<span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu">install.packages</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="st">"dplyr"</span>, <span class="st">"circlize"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">requireNamespace</span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">install.packages</span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
@@ -445,9 +442,8 @@ are installed automatically.</p>
 <span>  <span class="st">"minfi"</span>, <span class="st">"limma"</span>, <span class="st">"GEOquery"</span>,</span>
 <span>  <span class="st">"IlluminaHumanMethylationEPICv2anno.20a1.hg38"</span>,</span>
 <span>  <span class="st">"IlluminaHumanMethylationEPICv2manifest"</span>,</span>
-<span>  <span class="st">"AnnotationHub"</span>, <span class="st">"ComplexHeatmap"</span>, <span class="st">"DMRcate"</span>, <span class="st">"methylKit"</span>,</span>
-<span>  <span class="st">"missMethyl"</span>, <span class="st">"clusterProfiler"</span>, <span class="st">"org.Hs.eg.db"</span></span>
-<span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<span>  <span class="st">"AnnotationHub"</span>, <span class="st">"ComplexHeatmap"</span>, <span class="st">"DMRcate"</span>, <span class="st">"missMethyl"</span></span>
+<span><span class="op">)</span>, update <span class="op">=</span> <span class="cn">FALSE</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
 </div>
 <p>For EPIC v2 arrays, the matching packages are <a href="https://bioconductor.org/packages/IlluminaHumanMethylationEPICv2manifest/" class="external-link"><code>IlluminaHumanMethylationEPICv2manifest</code></a>
 and <a href="https://bioconductor.org/packages/IlluminaHumanMethylationEPICv2anno.20a1.hg38/" class="external-link"><code>IlluminaHumanMethylationEPICv2anno.20a1.hg38</code></a>.
