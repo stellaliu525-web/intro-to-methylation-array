@@ -155,9 +155,9 @@ DMPs$deltaBeta <- deltaBeta[rownames(DMPs)]
 
 # Plot the four top-ranked CpGs
 par(mfrow=c(2,2))
-sapply(rownames(DMPs)[1:4], function(cpg){
+for (cpg in rownames(DMPs)[1:4]) {
   plotCpg(bVals, cpg=cpg, pheno=targets$Type, ylab="Beta values")
-})
+}
 ```
 
 ```{r dmp-export, eval=FALSE}
@@ -201,7 +201,7 @@ We can plot the methylation profiles of specific genes of interest
 - To do this, we find any relevant probes relating to the target gene by searching the reference (epic dataframe)
 - Note: We are typically most interested in probes relating to the promoter region of genes. Therefore, for genes that have a large number of probes, you may choose to only focus on the probes relating to the promoter region. We can filter probes in this region by refining our search to CpG 'islands' that are typically located in or near promoter regions (this information can be found in the `Relation_to_Island` column). For a more precise search, we can also filter probes in the promoter region by refining our search to probes located within 200 base pairs (`TSS200`) and 1500 base pairs (`TSS1500`) upstream of the transcriptional start site (TSS) - both of which are typically considered parts of the promoter region (this information can be found in the `UCSC_RefGene_Group` column). You will need to play around with these parameters to suit your analysis of interest.
 
-```{r dmp-gene-probes, fig.width=7, fig.height=7}
+```{r gstp1-table}
 # GSTP1 - search for related probes
 applicable_probes <- as.data.frame(epicSub) %>%
   filter(grepl("\\bGSTP1\\b", UCSC_RefGene_Name))
@@ -209,22 +209,26 @@ applicable_probes <- as.data.frame(epicSub) %>%
 applicable_probes %>%
   dplyr::select(chr, pos, strand, Name, Relation_to_Island,
                 UCSC_RefGene_Group, UCSC_RefGene_Name)
+```
 
-# Two GSTP1 probes annotated as both promoter-associated and within a CpG island (cg04920951_BC11, cg02659086_BC11).
+```{r gstp1-plots, fig.width=7, fig.height=7}
+# Two GSTP1 probes are promoter-associated and within a CpG island.
 # Another five probes are promoter-associated (TSS1500) but lie in an island shore.
 
 # Plot the two promoter-associated CpG-island probes for GSTP1
 geneMap <- c("cg04920951_BC11" = "GSTP1",
              "cg02659086_BC11" = "GSTP1")
 
-par(mfrow=c(2,2))
+par(mfrow=c(1,2))
 
 for (probeID in names(geneMap)) {
   plotCpg(bVals, cpg=probeID, pheno=targets$Type,
           mainPrefix=paste(geneMap[probeID], "-"),
           ylab="Beta values")
 }
+```
 
+```{r apc-table}
 # APC - search for related probes
 applicable_probes <- as.data.frame(epicSub) %>%
   filter(grepl("\\bAPC\\b", UCSC_RefGene_Name))
@@ -232,9 +236,10 @@ applicable_probes <- as.data.frame(epicSub) %>%
 applicable_probes %>%
   dplyr::select(chr, pos, strand, Name, Relation_to_Island,
                 UCSC_RefGene_Group, UCSC_RefGene_Name)
+```
 
-# Eight APC probes are both promoter-associated (TSS200)
-# and within a CpG island.
+```{r apc-plots, fig.width=7, fig.height=7}
+# Eight APC probes are both promoter-associated (TSS200) and within a CpG island.
 
 # Plot the eight promoter-associated CpG-island probes for APC
 geneMap <- c("cg07003745_TC21" = "APC",
@@ -321,7 +326,6 @@ allCpGs <- DMPs$Name
 length(allCpGs)
 
 # GO enrichment analysis
-par(mfrow=c(1,1))
 gst <- gometh(sig.cpg=sigCpGs, all.cpg=allCpGs,
               array.type="EPIC_V2", collection="GO", plot.bias=TRUE)
 print(topGSA(gst, number=10))
