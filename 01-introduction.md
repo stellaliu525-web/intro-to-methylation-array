@@ -42,9 +42,7 @@ whenever you restart R.
 
 ``` r
 # Data handling
-library(tidyverse)
-library(readxl)
-library(reshape2)
+library(dplyr)
 
 # Methylation analysis and annotation
 library(minfi)
@@ -54,19 +52,10 @@ library(IlluminaHumanMethylationEPICv2anno.20a1.hg38)
 library(IlluminaHumanMethylationEPICv2manifest)
 library(AnnotationHub)
 library(DMRcate)
-library(methylKit)
 library(missMethyl)
-library(clusterProfiler)
-library(org.Hs.eg.db)
 
 # Plotting
 library(ComplexHeatmap)
-library(ggsci)
-library(gridExtra)
-library(RColorBrewer)
-
-# Parallel computing utilities 
-library(parallel)
 ```
 ## Load annotation data
 

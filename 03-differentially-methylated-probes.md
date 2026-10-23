@@ -337,7 +337,7 @@ cg07493922_TC21             exon_4             GSTP1
 geneMap <- c("cg04920951_BC11" = "GSTP1",
              "cg02659086_BC11" = "GSTP1")
 
-par(mfrow=c(1,2))
+par(mfrow=c(2,1))
 
 for (probeID in names(geneMap)) {
   plotCpg(bVals, cpg=probeID, pheno=targets$Type,
