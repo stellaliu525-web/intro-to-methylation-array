@@ -605,26 +605,11 @@ significant.</p>
 <span></span>
 <span><span class="co"># Plot the four top-ranked CpGs</span></span>
 <span><span class="fu">par</span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">sapply</span><span class="op">(</span><span class="fu">rownames</span><span class="op">(</span><span class="va">DMPs</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, <span class="kw">function</span><span class="op">(</span><span class="va">cpg</span><span class="op">)</span><span class="op">{</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">cpg</span> <span class="kw">in</span> <span class="fu">rownames</span><span class="op">(</span><span class="va">DMPs</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">plotCpg</span><span class="op">(</span><span class="va">bVals</span>, cpg<span class="op">=</span><span class="va">cpg</span>, pheno<span class="op">=</span><span class="va">targets</span><span class="op">$</span><span class="va">Type</span>, ylab<span class="op">=</span><span class="st">"Beta values"</span><span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span></span></code></pre>
+<span><span class="op">}</span></span></code></pre>
 </div>
-<figure><img src="../fig/03-differentially-methylated-probes-rendered-dmp-results-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>$cg17560015_BC11
-NULL
-
-$cg19868301_BC11
-NULL
-
-$cg27434509_TC11
-NULL
-
-$cg27026819_BC11
-NULL</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb16">
+<figure><img src="../fig/03-differentially-methylated-probes-rendered-dmp-results-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -633,7 +618,7 @@ NULL</code></pre>
 </div>
 <p>We can also extract only the statistically significant probes,
 retaining their statistics, annotation and beta-value differences.</p>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -645,7 +630,7 @@ retaining their statistics, annotation and beta-value differences.</p>
 </h3>
 <pre class="output" tabindex="0"><code>[1] 567733</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb19">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -707,7 +692,7 @@ typically considered parts of the promoter region (this information can
 be found in the <code>UCSC_RefGene_Group</code> column). You will need
 to play around with these parameters to suit your analysis of
 interest.</p>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -745,26 +730,30 @@ cg09038676_BC21             exon_2             GSTP1
 cg22224704_BC21             exon_3             GSTP1
 cg07493922_TC21             exon_4             GSTP1</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Two GSTP1 probes annotated as both promoter-associated and within a CpG island (cg04920951_BC11, cg02659086_BC11).</span></span>
+<code class="sourceCode R"><span><span class="co"># Two GSTP1 probes are promoter-associated and within a CpG island.</span></span>
 <span><span class="co"># Another five probes are promoter-associated (TSS1500) but lie in an island shore.</span></span>
 <span></span>
 <span><span class="co"># Plot the two promoter-associated CpG-island probes for GSTP1</span></span>
 <span><span class="va">geneMap</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="st">"cg04920951_BC11"</span> <span class="op">=</span> <span class="st">"GSTP1"</span>,</span>
 <span>             <span class="st">"cg02659086_BC11"</span> <span class="op">=</span> <span class="st">"GSTP1"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">par</span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">par</span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">probeID</span> <span class="kw">in</span> <span class="fu">names</span><span class="op">(</span><span class="va">geneMap</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">plotCpg</span><span class="op">(</span><span class="va">bVals</span>, cpg<span class="op">=</span><span class="va">probeID</span>, pheno<span class="op">=</span><span class="va">targets</span><span class="op">$</span><span class="va">Type</span>,</span>
 <span>          mainPrefix<span class="op">=</span><span class="fu">paste</span><span class="op">(</span><span class="va">geneMap</span><span class="op">[</span><span class="va">probeID</span><span class="op">]</span>, <span class="st">"-"</span><span class="op">)</span>,</span>
 <span>          ylab<span class="op">=</span><span class="st">"Beta values"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co"># APC - search for related probes</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<figure><img src="../fig/03-differentially-methylated-probes-rendered-gstp1-plots-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb22">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># APC - search for related probes</span></span>
 <span><span class="va">applicable_probes</span> <span class="op">&lt;-</span> <span class="fu">as.data.frame</span><span class="op">(</span><span class="va">epicSub</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">filter</span><span class="op">(</span><span class="fu">grepl</span><span class="op">(</span><span class="st">"\\bAPC\\b"</span>, <span class="va">UCSC_RefGene_Name</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -903,8 +892,7 @@ cg08390240_TC21                             APC;APC;APC;APC;APC;APC;APC;APC;APC;
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Eight APC probes are both promoter-associated (TSS200)</span></span>
-<span><span class="co"># and within a CpG island.</span></span>
+<code class="sourceCode R"><span><span class="co"># Eight APC probes are both promoter-associated (TSS200) and within a CpG island.</span></span>
 <span></span>
 <span><span class="co"># Plot the eight promoter-associated CpG-island probes for APC</span></span>
 <span><span class="va">geneMap</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="st">"cg07003745_TC21"</span> <span class="op">=</span> <span class="st">"APC"</span>,</span>
@@ -916,25 +904,21 @@ cg08390240_TC21                             APC;APC;APC;APC;APC;APC;APC;APC;APC;
 <span>             <span class="st">"cg18536802_TC21"</span> <span class="op">=</span> <span class="st">"APC"</span>,</span>
 <span>             <span class="st">"cg26660754_BC11"</span> <span class="op">=</span> <span class="st">"APC"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">par</span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre>
-</div>
-<figure><img src="../fig/03-differentially-methylated-probes-rendered-dmp-gene-probes-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb25">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">probeID</span> <span class="kw">in</span> <span class="fu">names</span><span class="op">(</span><span class="va">geneMap</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="fu">par</span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">probeID</span> <span class="kw">in</span> <span class="fu">names</span><span class="op">(</span><span class="va">geneMap</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">plotCpg</span><span class="op">(</span><span class="va">bVals</span>, cpg<span class="op">=</span><span class="va">probeID</span>, pheno<span class="op">=</span><span class="va">targets</span><span class="op">$</span><span class="va">Type</span>,</span>
 <span>          mainPrefix<span class="op">=</span><span class="fu">paste</span><span class="op">(</span><span class="va">geneMap</span><span class="op">[</span><span class="va">probeID</span><span class="op">]</span>, <span class="st">"-"</span><span class="op">)</span>,</span>
 <span>          ylab<span class="op">=</span><span class="st">"Beta values"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 </div>
-<p><img src="../fig/03-differentially-methylated-probes-rendered-dmp-gene-probes-2.png" alt="" style="display: block; margin: auto;" class="figure"><img src="../fig/03-differentially-methylated-probes-rendered-dmp-gene-probes-3.png" alt="" style="display: block; margin: auto;" class="figure"></p>
+<p><img src="../fig/03-differentially-methylated-probes-rendered-apc-plots-1.png" alt="" style="display: block; margin: auto;" class="figure"><img src="../fig/03-differentially-methylated-probes-rendered-apc-plots-2.png" alt="" style="display: block; margin: auto;" class="figure"></p>
 </section><section><h2 class="section-heading" id="hierarchical-clustering-of-the-top-cpg-probes">Hierarchical clustering of the top CpG probes<a class="anchor" aria-label="anchor" href="#hierarchical-clustering-of-the-top-cpg-probes"></a></h2>
 <hr class="half-width"><p>We will use the top 100 most differentiated CpG sites (this can be
 changed depending on your preference). Rows in the heatmap represent
 probes and columns represent samples. The code uses Euclidean distances
 and Ward’s clustering method, as in the example.</p>
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -952,7 +936,7 @@ and Ward’s clustering method, as in the example.</p>
 <span><span class="co"># Plot dendrogram</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">hc</span>, main <span class="op">=</span> <span class="st">"Hierarchical Clustering of DMPs - LNCaP vs PrEC"</span>, sub <span class="op">=</span> <span class="st">""</span>, xlab <span class="op">=</span> <span class="st">""</span>, cex.lab <span class="op">=</span> <span class="fl">0.75</span>, cex.axis <span class="op">=</span> <span class="fl">0.75</span>, cex.main <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/03-differentially-methylated-probes-rendered-dmp-clustering-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb27">
+<figure><img src="../fig/03-differentially-methylated-probes-rendered-dmp-clustering-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -999,7 +983,7 @@ replicate probes that measure the same CpG site. It is recommended that
 EPICv2 replicate probes are handelled before continuing with
 differential methylation analysis. Replicate probes in our dataset were
 collapsed in the previous lesson.</p>
-<div class="codewrapper sourceCode" id="cb28">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1014,7 +998,7 @@ collapsed in the previous lesson.</p>
  [5] "cg05175020_TC11" "cg13786801_BC11" "cg23324953_TC11" "cg00095594_TC11"
  [9] "cg00999865_TC11" "cg17213402_TC11"</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb30">
+<div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1025,7 +1009,7 @@ collapsed in the previous lesson.</p>
 </h3>
 <pre class="output" tabindex="0"><code>[1] 567733</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb32">
+<div class="codewrapper sourceCode" id="cb31">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1038,16 +1022,15 @@ collapsed in the previous lesson.</p>
 </h3>
 <pre class="output" tabindex="0"><code>[1] 852592</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb34">
+<div class="codewrapper sourceCode" id="cb33">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GO enrichment analysis</span></span>
-<span><span class="fu">par</span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">gst</span> <span class="op">&lt;-</span> <span class="fu">gometh</span><span class="op">(</span>sig.cpg<span class="op">=</span><span class="va">sigCpGs</span>, all.cpg<span class="op">=</span><span class="va">allCpGs</span>,</span>
 <span>              array.type<span class="op">=</span><span class="st">"EPIC_V2"</span>, collection<span class="op">=</span><span class="st">"GO"</span>, plot.bias<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/03-differentially-methylated-probes-rendered-dmp-enrichment-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb35">
+<figure><img src="../fig/03-differentially-methylated-probes-rendered-dmp-enrichment-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb34">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1079,7 +1062,7 @@ GO:0005622 1.191163e-42
 GO:0009987 3.519967e-42
 GO:0065007 1.975640e-38</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb37">
+<div class="codewrapper sourceCode" id="cb36">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
