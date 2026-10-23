@@ -579,6 +579,73 @@ groups during annotation. Keep complete EPICv2 probe IDs until this step;
 removing their suffixes alone does not combine the measurements. 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+For this EPICv2 dataset, average replicate M-values at each CpG position before saving; skip this optional step for older arrays.
+
+
+``` r
+# Remove probes with non-finite M-values before DMRcate calculates variances.
+mVals <- getM(mSetFnFlt)
+keep <- rowSums(!is.finite(mVals)) == 0
+table(keep)
+```
+
+``` output
+keep
+ FALSE   TRUE 
+     1 858894 
+```
+
+``` r
+mSetFnFlt <- mSetFnFlt[keep, ]
+
+# Collapse replicate probes by averaging measurements
+epicv2CollapsedAnnotation <- DMRcate::cpg.annotate(
+  datatype = "array",
+  object = getM(mSetFnFlt),
+  what = "M",
+  arraytype = "EPICv2",
+  epicv2Filter = "mean",
+  epicv2Remap = FALSE,
+  analysis.type = "variability"
+)
+
+# Extract beta values transformed from the averaged M-values.
+averaged_beta <- epicv2CollapsedAnnotation@betas
+
+# Translate DMRcate positions back to probe IDs
+probe_ids <- featureNames(mSetFnFlt)
+probe_annotation <- epic[match(probe_ids, epic$Name), ]
+cpg_position <- paste(probe_annotation$chr, probe_annotation$pos, sep=":")
+rownames(averaged_beta) <- probe_ids[match(rownames(averaged_beta), cpg_position)]
+
+# Keep the saved object compatible with getM() and getBeta().
+mSetFnFlt <- makeGenomicRatioSetFromMatrix(
+  mat=averaged_beta, what="Beta",
+  array="IlluminaHumanMethylationEPICv2", annotation="20a1.hg38"
+)
+mSetFnFlt
+```
+
+``` output
+class: GenomicRatioSet 
+dim: 852592 6 
+metadata(0):
+assays(1): Beta
+rownames(852592): cg00002271_BC21 cg00004581_TC21 ... cg13801850_TC21
+  cg08423507_BC11
+rowData names(0):
+colnames(6): LNCAP_500_1 LNCAP_500_2 ... PREC_500_2 PREC_500_3
+colData names(1): X1
+Annotation
+  array: IlluminaHumanMethylationEPICv2
+  annotation: 20a1.hg38
+Preprocessing
+  Method: Matrix converted with makeGenomicRatioSetFromMatrix
+  minfi version: NA
+  Manifest version: NA
+```
+852592 probes are retained after collapsing EPICv2 replicate probes.
+
 ## Save files
 
 
