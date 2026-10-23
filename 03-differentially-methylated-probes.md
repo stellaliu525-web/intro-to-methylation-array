@@ -235,26 +235,12 @@ DMPs$deltaBeta <- deltaBeta[rownames(DMPs)]
 
 # Plot the four top-ranked CpGs
 par(mfrow=c(2,2))
-sapply(rownames(DMPs)[1:4], function(cpg){
+for (cpg in rownames(DMPs)[1:4]) {
   plotCpg(bVals, cpg=cpg, pheno=targets$Type, ylab="Beta values")
-})
+}
 ```
 
 <img src="fig/03-differentially-methylated-probes-rendered-dmp-results-1.png" alt="" style="display: block; margin: auto;" />
-
-``` output
-$cg17560015_BC11
-NULL
-
-$cg19868301_BC11
-NULL
-
-$cg27434509_TC11
-NULL
-
-$cg27026819_BC11
-NULL
-```
 
 
 ``` r
@@ -342,22 +328,28 @@ cg22224704_BC21             exon_3             GSTP1
 cg07493922_TC21             exon_4             GSTP1
 ```
 
+
 ``` r
-# Two GSTP1 probes annotated as both promoter-associated and within a CpG island (cg04920951_BC11, cg02659086_BC11).
+# Two GSTP1 probes are promoter-associated and within a CpG island.
 # Another five probes are promoter-associated (TSS1500) but lie in an island shore.
 
 # Plot the two promoter-associated CpG-island probes for GSTP1
 geneMap <- c("cg04920951_BC11" = "GSTP1",
              "cg02659086_BC11" = "GSTP1")
 
-par(mfrow=c(2,2))
+par(mfrow=c(1,2))
 
 for (probeID in names(geneMap)) {
   plotCpg(bVals, cpg=probeID, pheno=targets$Type,
           mainPrefix=paste(geneMap[probeID], "-"),
           ylab="Beta values")
 }
+```
 
+<img src="fig/03-differentially-methylated-probes-rendered-gstp1-plots-1.png" alt="" style="display: block; margin: auto;" />
+
+
+``` r
 # APC - search for related probes
 applicable_probes <- as.data.frame(epicSub) %>%
   filter(grepl("\\bAPC\\b", UCSC_RefGene_Name))
@@ -493,9 +485,9 @@ cg08390147_TC21                             APC;APC;APC;APC;APC;APC;APC;APC;APC;
 cg08390240_TC21                             APC;APC;APC;APC;APC;APC;APC;APC;APC;APC;APC;APC;APC;APC;APC
 ```
 
+
 ``` r
-# Eight APC probes are both promoter-associated (TSS200)
-# and within a CpG island.
+# Eight APC probes are both promoter-associated (TSS200) and within a CpG island.
 
 # Plot the eight promoter-associated CpG-island probes for APC
 geneMap <- c("cg07003745_TC21" = "APC",
@@ -508,11 +500,7 @@ geneMap <- c("cg07003745_TC21" = "APC",
              "cg26660754_BC11" = "APC")
 
 par(mfrow=c(2,2))
-```
 
-<img src="fig/03-differentially-methylated-probes-rendered-dmp-gene-probes-1.png" alt="" style="display: block; margin: auto;" />
-
-``` r
 for (probeID in names(geneMap)) {
   plotCpg(bVals, cpg=probeID, pheno=targets$Type,
           mainPrefix=paste(geneMap[probeID], "-"),
@@ -520,7 +508,7 @@ for (probeID in names(geneMap)) {
 }
 ```
 
-<img src="fig/03-differentially-methylated-probes-rendered-dmp-gene-probes-2.png" alt="" style="display: block; margin: auto;" /><img src="fig/03-differentially-methylated-probes-rendered-dmp-gene-probes-3.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/03-differentially-methylated-probes-rendered-apc-plots-1.png" alt="" style="display: block; margin: auto;" /><img src="fig/03-differentially-methylated-probes-rendered-apc-plots-2.png" alt="" style="display: block; margin: auto;" />
 
 ## Hierarchical clustering of the top CpG probes
 
@@ -617,7 +605,6 @@ length(allCpGs)
 
 ``` r
 # GO enrichment analysis
-par(mfrow=c(1,1))
 gst <- gometh(sig.cpg=sigCpGs, all.cpg=allCpGs,
               array.type="EPIC_V2", collection="GO", plot.bias=TRUE)
 ```
