@@ -117,11 +117,11 @@
     -->
     <a id="search-button" class="btn btn-primary" href="aio.html" role="button" aria-label="Search the All In One page">Search the All In One page</a>
   </div><!--/div.container-fluid -->
-</nav><aside class="col-md-12 lesson-progress"><div style="width: 25%" class="percentage">
-    25%
+</nav><aside class="col-md-12 lesson-progress"><div style="width: 15%" class="percentage">
+    15%
   </div>
   <div class="progress uom">
-    <div class="progress-bar uom" role="progressbar" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" style="width: 25%">
+    <div class="progress-bar uom" role="progressbar" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="15" style="width: 15%">
     </div>
   </div>
 </aside><div class="container">
@@ -316,7 +316,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>First steps: quality control, filtering, normalisation and basic visualisation</h1>
-        <p>Last updated on 2026-10-13 |
+        <p>Last updated on 2026-10-23 |
 
         <a href="https://github.com/stellaliu525-web/intro-to-methylation-array/edit/main/episodes/02-first-steps.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -531,7 +531,7 @@ detection p-value filter but still contain failed probes?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>All three objects must describe the same samples in the same order.
 Otherwise, we could assign the wrong group to a sample or filter using
@@ -993,8 +993,81 @@ measurements.</p>
 </div>
 </div>
 </div>
+<p>For this EPICv2 dataset, average replicate M-values at each CpG
+position before saving; skip this optional step for older arrays.</p>
+<div class="codewrapper sourceCode" id="cb39">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Remove probes with non-finite M-values before DMRcate calculates variances.</span></span>
+<span><span class="va">mVals</span> <span class="op">&lt;-</span> <span class="fu">getM</span><span class="op">(</span><span class="va">mSetFnFlt</span><span class="op">)</span></span>
+<span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu">rowSums</span><span class="op">(</span><span class="op">!</span><span class="fu">is.finite</span><span class="op">(</span><span class="va">mVals</span><span class="op">)</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span></span>
+<span><span class="fu">table</span><span class="op">(</span><span class="va">keep</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>keep
+ FALSE   TRUE
+     1 858894 </code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb41">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mSetFnFlt</span> <span class="op">&lt;-</span> <span class="va">mSetFnFlt</span><span class="op">[</span><span class="va">keep</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Collapse replicate probes by averaging measurements</span></span>
+<span><span class="va">epicv2CollapsedAnnotation</span> <span class="op">&lt;-</span> <span class="fu">DMRcate</span><span class="fu">::</span><span class="fu">cpg.annotate</span><span class="op">(</span></span>
+<span>  datatype <span class="op">=</span> <span class="st">"array"</span>,</span>
+<span>  object <span class="op">=</span> <span class="fu">getM</span><span class="op">(</span><span class="va">mSetFnFlt</span><span class="op">)</span>,</span>
+<span>  what <span class="op">=</span> <span class="st">"M"</span>,</span>
+<span>  arraytype <span class="op">=</span> <span class="st">"EPICv2"</span>,</span>
+<span>  epicv2Filter <span class="op">=</span> <span class="st">"mean"</span>,</span>
+<span>  epicv2Remap <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  analysis.type <span class="op">=</span> <span class="st">"variability"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Extract beta values transformed from the averaged M-values.</span></span>
+<span><span class="va">averaged_beta</span> <span class="op">&lt;-</span> <span class="va">epicv2CollapsedAnnotation</span><span class="op">@</span><span class="va">betas</span></span>
+<span></span>
+<span><span class="co"># Translate DMRcate positions back to probe IDs</span></span>
+<span><span class="va">probe_ids</span> <span class="op">&lt;-</span> <span class="fu">featureNames</span><span class="op">(</span><span class="va">mSetFnFlt</span><span class="op">)</span></span>
+<span><span class="va">probe_annotation</span> <span class="op">&lt;-</span> <span class="va">epic</span><span class="op">[</span><span class="fu">match</span><span class="op">(</span><span class="va">probe_ids</span>, <span class="va">epic</span><span class="op">$</span><span class="va">Name</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="va">cpg_position</span> <span class="op">&lt;-</span> <span class="fu">paste</span><span class="op">(</span><span class="va">probe_annotation</span><span class="op">$</span><span class="va">chr</span>, <span class="va">probe_annotation</span><span class="op">$</span><span class="va">pos</span>, sep<span class="op">=</span><span class="st">":"</span><span class="op">)</span></span>
+<span><span class="fu">rownames</span><span class="op">(</span><span class="va">averaged_beta</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">probe_ids</span><span class="op">[</span><span class="fu">match</span><span class="op">(</span><span class="fu">rownames</span><span class="op">(</span><span class="va">averaged_beta</span><span class="op">)</span>, <span class="va">cpg_position</span><span class="op">)</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Keep the saved object compatible with getM() and getBeta().</span></span>
+<span><span class="va">mSetFnFlt</span> <span class="op">&lt;-</span> <span class="fu">makeGenomicRatioSetFromMatrix</span><span class="op">(</span></span>
+<span>  mat<span class="op">=</span><span class="va">averaged_beta</span>, what<span class="op">=</span><span class="st">"Beta"</span>,</span>
+<span>  array<span class="op">=</span><span class="st">"IlluminaHumanMethylationEPICv2"</span>, annotation<span class="op">=</span><span class="st">"20a1.hg38"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">mSetFnFlt</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>class: GenomicRatioSet
+dim: 852592 6
+metadata(0):
+assays(1): Beta
+rownames(852592): cg00002271_BC21 cg00004581_TC21 ... cg13801850_TC21
+  cg08423507_BC11
+rowData names(0):
+colnames(6): LNCAP_500_1 LNCAP_500_2 ... PREC_500_2 PREC_500_3
+colData names(1): X1
+Annotation
+  array: IlluminaHumanMethylationEPICv2
+  annotation: 20a1.hg38
+Preprocessing
+  Method: Matrix converted with makeGenomicRatioSetFromMatrix
+  minfi version: NA
+  Manifest version: NA</code></pre>
+</div>
+<p>852592 probes are retained after collapsing EPICv2 replicate
+probes.</p>
 </section><section><h2 class="section-heading" id="save-files">Save files<a class="anchor" aria-label="anchor" href="#save-files"></a></h2>
-<hr class="half-width"><div class="codewrapper sourceCode" id="cb39">
+<hr class="half-width"><div class="codewrapper sourceCode" id="cb43">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1005,7 +1078,7 @@ measurements.</p>
 </div>
 </section><section><h2 class="section-heading" id="re-examine-mds-after-filtering">Re-examine MDS after filtering<a class="anchor" aria-label="anchor" href="#re-examine-mds-after-filtering"></a></h2>
 <hr class="half-width"><p>Plot the filtered M-values, to re-visualise the methylation data.</p>
-<div class="codewrapper sourceCode" id="cb40">
+<div class="codewrapper sourceCode" id="cb44">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1039,7 +1112,7 @@ to explore with MDS?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <ol style="list-style-type: decimal"><li>Other variables that can contribute to differential methylation:
 sex, batch, age etc</li>
@@ -1135,9 +1208,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://stellaliu525-web.github.io/intro-to-methylation-array/02-first-steps.html",
   "identifier": "https://stellaliu525-web.github.io/intro-to-methylation-array/02-first-steps.html",
-  "dateCreated": "2026-10-13",
-  "dateModified": "2026-10-13",
-  "datePublished": "2026-10-20"
+  "dateCreated": "2026-10-23",
+  "dateModified": "2026-10-23",
+  "datePublished": "2026-10-23"
 }
 
   </script><script>
