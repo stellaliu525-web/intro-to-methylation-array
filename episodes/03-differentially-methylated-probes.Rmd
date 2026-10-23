@@ -153,14 +153,20 @@ deltaBeta <- rowMeans(bVals[, sampleType == "LNCaP", drop=FALSE]) -
 DMPs$deltaBeta <- deltaBeta[rownames(DMPs)]
 head(DMPs)
 
-dir.create("data/output", recursive = TRUE, showWarnings = FALSE)
-write.table(DMPs, file="data/output/DMPs_epicv2_LNCaP_vs_PREC.csv", sep=",", row.names=FALSE)
-
 # Plot the four top-ranked CpGs
 par(mfrow=c(2,2))
 sapply(rownames(DMPs)[1:4], function(cpg){
   plotCpg(bVals, cpg=cpg, pheno=targets$Type, ylab="Beta values")
 })
+```
+
+To save the full results table locally, run the following code. This export is
+skipped when building the lesson website because the annotated table is too large
+to include in the published site.
+
+```{r dmp-export, eval=FALSE}
+dir.create("data/output", recursive = TRUE, showWarnings = FALSE)
+write.table(DMPs, file="data/output/DMPs_epicv2_LNCaP_vs_PREC.csv", sep=",", row.names=FALSE)
 ```
 
 We can also extract only the statistically significant probes, retaining their
